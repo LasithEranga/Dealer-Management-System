@@ -1,23 +1,15 @@
-import * as React from "react";
-import { styled, useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
-import CssBaseline from "@mui/material/CssBaseline";
-import MuiAppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+import MuiAppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
+import IconButton from "@mui/material/IconButton";
+import { styled, useTheme } from "@mui/material/styles";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import * as React from "react";
+import SidebarItem from "./SidebarItem";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import SubHeading from "./SubHeading";
 
 const drawerWidth = 240;
 
@@ -71,12 +63,8 @@ export default function Sidebar() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
-  const handleDrawerOpen = () => {
+  const toggleDrawer = () => {
     setOpen((prev) => !prev);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
   };
 
   return (
@@ -87,7 +75,7 @@ export default function Sidebar() {
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            onClick={toggleDrawer}
             edge="start"
             sx={{ mr: 2 }}
           >
@@ -115,20 +103,55 @@ export default function Sidebar() {
               height: "95vh",
               overflowY: "auto",
               color: "white",
-              pl: 2,
-              ...(open ? { width: 220 } : { width: 70 }),
+              pl: 1,
+              pt: 1,
+              pb: 3,
+              ...(open ? { width: 220 } : { width: 60 }),
             }}
           >
-            <Box my={3}>sdfdsf</Box>
-            <Box my={3}>sdfdsf</Box>
-            <Box my={3}>sdfdsf</Box>
-            <Box my={3}>sdfdsf</Box>
-            <Box my={3}>sdfdsf</Box>
-            <Box my={3}>sdfdsf</Box>
-            <Box my={3}>sdfdsf</Box>
-            <Box my={3}>sdfdsf</Box>
-            <Box my={3}>sdfdsf</Box>
+            <SidebarItem
+              icon={<DashboardIcon />}
+              title="Dashboard"
+              isSelected
+            />
+
+            {/* ------------------ IN house stock ---------------- */}
+            <SubHeading title="IN-HOUSE STOCK" />
+            <SidebarItem icon={<DashboardIcon />} title="New Stock" />
+            <SidebarItem icon={<DashboardIcon />} title="View Stock Details" />
+            <SidebarItem icon={<DashboardIcon />} title="Distribute Stock" />
+
+            {/* ------------------ IN house stock ---------------- */}
+
+            {/* -------------------  Dealers --------------------------*/}
+            <SubHeading title="DEALERS" />
+            <SidebarItem icon={<DashboardIcon />} title="Dealers" />
+            <SidebarItem icon={<DashboardIcon />} title="Dealer Stocks" />
+            <SidebarItem icon={<DashboardIcon />} title="Dealer Sales" />
+            <SidebarItem icon={<DashboardIcon />} title="Dealer Performance" />
+
+            {/* -------------------  Dealers --------------------------*/}
+
+            {/* -------------------  Dealers --------------------------*/}
+            <SubHeading title="GAS TANKS" />
+            <SidebarItem icon={<DashboardIcon />} title="New Gas Tank" />
+            <SidebarItem icon={<DashboardIcon />} title="View Gas Tanks" />
+
+            {/* -------------------  Dealers --------------------------*/}
+
+            {/* -------------------  Dealers --------------------------*/}
+            <SubHeading title="PURCHASE ORDERS" />
+            <SidebarItem icon={<DashboardIcon />} title="New Orders" />
+            <SidebarItem icon={<DashboardIcon />} title="View Orders" />
+            <SidebarItem icon={<DashboardIcon />} title="Saved Orders" />
+            <SidebarItem icon={<DashboardIcon />} title="Payment Pending" />
+
+            {/* -------------------  Dealers --------------------------*/}
+            <SubHeading title="REPORTS" />
+
+            <SidebarItem icon={<DashboardIcon />} title="Reports" />
           </Box>
+
           <Box
             sx={{
               height: "95vh",
