@@ -9,6 +9,8 @@ const EstimatedLevelCard = ({
   return (
     <Box
       sx={{
+        borderRadius: 2,
+        p: 1,
         minWidth: "11.2rem",
         backgroundColor: "#F9F9F9",
         border: "1px solid #F9F9F9",

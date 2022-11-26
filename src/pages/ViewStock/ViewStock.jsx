@@ -29,8 +29,8 @@ const ViewStock = () => {
   return (
     <Box>
       {/* content area */}
-      <Grid container display={"flex"}>
-        <Grid item xs={5} p={1} pl={0}>
+      <Grid container display={"flex"} mt={2}>
+        <Grid item xs={5} pr={2}>
           <ContentCard>
             <Box>
               <Typography fontSize={"1.5rem"}>In-House Stock</Typography>
@@ -85,22 +85,22 @@ const ViewStock = () => {
             </Grid>
           </ContentCard>
 
-          <Grid container mt={1} gap={1}>
-            <Grid item lg={5.8}>
+          <Grid container mt={2} gap={2}>
+            <Grid item lg={5.7}>
               <StockLevelCard title={"2.5KG Tanks"} />
             </Grid>
-            <Grid item lg={5.9}>
+            <Grid item lg={5.8}>
               <StockLevelCard title={"5KG Tanks"} />
             </Grid>
-            <Grid item lg={5.8}>
+            <Grid item lg={5.7}>
               <StockLevelCard title={"12.5KG Tanks"} />
             </Grid>
-            <Grid item lg={5.9}>
+            <Grid item lg={5.8}>
               <StockLevelCard title={"37.5KG Tanks"} />
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs mt={1}>
+        <Grid item xs>
           <ContentCard>
             <Box>
               <Box>
@@ -137,7 +137,9 @@ const ViewStock = () => {
                 </Typography>
               </Box>
               <Box
-                className="d-flex gap-2"
+                display={"flex"}
+                gap={2}
+                py={2}
                 style={{ maxWidth: "35rem", overflowX: "scroll" }}
               >
                 <EstimatedLevelCard
