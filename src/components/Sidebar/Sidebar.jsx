@@ -10,6 +10,8 @@ import * as React from "react";
 import SidebarItem from "./SidebarItem";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import SubHeading from "./SubHeading";
+import { Outlet } from "react-router-dom";
+import Scrollbar from "../Scrollbar";
 
 const drawerWidth = 240;
 
@@ -106,7 +108,7 @@ export default function Sidebar() {
               pl: 1,
               pt: 1,
               pb: 3,
-              ...(open ? { width: 220 } : { width: 60 }),
+              ...(open ? { width: 220 } : { width: 220 }),
             }}
           >
             <SidebarItem
@@ -140,6 +142,7 @@ export default function Sidebar() {
             {/* -------------------  Dealers --------------------------*/}
 
             {/* -------------------  Dealers --------------------------*/}
+
             <SubHeading title="PURCHASE ORDERS" />
             <SidebarItem icon={<DashboardIcon />} title="New Orders" />
             <SidebarItem icon={<DashboardIcon />} title="View Orders" />
@@ -157,20 +160,12 @@ export default function Sidebar() {
               height: "95vh",
               overflowY: "auto",
               pl: 2,
+              pr: 1,
               flexGrow: 1,
+              backgroundColor: "#F5F5F5",
             }}
           >
-            <Box my={3}>sdfdsf</Box>
-            <Box my={3}>sdfdsf</Box>
-            <Box my={3}>sdfdsf</Box>
-            <Box my={3}>sdfdsf</Box>
-            <Box my={3}>sdfdsf</Box>
-            <Box my={3}>sdfdsf</Box>
-            <Box my={3}>sdfdsf</Box>
-            <Box my={3}>sdfdsf</Box>
-            <Box my={3}>sdfdsf</Box>
-
-            <Box my={3}>sdfdsf</Box>
+            <Outlet />
           </Box>
         </Box>
       </Main>
