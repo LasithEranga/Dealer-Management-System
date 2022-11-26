@@ -1,12 +1,13 @@
 import { Box, Grid, MenuItem, Select } from "@mui/material";
 import React from "react";
 import { Doughnut } from "react-chartjs-2";
-import BarChart from "../BarChart/BarChart";
-import ContentCard from "../ContentCard/ContentCard";
-import DashboardCard from "../DashboardCard/DashboardCard";
-import DoughnutChartLegends from "./DoughnutChartLegends";
+
 import StockSummery from "./StockSummery";
 import { Chart, ArcElement } from "chart.js";
+import DashboardCard from "../../components/DashboardCard/DashboardCard";
+import ContentCard from "../../components/ContentCard/ContentCard";
+import BarChart from "../../components/BarChart/BarChart";
+import DoughnutChartLegends from "./DoughnutChartLegends";
 Chart.register(ArcElement);
 export const data = {
   labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
@@ -51,7 +52,7 @@ const Dashboard = () => {
                 </Select>
               </Box>
             </Box>
-            <Box sx={{ height: "25.5rem" }}>
+            <Box sx={{ height: "25.5rem" }} mb={1.5}>
               <BarChart />
             </Box>
           </ContentCard>

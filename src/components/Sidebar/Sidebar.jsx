@@ -103,12 +103,17 @@ export default function Sidebar() {
             sx={{
               backgroundColor: "#222531",
               height: "95vh",
-              overflowY: "auto",
+              overflowY: "hidden",
               color: "white",
               pl: 1,
-              pt: 1,
+              pr: 1,
+              pt: 2,
               pb: 3,
               ...(open ? { width: 220 } : { width: 220 }),
+              "&:hover": {
+                pr: 0,
+                overflowY: "auto",
+              },
             }}
           >
             <SidebarItem

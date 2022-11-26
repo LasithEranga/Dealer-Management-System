@@ -1,7 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Dashboard from "./components/Dashboard/Dashboard";
 import Sidebar from "./components/Sidebar/Sidebar";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import ViewStock from "./pages/ViewStock/ViewStock";
 
 function App() {
   return (
@@ -9,7 +10,7 @@ function App() {
       <Routes>
         <Route path={"/"} element={<Sidebar />}>
           <Route path="" element={<Dashboard />} />
-          <Route path="home" element={<div>Home</div>} />
+          <Route path="view-stock" element={<ViewStock />} />
         </Route>
       </Routes>
     </BrowserRouter>
