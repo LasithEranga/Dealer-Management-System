@@ -1,5 +1,4 @@
-import { Report } from "@mui/icons-material";
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import React from "react";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 const DashboardCard = () => {
@@ -15,7 +14,9 @@ const DashboardCard = () => {
         <LibraryBooksIcon sx={{ fontSize: "3rem" }} />
       </Box>
       <Box sx={{ flexGrow: 3 }}>
-        <Box>Rs.12,485.00</Box>
+        <Box>
+          <Typography fontSize={"1.5rem"}>Rs.12,485.00</Typography>
+        </Box>
         <Box>Today Total Income</Box>
       </Box>
     </Grid>

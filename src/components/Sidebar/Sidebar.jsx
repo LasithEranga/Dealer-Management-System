@@ -161,6 +161,7 @@ export default function Sidebar() {
               overflowY: "auto",
               pl: 2,
               pr: 1,
+              pb: 5,
               flexGrow: 1,
               backgroundColor: "#F5F5F5",
             }}
