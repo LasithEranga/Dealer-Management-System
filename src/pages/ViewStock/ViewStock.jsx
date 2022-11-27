@@ -38,10 +38,10 @@ const ViewStock = () => {
             <Grid container style={{ height: "15rem" }}>
               <Grid
                 item
-                lg={7}
+                lg={6}
                 display="flex"
                 alignItems={"center"}
-                justifyContent="center"
+                justifyContent="start"
               >
                 <Box style={{ width: "200px" }}>
                   <Pie
@@ -64,22 +64,27 @@ const ViewStock = () => {
                 flexDirection="column"
                 justifyContent={"center"}
                 gap={2}
+                pl={1}
               >
                 <PieChartLegend
                   label="New Tanks"
                   indicatorColor="rgba(255, 99, 132, 1)"
+                  count={200}
                 />
                 <PieChartLegend
                   label="Refilled Tanks"
                   indicatorColor="rgba(54, 162, 235, 1)"
+                  count={200}
                 />
                 <PieChartLegend
                   label="Returned Tanks"
                   indicatorColor="rgba(255, 206, 86, 1)"
+                  count={200}
                 />
                 <PieChartLegend
                   label="Empty Tanks"
                   indicatorColor="rgba(75, 192, 192, 1)"
+                  count={200}
                 />
               </Grid>
             </Grid>
@@ -109,7 +114,7 @@ const ViewStock = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs mt={1}>
+        <Grid item xs mt={1} ml={1}>
           <ContentCard>
             <Box>
               <Box>

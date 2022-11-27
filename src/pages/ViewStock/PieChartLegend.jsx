@@ -9,7 +9,14 @@ const PieChartLegend = ({
   indicatorStyle = {},
 }) => {
   return (
-    <Box display={"flex"} alignItems="center" gap={1} pl={0.5}>
+    <Box
+      display={"flex"}
+      alignItems="center"
+      gap={1}
+      pl={0.5}
+      p={1}
+      sx={{ backgroundColor: "#F7F7F7" }}
+    >
       <span
         style={{
           width: indicatorWH,
