@@ -30,7 +30,7 @@ const ViewStock = () => {
     <Box>
       {/* content area */}
       <Grid container display={"flex"} mt={2}>
-        <Grid item xs={5} pr={2}>
+        <Grid item xs={5} p={1} pl={0}>
           <ContentCard>
             <Box>
               <Typography fontSize={"1.5rem"}>In-House Stock</Typography>
@@ -85,22 +85,19 @@ const ViewStock = () => {
             </Grid>
           </ContentCard>
 
-          <Grid container mt={2} gap={2}>
-            <Grid item lg={5.7}>
+          <Grid container mt={1} gap={1} width="100%">
+            <Grid item lg={5.8}>
               <StockLevelCard title={"2.5KG Tanks"} />
             </Grid>
-            <Grid item lg={5.8}>
+            <Grid item lg={5.9}>
               <StockLevelCard title={"5KG Tanks"} />
             </Grid>
-            <Grid item lg={5.7}>
-              <StockLevelCard title={"12.5KG Tanks"} />
-            </Grid>
             <Grid item lg={5.8}>
-              <StockLevelCard title={"37.5KG Tanks"} />
+              <StockLevelCard title={"12.5KG Tanks"} />
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs>
+        <Grid item xs mt={1}>
           <ContentCard>
             <Box>
               <Box>

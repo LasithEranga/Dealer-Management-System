@@ -107,7 +107,7 @@ export default function Sidebar() {
               color: "white",
               pl: 1,
               pr: 1,
-              pt: 2,
+              pt: 1,
               pb: 3,
               ...(open ? { width: 220 } : { width: 220 }),
               "&:hover": {
