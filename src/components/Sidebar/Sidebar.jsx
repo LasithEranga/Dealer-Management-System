@@ -116,16 +116,16 @@ export default function Sidebar() {
               },
             }}
           >
-            <SidebarItem
-              icon={<DashboardIcon />}
-              title="Dashboard"
-              isSelected
-            />
+            <SidebarItem icon={<DashboardIcon />} title="Dashboard" />
 
             {/* ------------------ IN house stock ---------------- */}
             <SubHeading title="IN-HOUSE STOCK" />
             <SidebarItem icon={<DashboardIcon />} title="New Stock" />
-            <SidebarItem icon={<DashboardIcon />} title="View Stock Details" />
+            <SidebarItem
+              icon={<DashboardIcon />}
+              title="View Stock Details"
+              isSelected
+            />
             <SidebarItem icon={<DashboardIcon />} title="Distribute Stock" />
 
             {/* ------------------ IN house stock ---------------- */}

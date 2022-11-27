@@ -1,4 +1,4 @@
-import { Box, Grid, MenuItem, Select } from "@mui/material";
+import { Box, Grid, MenuItem, Select, Typography } from "@mui/material";
 import React from "react";
 import { Doughnut } from "react-chartjs-2";
 
@@ -29,6 +29,9 @@ export const data = {
 const Dashboard = () => {
   return (
     <Box mt={2}>
+      <Typography fontWeight={"bold"} fontSize="1.8rem" sx={{ my: 2 }}>
+        Hi Lasith, Welcome back
+      </Typography>
       <Grid container gap={2}>
         <DashboardCard />
         <DashboardCard />

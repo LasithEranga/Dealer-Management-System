@@ -6,6 +6,7 @@ import QuickActionBtn from "../../components/QuickActionBtn/QuickActionBtn";
 import EstimatedLevelCard from "./EstimatedLevelCard";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import { Box, Grid, Paper, styled, Typography } from "@mui/material";
+import Titlebar from "../../components/Titlebar/Titlebar";
 
 export const data = {
   labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
@@ -32,9 +33,7 @@ const ViewStock = () => {
       <Grid container display={"flex"} mt={2}>
         <Grid item xs={5} p={1} pl={0}>
           <ContentCard>
-            <Box>
-              <Typography fontSize={"1.5rem"}>In-House Stock</Typography>
-            </Box>
+            <Titlebar title={"In-House Stock"} />
             <Grid container style={{ height: "15rem" }}>
               <Grid
                 item
