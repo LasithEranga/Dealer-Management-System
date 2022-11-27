@@ -5,7 +5,7 @@ import StockLevelCard from "./StockLevelCard";
 import QuickActionBtn from "../../components/QuickActionBtn/QuickActionBtn";
 import EstimatedLevelCard from "./EstimatedLevelCard";
 import ContentCard from "../../components/ContentCard/ContentCard";
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Paper, styled, Typography } from "@mui/material";
 
 export const data = {
   labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
@@ -85,15 +85,27 @@ const ViewStock = () => {
             </Grid>
           </ContentCard>
 
-          <Grid container mt={1} gap={1} width="100%">
-            <Grid item lg={5.8}>
+          <Grid container mt={2} rowSpacing={1}>
+            {/* <Grid item lg={5.8}>
               <StockLevelCard title={"2.5KG Tanks"} />
-            </Grid>
-            <Grid item lg={5.9}>
-              <StockLevelCard title={"5KG Tanks"} />
-            </Grid>
-            <Grid item lg={5.8}>
-              <StockLevelCard title={"12.5KG Tanks"} />
+            </Grid> */}
+            <Grid
+              container
+              rowSpacing={2}
+              columnSpacing={{ xs: 2, sm: 2, md: 2 }}
+            >
+              <Grid item xs={6}>
+                <StockLevelCard title={"2.5KG Tanks"} />
+              </Grid>
+              <Grid item xs={6}>
+                <StockLevelCard title={"2.5KG Tanks"} />
+              </Grid>
+              <Grid item xs={6}>
+                <StockLevelCard title={"2.5KG Tanks"} />
+              </Grid>
+              <Grid item xs={6}>
+                <StockLevelCard title={"2.5KG Tanks"} />
+              </Grid>
             </Grid>
           </Grid>
         </Grid>

@@ -9,13 +9,6 @@ const StockLevelLine = ({
 }) => {
   return (
     <>
-      <style type="text/css">
-        {`
-        .level-line{
-          
-        }
-        `}
-      </style>
       <Box
         my={0.3}
         style={{ color: "#525252", fontWeight: 600 }}

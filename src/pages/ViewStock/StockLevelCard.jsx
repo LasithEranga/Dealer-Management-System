@@ -5,7 +5,7 @@ import StockLevelLine from "../../components/StockLevelLine/StockLevelLine";
 const StockLevelCard = ({ title }) => {
   return (
     <ContentCard>
-      <div className={` fs-6 fw-bold`}>{title}</div>
+      <div>{title}</div>
       <StockLevelLine
         fillColor="red"
         count={10}

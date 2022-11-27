@@ -109,7 +109,7 @@ export default function Sidebar() {
               pr: 1,
               pt: 1,
               pb: 3,
-              ...(open ? { width: 220 } : { width: 220 }),
+              ...(open ? { minWidth: 220 } : { minWidth: 220 }),
               "&:hover": {
                 pr: 0,
                 overflowY: "auto",
