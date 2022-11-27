@@ -1,69 +1,108 @@
-import { Search } from "@mui/icons-material";
-import { Box, Divider, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  ButtonBase,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React from "react";
-import FlexDivider from "../../components/FlexDivider/FlexDivider";
-import IconWithText from "../../components/IconWithText/IconWithText";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import StackedBarChartOutlinedIcon from "@mui/icons-material/StackedBarChartOutlined";
-import PersonSearchIcon from "@mui/icons-material/PersonSearch";
-import Step01 from "./Step01";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import Titlebar from "../../components/Titlebar/Titlebar";
-import Step02 from "./Step02";
+import DealerDetails from "./DealerDetails";
+import StockDetails from "./StockDetails";
 const DistributeStock = () => {
   return (
     <Box mt={2}>
       <ContentCard>
-        <Titlebar title={"Distribute Stock"} />
-        <Grid container columnSpacing={2}>
-          <FlexDivider />
-          <Grid item>
-            <IconWithText
-              icon={<PersonSearchIcon sx={{ fontSize: "2rem" }} />}
-              title={"Search Dealer"}
-            />
-          </Grid>
-          <FlexDivider />
-          <Grid item>
-            <IconWithText
-              icon={<StackedBarChartOutlinedIcon sx={{ fontSize: "2rem" }} />}
-              title={"Stock Details"}
-            />
-          </Grid>
-          <FlexDivider />
-          <IconWithText
-            icon={<LocalShippingIcon sx={{ fontSize: "2rem" }} />}
-            title={"Allocate Stock"}
-          />
-          <FlexDivider />
-        </Grid>
+        <Typography fontSize={"1.5rem"} lineHeight="1.5rem" fontWeight={"bold"}>
+          Distribute Stock
+        </Typography>
+      </ContentCard>
 
-        <Box mb={1}>
-          <Box
-            sx={{
-              height: "63vh",
-              border: "1px solid #9f86d0",
-              borderRadius: 3,
-            }}
-            mt={2}
-            display="flex"
-            flexDirection={"column"}
-          >
-            {/* <Step01 /> */}
-            <Step02 />
+      <Grid container mt={2} columnSpacing={2}>
+        <Grid item xs={5}>
+          <ContentCard>
+            <Typography fontWeight={"bold"} fontSize="1.5rem">
+              Search Dealer
+            </Typography>
+            <Box sx={{ mr: 2, my: 1 }}>
+              <TextField
+                fullWidth
+                size="small"
+                variant="outlined"
+                placeholder="Search dealer"
+                sx={{ mt: 1 }}
+              />
+            </Box>
 
             <Box
               display={"flex"}
-              justifyContent="space-between"
-              flexGrow={1}
-              mx={3}
+              alignItems={"center"}
+              justifyContent="center"
+              my={2}
             >
-              <Typography>btn back</Typography>
-              <Typography>btn fwd</Typography>
+              <Box
+                display={"flex"}
+                alignItems={"center"}
+                justifyContent="center"
+                sx={{
+                  width: "8rem",
+                  height: "8rem",
+                  backgroundColor: "#F7F7F7",
+                  borderRadius: "50%",
+                }}
+              >
+                <Typography fontSize={"3rem"} fontWeight={"bold"}>
+                  LE
+                </Typography>
+              </Box>
+            </Box>
+
+            <DealerDetails title={"Name:"} content={"Lasith Eranda "} />
+            <DealerDetails title={"Store:"} content={"Lasith's Store "} />
+            <DealerDetails title={"Outstanding:"} content={"Rs: 38467.89 "} />
+            <DealerDetails
+              title={"Address:"}
+              content={"200D, Thibbotugoda, Pokunuwita "}
+            />
+
+            <Box display={"flex"} justifyContent="end" mt={2}>
+              <Button variant="contained">Okay</Button>
+            </Box>
+          </ContentCard>
+        </Grid>
+        <Grid item xs display={"flex"} flexDirection="column">
+          <Box
+            p={2}
+            flexGrow={1}
+            display={"flex"}
+            flexDirection="column"
+            sx={{ backgroundColor: "white", borderRadius: 2 }}
+          >
+            <Typography fontWeight={"bold"} fontSize="1.5rem">
+              Stock details
+            </Typography>
+            <StockDetails title={"Tank Type"} placeholder={"Search dealer"} />
+            <StockDetails
+              title={"Available Qty @ In-House"}
+              placeholder={"568"}
+            />
+            <StockDetails title={"Quantity"} placeholder={"50"} />
+            <Box
+              display="flex"
+              flexGrow={1}
+              alignItems={"end"}
+              gap={2}
+              justifyContent="end"
+              mr={2}
+            >
+              <Button variant="outlined">Clear</Button>
+              <Button variant="contained">Allocate</Button>
             </Box>
           </Box>
-        </Box>
-      </ContentCard>
+        </Grid>
+      </Grid>
     </Box>
   );
 };
