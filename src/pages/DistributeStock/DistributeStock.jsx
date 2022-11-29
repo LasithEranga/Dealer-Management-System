@@ -1,14 +1,6 @@
-import {
-  Box,
-  Button,
-  ButtonBase,
-  Grid,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import React from "react";
 import ContentCard from "../../components/ContentCard/ContentCard";
-import Titlebar from "../../components/Titlebar/Titlebar";
 import DealerDetails from "./DealerDetails";
 import StockDetails from "./StockDetails";
 const DistributeStock = () => {

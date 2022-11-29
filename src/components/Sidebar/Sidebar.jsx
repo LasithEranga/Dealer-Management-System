@@ -10,7 +10,7 @@ import * as React from "react";
 import SidebarItem from "./SidebarItem";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import SubHeading from "./SubHeading";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Scrollbar from "../Scrollbar";
 
 const drawerWidth = 240;
@@ -36,6 +36,7 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
+  boxShadow: "none",
   transition: theme.transitions.create(["margin", "width"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -116,7 +117,7 @@ export default function Sidebar() {
               },
             }}
           >
-            <SidebarItem icon={<DashboardIcon />} title="Dashboard" />
+            <SidebarItem icon={<DashboardIcon />} title="Dashboard" path={""} />
 
             {/* ------------------ IN house stock ---------------- */}
             <SubHeading title="IN-HOUSE STOCK" />
@@ -124,15 +125,23 @@ export default function Sidebar() {
             <SidebarItem
               icon={<DashboardIcon />}
               title="View Stock Details"
-              isSelected
+              path={"view-stock"}
             />
-            <SidebarItem icon={<DashboardIcon />} title="Distribute Stock" />
+            <SidebarItem
+              icon={<DashboardIcon />}
+              title="Distribute Stock"
+              path={"distribute-stock"}
+            />
 
             {/* ------------------ IN house stock ---------------- */}
 
             {/* -------------------  Dealers --------------------------*/}
             <SubHeading title="DEALERS" />
-            <SidebarItem icon={<DashboardIcon />} title="Dealers" />
+            <SidebarItem
+              icon={<DashboardIcon />}
+              title="Dealers"
+              path={"dealers"}
+            />
             <SidebarItem icon={<DashboardIcon />} title="Dealer Stocks" />
             <SidebarItem icon={<DashboardIcon />} title="Dealer Sales" />
             <SidebarItem icon={<DashboardIcon />} title="Dealer Performance" />
