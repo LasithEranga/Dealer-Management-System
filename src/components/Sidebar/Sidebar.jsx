@@ -1,17 +1,16 @@
+import DashboardIcon from "@mui/icons-material/Dashboard";
 import MenuIcon from "@mui/icons-material/Menu";
 import MuiAppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import IconButton from "@mui/material/IconButton";
-import { styled, useTheme } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
+import { Outlet } from "react-router-dom";
 import SidebarItem from "./SidebarItem";
-import DashboardIcon from "@mui/icons-material/Dashboard";
 import SubHeading from "./SubHeading";
-import { Outlet, useLocation } from "react-router-dom";
-import Scrollbar from "../Scrollbar";
 
 const drawerWidth = 240;
 
@@ -63,7 +62,6 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function Sidebar() {
-  const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = () => {
@@ -148,14 +146,14 @@ export default function Sidebar() {
 
             {/* -------------------  Dealers --------------------------*/}
 
-            {/* -------------------  Dealers --------------------------*/}
+            {/* -------------------  Gas tanks --------------------------*/}
             <SubHeading title="GAS TANKS" />
             <SidebarItem icon={<DashboardIcon />} title="New Gas Tank" />
             <SidebarItem icon={<DashboardIcon />} title="View Gas Tanks" />
 
-            {/* -------------------  Dealers --------------------------*/}
+            {/* -------------------  Gas tanks --------------------------*/}
 
-            {/* -------------------  Dealers --------------------------*/}
+            {/* -------------------  PURCHASE ORDERS --------------------------*/}
 
             <SubHeading title="PURCHASE ORDERS" />
             <SidebarItem icon={<DashboardIcon />} title="New Orders" />
@@ -163,7 +161,7 @@ export default function Sidebar() {
             <SidebarItem icon={<DashboardIcon />} title="Saved Orders" />
             <SidebarItem icon={<DashboardIcon />} title="Payment Pending" />
 
-            {/* -------------------  Dealers --------------------------*/}
+            {/* -------------------  PURCHASE ORDERS --------------------------*/}
             <SubHeading title="REPORTS" />
 
             <SidebarItem icon={<DashboardIcon />} title="Reports" />
