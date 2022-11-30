@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import ContentCard from "../../components/ContentCard/ContentCard";
+import EnhancedTable from "../../components/EnhancedTable/EnhancedTable";
 
 const Dealers = () => {
   return (
@@ -88,6 +89,14 @@ const Dealers = () => {
           </Grid>
         </ContentCard>
       </Box>
+
+      {/* --------------------------- table section ------------------------------- */}
+      <Box mt={2}>
+        <ContentCard>
+          <EnhancedTable />
+        </ContentCard>
+      </Box>
+      {/* --------------------------- table section ------------------------------- */}
     </div>
   );
 };
