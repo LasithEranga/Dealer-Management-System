@@ -5,12 +5,17 @@ import DealerDetails from "./DealerDetails";
 import StockDetails from "./StockDetails";
 const DistributeStock = () => {
   return (
-    <Box mt={2}>
-      <ContentCard>
-        <Typography fontSize={"1.5rem"} lineHeight="1.5rem" fontWeight={"bold"}>
+    <Box mt={1}>
+      <Box
+        display={"flex"}
+        justifyContent="space-between"
+        alignItems="center"
+        my={1}
+      >
+        <Typography fontSize="1.5rem" fontWeight="bold">
           Distribute Stock
         </Typography>
-      </ContentCard>
+      </Box>
 
       <Grid container mt={2} columnSpacing={2}>
         <Grid item xs={5}>

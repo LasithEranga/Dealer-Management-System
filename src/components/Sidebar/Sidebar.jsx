@@ -119,7 +119,11 @@ export default function Sidebar() {
 
             {/* ------------------ IN house stock ---------------- */}
             <SubHeading title="IN-HOUSE STOCK" />
-            <SidebarItem icon={<DashboardIcon />} title="New Stock" />
+            <SidebarItem
+              icon={<DashboardIcon />}
+              title="New Stock"
+              path={"new-stock"}
+            />
             <SidebarItem
               icon={<DashboardIcon />}
               title="View Stock Details"
@@ -148,7 +152,11 @@ export default function Sidebar() {
 
             {/* -------------------  Gas tanks --------------------------*/}
             <SubHeading title="GAS TANKS" />
-            <SidebarItem icon={<DashboardIcon />} title="New Gas Tank" />
+            <SidebarItem
+              icon={<DashboardIcon />}
+              title="New Gas Tank"
+              path={"new-gastank"}
+            />
             <SidebarItem
               icon={<DashboardIcon />}
               title="View Gas Tanks"

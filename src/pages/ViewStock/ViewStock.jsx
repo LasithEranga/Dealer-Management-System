@@ -29,6 +29,16 @@ export const data = {
 const ViewStock = () => {
   return (
     <Box>
+      <Box
+        display={"flex"}
+        justifyContent="space-between"
+        alignItems="center"
+        my={1}
+      >
+        <Typography fontSize="1.5rem" fontWeight="bold">
+          View Stock Details
+        </Typography>
+      </Box>
       {/* content area */}
       <Grid container display={"flex"} mt={2}>
         <Grid item xs={5} p={1} pl={0}>
