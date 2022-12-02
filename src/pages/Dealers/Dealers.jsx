@@ -45,45 +45,37 @@ const Dealers = () => {
             <Grid item xs={3}>
               <Box>
                 <Typography fontWeight={"bold"} sx={{ mb: 1 }}>
-                  Status
+                  Sort By
                 </Typography>
                 <FormControl fullWidth size="small">
                   <Select>
-                    <MenuItem value={10}>Ten</MenuItem>
+                    {/* <MenuItem value={10}>Ten</MenuItem>
                     <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    <MenuItem value={30}>Thirty</MenuItem> */}
                   </Select>
                 </FormControl>
               </Box>
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid item xs={6}>
               <Box>
                 <Typography fontWeight={"bold"} sx={{ mb: 1 }}>
-                  Category
+                  Outstanding Balance
                 </Typography>
-                <FormControl fullWidth size="small">
-                  <Select>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
-            </Grid>
-
-            <Grid item xs={3}>
-              <Box>
-                <Typography fontWeight={"bold"} sx={{ mb: 1 }}>
-                  Customer
-                </Typography>
-                <FormControl fullWidth size="small">
-                  <Select>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Select>
-                </FormControl>
+                <Box display={"flex"} gtap={2}>
+                  <FormControl fullWidth size="small">
+                    <TextField size="small" placeholder="min: Rs:2000.00" />
+                  </FormControl>
+                  <Box mx={2}>
+                    <Typography fontSize="1.5rem" fontWeight={"bold"}>
+                      {" "}
+                      -{" "}
+                    </Typography>
+                  </Box>
+                  <FormControl fullWidth size="small">
+                    <TextField size="small" placeholder="Max: Rs:50000.00" />
+                  </FormControl>
+                </Box>
               </Box>
             </Grid>
           </Grid>

@@ -1,9 +1,9 @@
 import { Box } from "@mui/material";
 import React from "react";
 
-const ContentCard = ({ children }) => {
+const ContentCard = ({ children, sx = {} }) => {
   return (
-    <Box p={2} sx={{ backgroundColor: "white", borderRadius: 2 }}>
+    <Box p={2} sx={{ backgroundColor: "white", borderRadius: 2, ...sx }}>
       {children}
     </Box>
   );

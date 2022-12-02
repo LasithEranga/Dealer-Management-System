@@ -149,7 +149,11 @@ export default function Sidebar() {
             {/* -------------------  Gas tanks --------------------------*/}
             <SubHeading title="GAS TANKS" />
             <SidebarItem icon={<DashboardIcon />} title="New Gas Tank" />
-            <SidebarItem icon={<DashboardIcon />} title="View Gas Tanks" />
+            <SidebarItem
+              icon={<DashboardIcon />}
+              title="View Gas Tanks"
+              path={"view-gastanks"}
+            />
 
             {/* -------------------  Gas tanks --------------------------*/}
 

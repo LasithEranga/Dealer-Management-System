@@ -4,6 +4,7 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Dealers from "./pages/Dealers/Dealers";
 import DistributeStock from "./pages/DistributeStock/DistributeStock";
+import ViewGasTanks from "./pages/ViewGasTanks/ViewGasTanks";
 import ViewStock from "./pages/ViewStock/ViewStock";
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
           <Route path="view-stock" element={<ViewStock />} />
           <Route path="distribute-stock" element={<DistributeStock />} />
           <Route path="dealers" element={<Dealers />} />
+          <Route path="view-gastanks" element={<ViewGasTanks />} />
         </Route>
       </Routes>
     </BrowserRouter>
