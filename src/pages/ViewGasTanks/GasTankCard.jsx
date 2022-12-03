@@ -1,15 +1,18 @@
 import { Delete, Edit } from "@mui/icons-material";
-import { Box, Divider, Grid, Typography } from "@mui/material";
+import { Box, Button, Divider, Grid, Typography } from "@mui/material";
 import React from "react";
 import ContentCard from "../../components/ContentCard/ContentCard";
 
 const GasTankCard = ({
+  _id,
   name,
   type,
   orderedPriceDealer,
   orderedPriceDistributor,
   sellingPriceDealer,
   sellingPriceDistributor,
+  setShowEditModal,
+  setValues,
 }) => {
   return (
     <Grid item xs={3}>
@@ -68,9 +71,23 @@ const GasTankCard = ({
             Rs. {sellingPriceDealer}
           </Grid>
         </Grid>
-        <Box display={"flex"} justifyContent="end" mr={2} gap={2} mt={2}>
-          <Edit sx={{ color: "blue", fontSize: "1.7rem" }} />
-          <Delete sx={{ color: "red", fontSize: "1.7rem" }} />
+        <Box display={"flex"} justifyContent="end" mt={2}>
+          <Button
+            onClick={() => {
+              setValues(
+                _id,
+                name,
+                type,
+                orderedPriceDealer,
+                orderedPriceDistributor,
+                sellingPriceDealer,
+                sellingPriceDistributor
+              );
+              setShowEditModal(true);
+            }}
+          >
+            Edit
+          </Button>
         </Box>
       </ContentCard>
     </Grid>
