@@ -11,38 +11,38 @@ import ContentCard from "../../components/ContentCard/ContentCard";
 
 const NewStock = () => {
   return (
-    <Box mt={1}>
+    <Box mt={1} >
       <Box
         display={"flex"}
         justifyContent="space-between"
         alignItems="center"
-        mb={3}
+        mb={2}
       >
         <Typography fontSize="1.5rem" fontWeight="bold">
           New Stock
         </Typography>
       </Box>
 
-      <ContentCard>
-        <Grid container columnSpacing={4} rowSpacing={4}>
+      <ContentCard sx={{px:3, mr:1}}>
+        <Grid container columnSpacing={4} rowSpacing={4} pt={0.5}>
           <Grid item xs={6}>
             <Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
               Gas Tank Details
             </Typography>
             <Box>
-              <Typography sx={{ my: 1 }}>Gas Tank Name</Typography>
+              <Typography sx={{ mb: 1, mt: 3 }}>Gas Tank Name</Typography>
               <TextField size="small" fullWidth />
             </Box>
             <Box>
-              <Typography sx={{ my: 1 }}>Gas Tank Type</Typography>
+              <Typography sx={{ mb: 1, mt: 3 }}>Gas Tank Type</Typography>
               <TextField size="small" fullWidth />
             </Box>
             <Box>
-              <Typography sx={{ my: 1 }}>Quantity</Typography>
+              <Typography sx={{ mb: 1, mt: 3 }}>Quantity</Typography>
               <TextField size="small" fullWidth />
             </Box>
             <Box>
-              <Typography sx={{ my: 1 }}>Re-Order level</Typography>
+              <Typography sx={{ mb: 1, mt: 3 }}>Re-Order level</Typography>
               <TextField size="small" fullWidth />
             </Box>
           </Grid>
@@ -52,30 +52,30 @@ const NewStock = () => {
               Gas Stock Pricing
             </Typography>
             <Box>
-              <Typography sx={{ my: 1 }}>
+              <Typography sx={{mb: 1, mt: 3 }}>
                 Distributor - Ordered Price
               </Typography>
               <TextField size="small" fullWidth />
             </Box>
             <Box>
-              <Typography sx={{ my: 1 }}>
+              <Typography sx={{mb: 1, mt: 3 }}>
                 Distributor - Selling Price
               </Typography>
               <TextField size="small" fullWidth />
             </Box>
 
             <Box>
-              <Typography sx={{ my: 1 }}>Dealer - Ordered Price</Typography>
+              <Typography sx={{mb: 1, mt: 3 }}>Dealer - Ordered Price</Typography>
               <TextField size="small" fullWidth />
             </Box>
             <Box>
-              <Typography sx={{ my: 1 }}>Dealer - Selling Price</Typography>
+              <Typography sx={{mb: 1, mt: 3 }}>Dealer - Selling Price</Typography>
               <TextField size="small" fullWidth />
             </Box>
           </Grid>
         </Grid>
 
-        <Box mt={3} display="flex" justifyContent={"end"} gap={3} my={2}>
+        <Box pt={3}  display="flex" justifyContent={"end"} gap={3} >
           <Button variant="outlined" sx={{ px: 5 }}>
             Clear
           </Button>

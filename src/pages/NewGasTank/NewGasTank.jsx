@@ -1,21 +1,34 @@
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import ContentCard from "../../components/ContentCard/ContentCard";
-
+import { useForm } from "react-hook-form";
+import { newTank } from "../../app/api/newTank";
 const NewGasTank = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => {
+    console.log(data);
+    newTank(data, (data) => {
+      console.log(data);
+    });
+  };
+
   return (
-    <Box mt={1} p={1}>
-      <ContentCard>
-        <Box
-          display={"flex"}
-          justifyContent="space-between"
-          alignItems="center"
-          mb={3}
-        >
-          <Typography fontSize="1.5rem" fontWeight="bold">
-            New Gas Tank
-          </Typography>
-        </Box>
+    <Box mt={1}>
+      <Box
+        display={"flex"}
+        justifyContent="space-between"
+        alignItems="center"
+        mb={2}
+      >
+        <Typography fontSize="1.5rem" fontWeight="bold">
+          New Gas Tank
+        </Typography>
+      </Box>
+      <ContentCard sx={{ mr: 1 }}>
         <Typography sx={{ mt: 2, fontSize: "1rem", fontWeight: "bold" }}>
           Gas Tank Details
         </Typography>
@@ -23,13 +36,39 @@ const NewGasTank = () => {
           <Grid item xs>
             <Box>
               <Typography sx={{ my: 1 }}>Gas Tank Name</Typography>
-              <TextField size="small" fullWidth />
+              <TextField
+                size="small"
+                fullWidth
+                {...register("name", {
+                  required: {
+                    value: true,
+                    message: "Gas tank name is required",
+                  },
+                })}
+                {...(errors.name && {
+                  error: true,
+                  helperText: errors.name.message,
+                })}
+              />
             </Box>
           </Grid>
           <Grid item xs>
             <Box>
               <Typography sx={{ my: 1 }}>Tank Type</Typography>
-              <TextField size="small" fullWidth />
+              <TextField
+                size="small"
+                fullWidth
+                {...register("type", {
+                  required: {
+                    value: true,
+                    message: "Gas tank type is required",
+                  },
+                })}
+                {...(errors.type && {
+                  error: true,
+                  helperText: errors.type.message,
+                })}
+              />
             </Box>
           </Grid>
         </Grid>
@@ -41,13 +80,47 @@ const NewGasTank = () => {
           <Grid item xs>
             <Box>
               <Typography sx={{ my: 1 }}>Ordered Price</Typography>
-              <TextField size="small" fullWidth />
+              <TextField
+                size="small"
+                fullWidth
+                {...register("orderedPriceDistributor", {
+                  required: {
+                    value: true,
+                    message: "Gas tank type is required",
+                  },
+                  pattern: {
+                    value: /^\d+(\.\d{1,2})?$/,
+                    message: "Ordered price should be a number",
+                  },
+                })}
+                {...(errors.orderedPriceDistributor && {
+                  error: true,
+                  helperText: errors.orderedPriceDistributor.message,
+                })}
+              />
             </Box>
           </Grid>
           <Grid item xs>
             <Box>
               <Typography sx={{ my: 1 }}>Selling Price</Typography>
-              <TextField size="small" fullWidth />
+              <TextField
+                size="small"
+                fullWidth
+                {...register("sellingPriceDistributor", {
+                  required: {
+                    value: true,
+                    message: "Selling price is required",
+                  },
+                  pattern: {
+                    value: /^\d+(\.\d{1,2})?$/,
+                    message: "Selling price should be a number",
+                  },
+                })}
+                {...(errors.sellingPriceDistributor && {
+                  error: true,
+                  helperText: errors.sellingPriceDistributor.message,
+                })}
+              />
             </Box>
           </Grid>
         </Grid>
@@ -59,21 +132,59 @@ const NewGasTank = () => {
           <Grid item xs>
             <Box>
               <Typography sx={{ my: 1 }}>Ordered Price</Typography>
-              <TextField size="small" fullWidth />
+              <TextField
+                size="small"
+                fullWidth
+                {...register("orderedPriceDealer", {
+                  required: {
+                    value: true,
+                    message: "Ordered price is required",
+                  },
+                  pattern: {
+                    value: /^\d+(\.\d{1,2})?$/,
+                    message: "Ordered price should be a number",
+                  },
+                })}
+                {...(errors.orderedPriceDealer && {
+                  error: true,
+                  helperText: errors.orderedPriceDealer.message,
+                })}
+              />
             </Box>
           </Grid>
           <Grid item xs>
             <Box>
               <Typography sx={{ my: 1 }}>Selling Price</Typography>
-              <TextField size="small" fullWidth />
+              <TextField
+                size="small"
+                fullWidth
+                {...register("sellingPriceDealer", {
+                  required: {
+                    value: true,
+                    message: "Selling price is required",
+                  },
+                  pattern: {
+                    value: /^\d+(\.\d{1,2})?$/,
+                    message: "Selling price should be a number",
+                  },
+                })}
+                {...(errors.sellingPriceDealer && {
+                  error: true,
+                  helperText: errors.sellingPriceDealer.message,
+                })}
+              />
             </Box>
           </Grid>
         </Grid>
-        <Box mt={3} display="flex" justifyContent={"end"} gap={3} my={4}>
+        <Box display="flex" justifyContent={"end"} gap={3} pt={4} pb={2}>
           <Button variant="outlined" sx={{ px: 5 }}>
             Clear
           </Button>
-          <Button variant="contained" sx={{ px: 5 }}>
+          <Button
+            variant="contained"
+            sx={{ px: 5 }}
+            onClick={handleSubmit(onSubmit)}
+          >
             Save
           </Button>
         </Box>
