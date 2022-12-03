@@ -2,7 +2,7 @@ steps
 
 add gas tank - done
 view gas tank - done
-edit gas tank
+edit gas tank - done
 
 add stock using gas tank
 view stock
