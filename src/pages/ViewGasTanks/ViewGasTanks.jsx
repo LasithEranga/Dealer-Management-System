@@ -1,10 +1,22 @@
 import { Delete, Edit } from "@mui/icons-material";
 import { Box, Divider, Grid, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getAllTanks } from "../../app/api/gasTankServices";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import GasTankCard from "./GasTankCard";
 
 const ViewGasTanks = () => {
+  const [gasTanks, setGasTanks] = useState([]);
+  useEffect(() => {
+    getAllTanks(
+      (response) => {
+        console.log(response);
+        setGasTanks(response.data);
+      },
+      () => {}
+    );
+  }, []);
+
   return (
     <Box>
       <Box
@@ -20,12 +32,9 @@ const ViewGasTanks = () => {
       </Box>
       <Box>
         <Grid container columnSpacing={1.5} rowSpacing={1.5}>
-          <GasTankCard />
-          <GasTankCard />
-          <GasTankCard />
-          <GasTankCard />
-          <GasTankCard />
-          <GasTankCard />
+          {gasTanks.map((oneEl, index) => {
+            return <GasTankCard key={index} {...oneEl} />;
+          })}
         </Grid>
       </Box>
     </Box>

@@ -1,18 +1,30 @@
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import { useForm } from "react-hook-form";
-import { newTank } from "../../app/api/newTank";
+import { newTank } from "../../app/api/gasTankServices";
 const NewGasTank = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    resetField,
   } = useForm();
+
+  const clearAll = () => {
+    resetField("name");
+    resetField("type");
+    resetField("orderedPriceDistributor");
+    resetField("sellingPriceDistributor");
+    resetField("orderedPriceDealer");
+    resetField("sellingPriceDealer");
+  };
+
   const onSubmit = (data) => {
     console.log(data);
-    newTank(data, (data) => {
-      console.log(data);
+    newTank(data, (response) => {
+      console.log(response);
+      clearAll();
     });
   };
 
@@ -177,7 +189,7 @@ const NewGasTank = () => {
           </Grid>
         </Grid>
         <Box display="flex" justifyContent={"end"} gap={3} pt={4} pb={2}>
-          <Button variant="outlined" sx={{ px: 5 }}>
+          <Button variant="outlined" sx={{ px: 5 }} onClick={clearAll}>
             Clear
           </Button>
           <Button
