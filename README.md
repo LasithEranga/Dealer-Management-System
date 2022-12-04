@@ -4,11 +4,11 @@ add gas tank - done
 view gas tank - done
 edit gas tank - done
 
-add stock using gas tank
-view stock
+add stock using gas tank - done
+view stock - done
 
-add dealer
-view dealers
+add dealer - done
+view dealers - done
 edit dealers
 
 login dealer

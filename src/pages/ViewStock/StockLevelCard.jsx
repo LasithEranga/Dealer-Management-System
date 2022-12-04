@@ -1,35 +1,26 @@
+import _ from "lodash";
 import React from "react";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import StockLevelLine from "../../components/StockLevelLine/StockLevelLine";
 
-const StockLevelCard = ({ title }) => {
+const StockLevelCard = ({ title, data }) => {
+  console.log(data);
   return (
     <ContentCard>
       <div>{title}</div>
-      <StockLevelLine
-        fillColor="red"
-        count={10}
-        title="New Tanks"
-        filled={20}
-      />
-      <StockLevelLine
-        fillColor="#1D9D62"
-        count={60}
-        title="Empty Tanks"
-        filled={60}
-      />
-      <StockLevelLine
-        fillColor="#FDEA3B"
-        count={40}
-        title="Refilled Tanks"
-        filled={40}
-      />
-      <StockLevelLine
-        fillColor="#248DDB"
-        count={50}
-        title="Returned Tanks"
-        filled={50}
-      />
+      {Object.keys(data).map((oneEl, index) => (
+        <StockLevelLine
+          key={index}
+          fillColor={`rgba( ${
+            oneEl.length * 3 > 255 ? 125 : oneEl.length * 3
+          }, ${oneEl.length * 25 > 255 ? 125 : oneEl.length * 25}, ${
+            oneEl.length * 50 > 255 ? 125 : oneEl.length * 50
+          }, 1)`}
+          hundredPercentValue={data[oneEl].hundredPercentValue}
+          currentValue={data[oneEl].currentValue}
+          title={`${_.capitalize(oneEl)} tanks`}
+        />
+      ))}
     </ContentCard>
   );
 };

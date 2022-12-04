@@ -1,65 +1,72 @@
 import { Button, MenuItem, Select, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { DEALERS } from "../../data";
+import NameAvatar from "../NameAvatar/NameAvatar";
 import "./index.css";
 
-const EnhancedTable = () => {
+const EnhancedTable = ({
+  headCells = [
+    "Dealer",
+    "Name",
+    "Address",
+    "Store Address",
+    "Phone No",
+    "Email",
+    "Actions",
+  ],
+  actionButtons = [],
+  amountIndex = 5,
+  priceEnabled = true,
+  enableAvatar = {
+    isVisible: true,
+    madeBy: [0],
+  },
+  data = [],
+}) => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
-  console.log(DEALERS);
+
   return (
     <div>
       <table style={{ width: "100%" }}>
         <thead>
           <tr>
-            <th>Delaer</th>
-            <th>Name </th>
-            <th>Address</th>
-            <th>Phone no</th>
-            <th>Email</th>
-            <th>Actions </th>
+            {headCells.map((oneEl, index) => (
+              <th>{oneEl}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
-          {DEALERS.slice(
-            page * rowsPerPage,
-            page * rowsPerPage + rowsPerPage
-          ).map((element, index) => {
-            return (
-              <tr key={index}>
-                <td>
-                  <div className="d-flex justify-content-start align-items-center text-nowrap">
-                    <div
-                      style={{
-                        width: "40px",
-                        height: "40px",
-                        borderRadius: "50%",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        fontWeight: "bold",
-                        backgroundColor: "#4AEBCB",
-                      }}
-                    >
-                      DB
-                    </div>
-                    <div className="ps-2">
-                      <div className="fw-bold">{element.name}</div>
-                      <div>Rs.{element.outstandingAmount}.00</div>
-                    </div>
-                  </div>
-                </td>
-                {Object.values(element)
-                  .slice(0, 4)
-                  .map((oneEl, index) => {
-                    return <td key={index}>{oneEl}</td>;
-                  })}
-                <td>
-                  <Button>Edit</Button>
-                </td>
-              </tr>
-            );
-          })}
+          {data
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((element, index) => {
+              return (
+                <tr key={index}>
+                  {enableAvatar.isVisible && (
+                    <td>
+                      <NameAvatar
+                        priceEnabled={priceEnabled}
+                        {...(priceEnabled && {
+                          amount: Object.values(element)[amountIndex],
+                        })}
+                        name={enableAvatar.madeBy
+                          .map((oneEl) => Object.values(element)[oneEl])
+                          .join("")}
+                      />
+                    </td>
+                  )}
+
+                  {Object.values(element)
+                    .slice(0, 5)
+                    .map((oneEl, index) => {
+                      return <td key={index}>{oneEl}</td>;
+                    })}
+                  <td>
+                    <Button>Edit</Button>
+                  </td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
 
@@ -98,10 +105,10 @@ const EnhancedTable = () => {
             marginRight: "20px",
           }}
         >{`${page * rowsPerPage + 1} -${
-          page * rowsPerPage + rowsPerPage < DEALERS.length
+          page * rowsPerPage + rowsPerPage < data.length
             ? page * rowsPerPage + rowsPerPage
-            : page * rowsPerPage + DEALERS.length - page * rowsPerPage
-        }  of ${DEALERS.length}`}</div>
+            : page * rowsPerPage + data.length - page * rowsPerPage
+        }  of ${data.length}`}</div>
         <Button
           {...(page === 0 && { disabled: true })}
           onClick={() => {
@@ -111,7 +118,7 @@ const EnhancedTable = () => {
           prev
         </Button>
         <Button
-          {...(page + 1 >= DEALERS.length / rowsPerPage && {
+          {...(page + 1 >= data.length / rowsPerPage && {
             disabled: true,
           })}
           onClick={() => {

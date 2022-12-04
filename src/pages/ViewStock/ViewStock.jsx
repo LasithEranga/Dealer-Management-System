@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Pie } from "react-chartjs-2";
 import PieChartLegend from "./PieChartLegend";
 import StockLevelCard from "./StockLevelCard";
@@ -7,26 +7,46 @@ import EstimatedLevelCard from "./EstimatedLevelCard";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import { Box, Grid, Paper, styled, Typography } from "@mui/material";
 import Titlebar from "../../components/Titlebar/Titlebar";
-
-export const data = {
-  labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-  datasets: [
-    {
-      label: "# of Votes",
-      data: [12, 19, 3, 5],
-      backgroundColor: [
-        "rgba(255, 99, 132, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(255, 206, 86, 1)",
-        "rgba(75, 192, 192, 1)",
-      ],
-
-      borderWidth: 1,
-    },
-  ],
-};
+import { useEffect } from "react";
+import { getChartData, getStockSummery } from "../../app/api/gasStockServices";
+import _ from "lodash";
 
 const ViewStock = () => {
+  //FIXME:user id
+  const userId = "638ba3bf0ebbd0625a8ccbc6";
+  const [chartData, setChartData] = useState([]);
+  const [stockSummery, setStockSummery] = useState({});
+
+  useEffect(() => {
+    getChartData({ userId }, (response) => {
+      let tempData = response.data;
+      tempData.map(
+        (oneEl) =>
+          (oneEl["color"] = `rgba( ${
+            oneEl._id.length * 3 > 255 ? 125 : oneEl._id.length * 3
+          }, ${oneEl._id.length * 25 > 255 ? 125 : oneEl._id.length * 25}, ${
+            oneEl._id.length * 50 > 255 ? 125 : oneEl._id.length * 50
+          }, 1)`)
+      );
+      console.log("tempData", tempData);
+      setChartData(tempData);
+    });
+    getStockSummery({ userId }, (response) => {
+      setStockSummery(response.data);
+    });
+  }, []);
+
+  const data = {
+    labels: chartData.map((oneEl) => `${_.capitalize(oneEl._id)} tanks`),
+    datasets: [
+      {
+        data: chartData.map((oneEl) => oneEl.quantity),
+        backgroundColor: chartData.map((oneEl) => oneEl.color),
+        borderWidth: 1,
+      },
+    ],
+  };
+
   return (
     <Box>
       <Box
@@ -75,26 +95,13 @@ const ViewStock = () => {
                 gap={2}
                 pl={1}
               >
-                <PieChartLegend
-                  label="New Tanks"
-                  indicatorColor="rgba(255, 99, 132, 1)"
-                  count={200}
-                />
-                <PieChartLegend
-                  label="Refilled Tanks"
-                  indicatorColor="rgba(54, 162, 235, 1)"
-                  count={200}
-                />
-                <PieChartLegend
-                  label="Returned Tanks"
-                  indicatorColor="rgba(255, 206, 86, 1)"
-                  count={200}
-                />
-                <PieChartLegend
-                  label="Empty Tanks"
-                  indicatorColor="rgba(75, 192, 192, 1)"
-                  count={200}
-                />
+                {chartData.map((oneEl) => (
+                  <PieChartLegend
+                    label={`${_.capitalize(oneEl._id)} tanks`}
+                    indicatorColor={oneEl.color}
+                    count={oneEl.quantity}
+                  />
+                ))}
               </Grid>
             </Grid>
           </ContentCard>
@@ -108,18 +115,11 @@ const ViewStock = () => {
               rowSpacing={2}
               columnSpacing={{ xs: 2, sm: 2, md: 2 }}
             >
-              <Grid item xs={6}>
-                <StockLevelCard title={"2.5KG Tanks"} />
-              </Grid>
-              <Grid item xs={6}>
-                <StockLevelCard title={"2.5KG Tanks"} />
-              </Grid>
-              <Grid item xs={6}>
-                <StockLevelCard title={"2.5KG Tanks"} />
-              </Grid>
-              <Grid item xs={6}>
-                <StockLevelCard title={"2.5KG Tanks"} />
-              </Grid>
+              {Object.keys(stockSummery).map((oneEl) => (
+                <Grid item xs={6}>
+                  <StockLevelCard title={oneEl} data={stockSummery[oneEl]} />
+                </Grid>
+              ))}
             </Grid>
           </Grid>
         </Grid>

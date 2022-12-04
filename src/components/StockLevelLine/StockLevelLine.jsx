@@ -4,8 +4,8 @@ import React from "react";
 const StockLevelLine = ({
   fillColor = "",
   title = "",
-  count = 0,
-  filled = 0,
+  currentValue = 0,
+  hundredPercentValue = 0,
 }) => {
   return (
     <>
@@ -16,7 +16,7 @@ const StockLevelLine = ({
         justifyContent={"space-between"}
       >
         <Box>{title}</Box>
-        <Box>{count}</Box>
+        <Box>{currentValue}</Box>
       </Box>
       <Box
         sx={{
@@ -27,7 +27,11 @@ const StockLevelLine = ({
       >
         <Box
           style={{
-            width: `${filled}%`,
+            width: `${
+              (currentValue / hundredPercentValue) * 100 > 100
+                ? "100"
+                : (currentValue / hundredPercentValue) * 100
+            }%`,
             position: "absolute",
             top: 0,
             height: "8px",
