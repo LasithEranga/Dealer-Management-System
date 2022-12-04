@@ -1,0 +1,11 @@
+.list-item {
+  background-color: bisque;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+}
+.list-item:hover {
+  background-color: rgb(255, 246, 234);
+  cursor: pointer;
+}

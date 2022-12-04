@@ -1,6 +1,7 @@
 import { Box, TextField, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import React from "react";
+import "./index.css";
 
 const StyledBox = styled(Box)`
   ${({ theme }) => `
@@ -16,6 +17,9 @@ const StyledAutoComplete = ({
   setKeyword,
   suggessionName,
   setSuggestedList,
+  setSelected,
+  register,
+  errors,
 }) => {
   return (
     <Box>
@@ -25,12 +29,14 @@ const StyledAutoComplete = ({
           size="small"
           fullWidth
           value={keyword}
+          {...register}
           onChange={(e) => {
             setKeyword(e.target.value);
           }}
-          onBlur={(e) => {
-            setSuggestedList([]);
-          }}
+          {...(errors.name && {
+            error: true,
+            helperText: errors.name.message,
+          })}
         />
         <StyledBox
           sx={{
@@ -59,11 +65,18 @@ const StyledAutoComplete = ({
           <Typography fontWeight={"bold"} sx={{ mb: 1 }}>
             {suggessionName}
           </Typography>
-          {suggestedList.slice(0, 5).map((oneEl) => {
+          {suggestedList.slice(0, 5).map((oneEl, index) => {
             return (
-              <Box sx={{ height: "2rem" }}>
+              <div
+                key={index}
+                className="list-item"
+                onClick={() => {
+                  setSelected(oneEl);
+                  setSuggestedList([]);
+                }}
+              >
                 {Object.values(oneEl)[1]} {Object.values(oneEl)[3]}
-              </Box>
+              </div>
             );
           })}
         </StyledBox>
