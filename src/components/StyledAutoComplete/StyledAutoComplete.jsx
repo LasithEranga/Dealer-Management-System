@@ -28,7 +28,7 @@ const StyledAutoComplete = ({
         <TextField
           size="small"
           fullWidth
-          value={keyword}
+          value={keyword ? keyword : ""}
           {...register}
           onChange={(e) => {
             setKeyword(e.target.value);

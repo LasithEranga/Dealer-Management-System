@@ -32,11 +32,16 @@ const NewStock = () => {
     setValue,
     setError,
     watch,
+    clearErrors,
+    setFocus,
   } = useForm();
 
   const clearAll = () => {
     resetField("name");
+    setKeyword("");
     resetField("type");
+    resetField("quantity");
+    resetField("reOrderLevel");
     resetField("orderedPriceDistributor");
     resetField("sellingPriceDistributor");
     resetField("orderedPriceDealer");
@@ -54,14 +59,19 @@ const NewStock = () => {
 
   const onSubmit = (data) => {
     if (selected._id) {
-      newStock({
-        user: userId,
-        gasTank: selected._id,
-        quantity: data.quantity,
-        reOrderLevel: data.reOrderLevel,
-      });
+      newStock(
+        {
+          user: userId,
+          gasTank: selected._id,
+          quantity: Number(data.quantity),
+          reOrderLevel: data.reOrderLevel,
+        },
+        () => {
+          clearAll();
+        }
+      );
     } else {
-      setError();
+      setError("name");
     }
 
     console.log(data);
@@ -77,10 +87,15 @@ const NewStock = () => {
 
   useEffect(() => {
     setValues(selected);
+    clearErrors(["name", "type"]);
+    if (selected._id) {
+      setFocus("quantity");
+    }
     // get re-order level if gas tank already has a stock
     getReOrderLevel({ userId, gasTankId: selected._id }, (response) => {
       if (response.data !== "NOT_FOUND") {
         setValue("reOrderLevel", response.data.reOrderLevel);
+        clearErrors("reOrderLevel");
       } else {
         setValue("reOrderLevel", "");
       }
