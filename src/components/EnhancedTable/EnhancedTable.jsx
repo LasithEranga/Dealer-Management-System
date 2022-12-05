@@ -61,9 +61,18 @@ const EnhancedTable = ({
                     .map((oneEl, index) => {
                       return <td key={index}>{oneEl}</td>;
                     })}
-                  <td>
-                    <Button>Edit</Button>
-                  </td>
+
+                  {actionButtons.map((oneEl, index) => (
+                    <td>
+                      <Button
+                        onClick={() => {
+                          oneEl.action(element);
+                        }}
+                      >
+                        {oneEl.name}
+                      </Button>
+                    </td>
+                  ))}
                 </tr>
               );
             })}

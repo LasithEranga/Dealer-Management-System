@@ -11,7 +11,7 @@ import * as React from "react";
 import { Outlet } from "react-router-dom";
 import SidebarItem from "./SidebarItem";
 import SubHeading from "./SubHeading";
-
+import logo from "../../asessts/logo.png";
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -78,13 +78,13 @@ export default function Sidebar() {
             aria-label="open drawer"
             onClick={toggleDrawer}
             edge="start"
-            sx={{ mr: 2 }}
+            sx={{ mr: 1 }}
           >
-            <MenuIcon />
+            <MenuIcon sx={{ fontSize: "1.6rem", color: "#B2B2B2" }} />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Dealer Management System
-          </Typography>
+          <Box display={"flex"}>
+            <img src={logo} alt="" width="100px" />
+          </Box>
         </Toolbar>
       </AppBar>
 
@@ -108,6 +108,7 @@ export default function Sidebar() {
               pr: 1,
               pt: 1,
               pb: 3,
+              scrollbarWidth: "thin",
               ...(open ? { minWidth: 220 } : { minWidth: 220 }),
               "&:hover": {
                 pr: 0,
@@ -183,6 +184,7 @@ export default function Sidebar() {
             sx={{
               height: "95vh",
               overflowY: "auto",
+              scrollbarWidth: "thin",
               pl: 2,
               pr: 1,
               pb: 5,

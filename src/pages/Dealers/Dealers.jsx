@@ -20,6 +20,7 @@ const Dealers = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [dealers, setDealers] = useState([]);
   const [refreshTable, setRefreshTable] = useState(false);
+  const [updatingUseId, setUpdatingUseId] = useState("");
 
   const {
     register,
@@ -50,16 +51,15 @@ const Dealers = () => {
     });
   };
 
-  const setValues = (
-    _id,
-    name,
-    email,
-    phoneNumber,
-    address,
-    storeAddress,
-    outstandingAmount
-  ) => {
-    console.log(_id);
+  const setValues = (data) => {
+    const {
+      name,
+      email,
+      phoneNumber,
+      address,
+      storeAddress,
+      outstandingAmount,
+    } = data;
 
     setValue("name", name);
     setValue("email", email);
@@ -75,7 +75,8 @@ const Dealers = () => {
     email,
     phoneNumber,
     address,
-    storeAddress
+    storeAddress,
+    _id
   ) => {
     return {
       name,
@@ -84,6 +85,7 @@ const Dealers = () => {
       phoneNumber,
       email,
       outstandingAmount,
+      _id,
     };
   };
 
@@ -98,12 +100,20 @@ const Dealers = () => {
             oneEl.email,
             oneEl.phoneNumber,
             oneEl.address,
-            oneEl.storeAddress
+            oneEl.storeAddress,
+            oneEl._id
           )
         )
       );
     });
   }, [refreshTable]);
+
+  const handleEditClick = (data) => {
+    console.log(data);
+    setUpdatingUseId(data._id);
+    setValues(data);
+    setShowEditModal(true);
+  };
 
   return (
     <div>
@@ -113,7 +123,10 @@ const Dealers = () => {
             Add Dealer
           </Typography>
         </Box>
-        <Box sx={{ maxHeight: "30rem", overflow: "auto" }} pr={2}>
+        <Box
+          sx={{ maxHeight: "30rem", overflow: "auto", scrollbarWidth: "thin" }}
+          pr={2}
+        >
           <Box>
             <Typography sx={{ my: 1 }} fontWeight="bold">
               Dealer Name
@@ -231,7 +244,7 @@ const Dealers = () => {
             />
           </Box>
         </Box>
-        <Box display="flex" justifyContent={"end"} gap={1} pt={3} pb={1}>
+        <Box display="flex" justifyContent={"end"} gap={1} pt={3} pb={1} pr={2}>
           <Button
             variant="outlined"
             sx={{ px: 5 }}
@@ -263,8 +276,12 @@ const Dealers = () => {
           Dealers
         </Typography>
         <Box>
-          <Button>Download PDF</Button>
+          <Button sx={{ mr: 1, boxShadow: 0 }} variant="contained">
+            Download PDF
+          </Button>
           <Button
+            variant="contained"
+            sx={{ boxShadow: 0 }}
             onClick={() => {
               setShowEditModal(true);
             }}
@@ -328,7 +345,15 @@ const Dealers = () => {
       {/* --------------------------- table section ------------------------------- */}
       <Box mt={2}>
         <ContentCard>
-          <EnhancedTable data={dealers} />
+          <EnhancedTable
+            data={dealers}
+            actionButtons={[
+              {
+                name: "Edit",
+                action: handleEditClick,
+              },
+            ]}
+          />
         </ContentCard>
       </Box>
       {/* --------------------------- table section ------------------------------- */}

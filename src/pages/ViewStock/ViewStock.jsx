@@ -163,7 +163,11 @@ const ViewStock = () => {
                 display={"flex"}
                 gap={2}
                 py={2}
-                style={{ maxWidth: "35rem", overflowX: "scroll" }}
+                style={{
+                  maxWidth: "35rem",
+                  overflowX: "scroll",
+                  scrollbarWidth: "thin",
+                }}
               >
                 <EstimatedLevelCard
                   tankType="12.5KG Tanks"

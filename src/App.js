@@ -4,6 +4,7 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Dealers from "./pages/Dealers/Dealers";
 import DistributeStock from "./pages/DistributeStock/DistributeStock";
+import Login from "./pages/Login/Login";
 import NewGasTank from "./pages/NewGasTank/NewGasTank";
 import NewStock from "./pages/NewStock/NewStock";
 import ViewGasTanks from "./pages/ViewGasTanks/ViewGasTanks";
@@ -13,6 +14,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path={"/login"} element={<Login />} />
         <Route path={"/"} element={<Sidebar />}>
           <Route path="" element={<Dashboard />} />
           <Route path="new-stock" element={<NewStock />} />
