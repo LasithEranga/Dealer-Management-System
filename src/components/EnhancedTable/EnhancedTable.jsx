@@ -28,11 +28,11 @@ const EnhancedTable = ({
 
   return (
     <div>
-      <table style={{ width: "100%" }}>
+      <table style={{ width: "100%" }} className="eh-table">
         <thead>
-          <tr>
+          <tr className="eh-tr">
             {headCells.map((oneEl, index) => (
-              <th>{oneEl}</th>
+              <th className="eh-th">{oneEl}</th>
             ))}
           </tr>
         </thead>
@@ -41,9 +41,9 @@ const EnhancedTable = ({
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((element, index) => {
               return (
-                <tr key={index}>
+                <tr key={index} className="eh-tr">
                   {enableAvatar.isVisible && (
-                    <td>
+                    <td className="eh-td">
                       <NameAvatar
                         priceEnabled={priceEnabled}
                         {...(priceEnabled && {

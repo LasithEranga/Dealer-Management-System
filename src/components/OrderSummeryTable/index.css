@@ -1,0 +1,21 @@
+.sales-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.sales-th {
+  text-align: left;
+  padding-left: 10px;
+  background-color: rgb(247, 247, 247);
+  height: 30px;
+}
+.sales-tr {
+  height: 30px;
+}
+.sales-body {
+  max-height: 2rem;
+  overflow-y: auto;
+}
+.sales-td {
+  padding-left: 10px;
+}

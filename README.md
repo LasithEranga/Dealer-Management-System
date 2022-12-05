@@ -9,9 +9,10 @@ view stock - done
 
 add dealer - done
 view dealers - done
-edit dealers
+edit dealers - done
 
-login dealer
+login dealer - dealer dashboard done
+login distributor
 make a purchase order
 
 distributor receive order

@@ -11,7 +11,11 @@ import {
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { getAllDealers, newDealer } from "../../app/api/userServices";
+import {
+  getAllDealers,
+  newDealer,
+  updateDealer,
+} from "../../app/api/userServices";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import CustomModal from "../../components/CustomModal/CustomModal";
 import EnhancedTable from "../../components/EnhancedTable/EnhancedTable";
@@ -20,7 +24,17 @@ const Dealers = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [dealers, setDealers] = useState([]);
   const [refreshTable, setRefreshTable] = useState(false);
-  const [updatingUseId, setUpdatingUseId] = useState("");
+  const [update, setUpdate] = useState({
+    isUpdating: true,
+    _id: "",
+  });
+
+  const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState("pleaseSelect");
+  const [outstandingBalance, setOutstandingamount] = useState({
+    min: "",
+    max: "",
+  });
 
   const {
     register,
@@ -39,11 +53,24 @@ const Dealers = () => {
     resetField("outstandingAmount");
   };
 
+  //saves the dealer details
   const onSubmit = (data) => {
     console.log(data);
     data["password"] = Math.random() * 12458;
     data["type"] = "DEALER";
     newDealer(data, (response) => {
+      console.log(response);
+      clearAll();
+      setShowEditModal(false);
+      setRefreshTable((prev) => !prev);
+    });
+  };
+
+  //updates the dealer details
+  const onClickUpdate = (data) => {
+    console.log(data);
+    data["_id"] = update._id;
+    updateDealer(data, (response) => {
       console.log(response);
       clearAll();
       setShowEditModal(false);
@@ -108,9 +135,22 @@ const Dealers = () => {
     });
   }, [refreshTable]);
 
+  useEffect(() => {
+    if (!showEditModal) {
+      clearAll();
+      setUpdate({
+        isUpdating: false,
+        _id: "",
+      });
+    }
+  }, [showEditModal]);
+
   const handleEditClick = (data) => {
     console.log(data);
-    setUpdatingUseId(data._id);
+    setUpdate({
+      isUpdating: true,
+      _id: data._id,
+    });
     setValues(data);
     setShowEditModal(true);
   };
@@ -250,7 +290,6 @@ const Dealers = () => {
             sx={{ px: 5 }}
             color="secondary"
             onClick={() => {
-              clearAll();
               setShowEditModal(false);
             }}
           >
@@ -259,9 +298,13 @@ const Dealers = () => {
           <Button
             variant="contained"
             sx={{ px: 5 }}
-            onClick={handleSubmit(onSubmit)}
+            onClick={
+              update.isUpdating
+                ? handleSubmit(onClickUpdate)
+                : handleSubmit(onSubmit)
+            }
           >
-            Save
+            {update.isUpdating ? "Update" : "Save"}
           </Button>
         </Box>
       </CustomModal>
@@ -298,7 +341,15 @@ const Dealers = () => {
                 <Typography fontWeight={"bold"} sx={{ mb: 1 }}>
                   Search for dealer
                 </Typography>
-                <TextField fullWidth size="small" placeholder="Dealer name" />
+                <TextField
+                  fullWidth
+                  size="small"
+                  placeholder="Dealer name"
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                  }}
+                  value={search}
+                />
               </Box>
             </Grid>
 
@@ -308,10 +359,22 @@ const Dealers = () => {
                   Sort By
                 </Typography>
                 <FormControl fullWidth size="small">
-                  <Select>
-                    {/* <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem> */}
+                  <Select
+                    onChange={(e) => {
+                      setSortBy(e.target.value);
+                    }}
+                    value={sortBy}
+                    defaultValue={""}
+                  >
+                    <MenuItem value={"pleaseSelect"} disabled>
+                      Please Select
+                    </MenuItem>
+                    <MenuItem value={"name"}>Name</MenuItem>
+                    <MenuItem value={"address"}>Address</MenuItem>
+                    <MenuItem value={"email"}>Email</MenuItem>
+                    <MenuItem value={"outstandingBalance"}>
+                      Outstanding Balance
+                    </MenuItem>
                   </Select>
                 </FormControl>
               </Box>
@@ -324,7 +387,17 @@ const Dealers = () => {
                 </Typography>
                 <Box display={"flex"} gtap={2}>
                   <FormControl fullWidth size="small">
-                    <TextField size="small" placeholder="min: Rs:2000.00" />
+                    <TextField
+                      size="small"
+                      placeholder="min: Rs:2000.00"
+                      onChange={(e) => {
+                        setOutstandingamount((prev) => ({
+                          ...prev,
+                          min: e.target.value,
+                        }));
+                      }}
+                      value={outstandingBalance.min}
+                    />
                   </FormControl>
                   <Box mx={2}>
                     <Typography fontSize="1.5rem" fontWeight={"bold"}>
@@ -333,7 +406,17 @@ const Dealers = () => {
                     </Typography>
                   </Box>
                   <FormControl fullWidth size="small">
-                    <TextField size="small" placeholder="Max: Rs:50000.00" />
+                    <TextField
+                      size="small"
+                      placeholder="Max: Rs:50000.00"
+                      onChange={(e) => {
+                        setOutstandingamount((prev) => ({
+                          ...prev,
+                          min: e.target.value,
+                        }));
+                      }}
+                      value={outstandingBalance.min}
+                    />
                   </FormControl>
                 </Box>
               </Box>

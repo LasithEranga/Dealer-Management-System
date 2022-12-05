@@ -62,6 +62,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function Sidebar() {
+  const userType = "DEALER";
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = () => {
@@ -98,87 +99,163 @@ export default function Sidebar() {
         <DrawerHeader />
 
         <Box display={"flex"}>
-          <Box
-            sx={{
-              backgroundColor: "#222531",
-              height: "95vh",
-              overflowY: "hidden",
-              color: "white",
-              pl: 1,
-              pr: 1,
-              pt: 1,
-              pb: 3,
-              scrollbarWidth: "thin",
-              ...(open ? { minWidth: 220 } : { minWidth: 220 }),
-              "&:hover": {
-                pr: 0,
-                overflowY: "auto",
-              },
-            }}
-          >
-            <SidebarItem icon={<DashboardIcon />} title="Dashboard" path={""} />
+          {userType === "DISTRIBUTOR" && (
+            <Box
+              sx={{
+                backgroundColor: "#222531",
+                height: "95vh",
+                overflowY: "hidden",
+                color: "white",
+                pl: 1,
+                pr: 1,
+                pt: 1,
+                pb: 3,
+                scrollbarWidth: "thin",
+                ...(open ? { minWidth: 220 } : { minWidth: 220 }),
+                "&:hover": {
+                  pr: 0,
+                  overflowY: "auto",
+                },
+              }}
+            >
+              <SidebarItem
+                icon={<DashboardIcon />}
+                title="Dashboard"
+                path={""}
+              />
 
-            {/* ------------------ IN house stock ---------------- */}
-            <SubHeading title="IN-HOUSE STOCK" />
-            <SidebarItem
-              icon={<DashboardIcon />}
-              title="New Stock"
-              path={"new-stock"}
-            />
-            <SidebarItem
-              icon={<DashboardIcon />}
-              title="View Stock Details"
-              path={"view-stock"}
-            />
-            <SidebarItem
-              icon={<DashboardIcon />}
-              title="Distribute Stock"
-              path={"distribute-stock"}
-            />
+              {/* ------------------ IN house stock ---------------- */}
+              <SubHeading title="IN-HOUSE STOCK" />
+              <SidebarItem
+                icon={<DashboardIcon />}
+                title="New Stock"
+                path={"new-stock"}
+              />
+              <SidebarItem
+                icon={<DashboardIcon />}
+                title="View Stock Details"
+                path={"view-stock"}
+              />
+              <SidebarItem
+                icon={<DashboardIcon />}
+                title="Distribute Stock"
+                path={"distribute-stock"}
+              />
 
-            {/* ------------------ IN house stock ---------------- */}
+              {/* ------------------ IN house stock ---------------- */}
 
-            {/* -------------------  Dealers --------------------------*/}
-            <SubHeading title="DEALERS" />
-            <SidebarItem
-              icon={<DashboardIcon />}
-              title="Dealers"
-              path={"dealers"}
-            />
-            <SidebarItem icon={<DashboardIcon />} title="Dealer Stocks" />
-            <SidebarItem icon={<DashboardIcon />} title="Dealer Sales" />
-            <SidebarItem icon={<DashboardIcon />} title="Dealer Performance" />
+              {/* -------------------  Dealers --------------------------*/}
+              <SubHeading title="DEALERS" />
+              <SidebarItem
+                icon={<DashboardIcon />}
+                title="Dealers"
+                path={"dealers"}
+              />
+              <SidebarItem icon={<DashboardIcon />} title="Dealer Stocks" />
+              <SidebarItem icon={<DashboardIcon />} title="Dealer Sales" />
+              <SidebarItem
+                icon={<DashboardIcon />}
+                title="Dealer Performance"
+              />
 
-            {/* -------------------  Dealers --------------------------*/}
+              {/* -------------------  Dealers --------------------------*/}
 
-            {/* -------------------  Gas tanks --------------------------*/}
-            <SubHeading title="GAS TANKS" />
-            <SidebarItem
-              icon={<DashboardIcon />}
-              title="New Gas Tank"
-              path={"new-gastank"}
-            />
-            <SidebarItem
-              icon={<DashboardIcon />}
-              title="View Gas Tanks"
-              path={"view-gastanks"}
-            />
+              {/* -------------------  Gas tanks --------------------------*/}
+              <SubHeading title="GAS TANKS" />
+              <SidebarItem
+                icon={<DashboardIcon />}
+                title="New Gas Tank"
+                path={"new-gastank"}
+              />
+              <SidebarItem
+                icon={<DashboardIcon />}
+                title="View Gas Tanks"
+                path={"view-gastanks"}
+              />
 
-            {/* -------------------  Gas tanks --------------------------*/}
+              {/* -------------------  Gas tanks --------------------------*/}
 
-            {/* -------------------  PURCHASE ORDERS --------------------------*/}
+              {/* -------------------  PURCHASE ORDERS --------------------------*/}
 
-            <SubHeading title="PURCHASE ORDERS" />
-            <SidebarItem icon={<DashboardIcon />} title="New Orders" />
-            <SidebarItem icon={<DashboardIcon />} title="View Orders" />
-            <SidebarItem icon={<DashboardIcon />} title="Saved Orders" />
-            <SidebarItem icon={<DashboardIcon />} title="Payment Pending" />
+              <SubHeading title="PURCHASE ORDERS" />
+              <SidebarItem icon={<DashboardIcon />} title="New Orders" />
+              <SidebarItem icon={<DashboardIcon />} title="View Orders" />
+              <SidebarItem icon={<DashboardIcon />} title="Saved Orders" />
+              <SidebarItem icon={<DashboardIcon />} title="Payment Pending" />
 
-            {/* -------------------  PURCHASE ORDERS --------------------------*/}
-            <SubHeading title="REPORTS" />
+              {/* -------------------  PURCHASE ORDERS --------------------------*/}
+              <SubHeading title="REPORTS" />
 
-            <SidebarItem icon={<DashboardIcon />} title="Reports" />
-          </Box>
+              <SidebarItem icon={<DashboardIcon />} title="Reports" />
+            </Box>
+          )}
+
+          {userType === "DEALER" && (
+            <Box
+              sx={{
+                backgroundColor: "#222531",
+                height: "95vh",
+                overflowY: "hidden",
+                color: "white",
+                pl: 1,
+                pr: 1,
+                pt: 1,
+                pb: 6,
+                scrollbarWidth: "thin",
+                ...(open ? { minWidth: 220 } : { minWidth: 220 }),
+                "&:hover": {
+                  pr: 0,
+                  overflowY: "auto",
+                },
+              }}
+            >
+              {/* ------------------ SELLING ---------------- */}
+              <SubHeading title="SELLING" />
+              <SidebarItem
+                icon={<DashboardIcon />}
+                title="Sell Tanks"
+                path={""}
+              />
+              <SidebarItem
+                icon={<DashboardIcon />}
+                title="Accept Returns"
+                path={"accept-return"}
+              />
+
+              {/* ------------------ SELLING ---------------- */}
+
+              {/* -------------------  MANAGE STOCK --------------------------*/}
+              <SubHeading title="Manage Stock" />
+              <SidebarItem
+                icon={<DashboardIcon />}
+                title="New Stock"
+                path={"new-stock"}
+                //TODO:
+              />
+              <SidebarItem icon={<DashboardIcon />} title="View Stock" />
+              <SidebarItem icon={<DashboardIcon />} title="Return Stock" />
+
+              {/* -------------------  MANAGE STOCK --------------------------*/}
+
+              {/* -------------------  PURCHASE ORDERS --------------------------*/}
+
+              <SubHeading title="PURCHASE ORDERS" />
+              <SidebarItem
+                icon={<DashboardIcon />}
+                title="New Order"
+                path={"new-order"}
+              />
+              <SidebarItem icon={<DashboardIcon />} title="Accepted Orders" />
+              <SidebarItem icon={<DashboardIcon />} title="Pending Orders" />
+              <SidebarItem icon={<DashboardIcon />} title="Declined Orders" />
+              <SidebarItem icon={<DashboardIcon />} title="Pending Payments" />
+
+              {/* -------------------  PURCHASE ORDERS --------------------------*/}
+              <SubHeading title="REPORTS" />
+
+              <SidebarItem icon={<DashboardIcon />} title="Reports" />
+            </Box>
+          )}
 
           <Box
             sx={{
