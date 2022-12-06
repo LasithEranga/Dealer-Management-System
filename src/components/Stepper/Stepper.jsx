@@ -4,7 +4,7 @@ import React from "react";
 import HeaderItem from "./HeaderItem";
 import StepIcon from "./StepIcon";
 
-const Stepper = () => {
+const Stepper = ({ activeStep }) => {
   return (
     <>
       {/* stepper header */}

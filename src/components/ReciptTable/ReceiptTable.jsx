@@ -9,8 +9,8 @@ const ReceiptTable = () => {
           <th className="report-th">Tank Name</th>
           <th className="report-th">Tank Type</th>
           <th className="report-th">Qty</th>
-          <th className="report-th">Unit Price (Rs)</th>
-          <th className="report-th">Total Price (Rs)</th>
+          <th className="report-th text-end ">Unit Price (Rs)</th>
+          <th className="report-th text-end ">Total Price (Rs)</th>
         </tr>
       </thead>
       <tbody>
