@@ -35,10 +35,10 @@ const Dashboard = () => {
         Hi {userName.split(" ")[0]}, Welcome back
       </Typography>
       <Grid container gap={2}>
-        <DashboardCard />
-        <DashboardCard />
-        <DashboardCard />
-        <DashboardCard />
+        <DashboardCard title={"Today Total Sales"} />
+        <DashboardCard title={"This month Total Sales"} />
+        <DashboardCard title={"Sales from New Tanks"} />
+        <DashboardCard title={"This month Sales"} />
       </Grid>
 
       <Grid container mt={2} gap={2}>
