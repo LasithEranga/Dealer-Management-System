@@ -1,19 +1,19 @@
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import React, { useState } from "react";
+import { useEffect } from "react";
 import ContentCard from "../../components/ContentCard/ContentCard";
-import CustomModal from "../../components/CustomModal/CustomModal";
 import Stepper from "../../components/Stepper/Stepper";
 import StepOne from "./StepOne";
-import StepTwo from "./StepTwo";
-import logo from "../../asessts/logo.png";
-import TitleAndContent from "../../components/TitleAndContent/TitleAndContent";
-import RowItem from "../../components/RowItem/RowItem";
-import ReceiptTable from "../../components/ReciptTable/ReceiptTable";
 import StepThree from "./StepThree";
+import StepTwo from "./StepTwo";
 const NewPurchaseOrder = () => {
   const [activeStep, setActiveStep] = useState(1);
   const [orderList, setOrderList] = useState([]);
   const [open, setOpen] = useState(true);
+
+  useEffect(() => {
+    console.log(activeStep);
+  }, [activeStep]);
 
   return (
     <Box>
@@ -22,7 +22,7 @@ const NewPurchaseOrder = () => {
       </Typography>
       <Box>
         <ContentCard>
-          <Stepper activeStep />
+          <Stepper activeStep={activeStep} />
         </ContentCard>
       </Box>
       <Box>
@@ -171,7 +171,7 @@ const NewPurchaseOrder = () => {
           // </CustomModal>
         )}
 
-        {activeStep === 3 && (
+        {activeStep === 4 && (
           <StepThree
             setActiveStep={setActiveStep}
             orderList={orderList}

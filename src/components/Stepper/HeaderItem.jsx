@@ -7,13 +7,10 @@ import StepIcon from "./StepIcon";
 
 // Completed, inprogress, pending
 
-const HeaderItem = ({
-  hasNext = true,
-  xs,
-  stepNo,
-  title,
-  state = "COMPLETED",
-}) => {
+const HeaderItem = ({ xs, title, activeStep, icon, step }) => {
+  console.log(activeStep, step);
+  const pendingColor = "#BDBDBD";
+  const activeColor = "#5F36B1";
   return (
     <Grid item xs {...(xs && { xs: xs })}>
       <Grid container mb={0.5}>
@@ -22,7 +19,7 @@ const HeaderItem = ({
             <ColouredLine
               width={"100%"}
               height="2px"
-              backgroundColor={"#5F36B1"}
+              backgroundColor={activeStep >= step ? activeColor : pendingColor}
             />
           </FlexBox>
         </Grid>
@@ -37,17 +34,17 @@ const HeaderItem = ({
         >
           <FlexBox
             sx={{
-              width: "32px",
-              height: "32px",
+              width: "40px",
+              height: "40px",
               m: 1,
               ml: 0.5,
               borderRadius: "50%",
-              backgroundColor: "#5F36B1",
+              backgroundColor: activeStep >= step ? activeColor : pendingColor,
               color: "white",
               mx: 2,
             }}
           >
-            <Done />
+            {icon}
           </FlexBox>
         </Grid>
 
@@ -56,7 +53,7 @@ const HeaderItem = ({
             <ColouredLine
               width={"100%"}
               height="2px"
-              backgroundColor={"#5F36B1"}
+              backgroundColor={activeStep > step ? activeColor : pendingColor}
             />
           </FlexBox>
         </Grid>
@@ -65,7 +62,10 @@ const HeaderItem = ({
         fontWeight={"bold"}
         fontSize="0.8rem"
         textAlign={"center"}
-        sx={{ lineHeight: "0.7rem", color: "#5F36B1" }}
+        sx={{
+          lineHeight: "0.7rem",
+          color: activeStep >= step ? activeColor : pendingColor,
+        }}
       >
         {title}
       </Typography>

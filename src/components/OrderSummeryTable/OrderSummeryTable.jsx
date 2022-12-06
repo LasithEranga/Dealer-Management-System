@@ -51,7 +51,7 @@ const OrderSummeryTable = ({
         >
           <table className="sales-table">
             <thead style={{ position: "sticky", top: 0 }}>
-              <tr className="">
+              <tr className="sales-tr">
                 <th className="sales-th">Gas Tank</th>
                 <th className="sales-th">Type</th>
                 <th className="sales-th">Quantity</th>

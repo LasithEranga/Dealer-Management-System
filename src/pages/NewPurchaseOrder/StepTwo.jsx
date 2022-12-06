@@ -26,7 +26,7 @@ const StepTwo = ({ orderList, setActiveStep }) => {
   const [open, setOpen] = useState(true);
 
   const onClickNext = () => {
-    setActiveStep(3);
+    setActiveStep(4);
     setOpen(false);
   };
 
