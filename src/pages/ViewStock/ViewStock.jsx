@@ -10,10 +10,10 @@ import Titlebar from "../../components/Titlebar/Titlebar";
 import { useEffect } from "react";
 import { getChartData, getStockSummery } from "../../app/api/gasStockServices";
 import _ from "lodash";
+import { useSelector } from "react-redux";
 
 const ViewStock = () => {
-  //FIXME:user id
-  const userId = "638ba3bf0ebbd0625a8ccbc6";
+  const { userId } = useSelector((state) => state.loginDMS);
   const [chartData, setChartData] = useState([]);
   const [stockSummery, setStockSummery] = useState({});
 

@@ -32,16 +32,32 @@ const Login = () => {
     userLogin(data, (response) => {
       console.log(response);
       if (response.status === 0) {
-        const { _id, name, email, type, outstandingAmount } = response.data;
-        dispatch(
-          login({
-            _id,
-            name,
-            email,
-            type,
-            outstandingAmount,
-          })
-        );
+        const { _id, name, email, type, outstandingAmount, distributor } =
+          response.data;
+        if (type === "DEALER") {
+          dispatch(
+            login({
+              _id,
+              name,
+              email,
+              type,
+              outstandingAmount,
+              distributor,
+            })
+          );
+        } else {
+          dispatch(
+            login({
+              _id,
+              name,
+              email,
+              type,
+              outstandingAmount,
+              distributor: {},
+            })
+          );
+        }
+
         showSystemAlert("Logged into the system", "success");
 
         navigate("/");

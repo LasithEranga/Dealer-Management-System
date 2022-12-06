@@ -8,6 +8,7 @@ import CustomModal from "../../components/CustomModal/CustomModal";
 import ReceiptTable from "../../components/ReciptTable/ReceiptTable";
 import RowItem from "../../components/RowItem/RowItem";
 import logo from "../../asessts/logo.png";
+import { useEffect } from "react";
 
 const style = {
   position: "absolute",
@@ -24,12 +25,20 @@ const style = {
 };
 const StepTwo = ({ orderList, setActiveStep }) => {
   const [open, setOpen] = useState(true);
+  const [orderTotal, setOrderTotal] = useState(true);
 
   const onClickNext = () => {
     setActiveStep(4);
     setOpen(false);
   };
 
+  useEffect(() => {
+    let total = 0;
+    orderList.forEach((oneEl) => {
+      total = total + oneEl.quantity * oneEl.orderedPriceDealer;
+    });
+    setOrderTotal(total);
+  }, [orderList]);
   return (
     <CustomModal open={open} setOpen={setOpen} width={600} pr={2}>
       <Box>
@@ -101,7 +110,7 @@ const StepTwo = ({ orderList, setActiveStep }) => {
         height="10rem"
         sx={{ overflowY: "auto", scrollbarWidth: "thin" }}
       >
-        <ReceiptTable />
+        <ReceiptTable orderList={orderList} />
       </Box>
       <Box
         mt={2}
@@ -121,7 +130,7 @@ const StepTwo = ({ orderList, setActiveStep }) => {
           ORDER TOTAL
         </Box>
         <Typography fontWeight={"bold"} fontSize="1.2rem">
-          Rs: 125000.00
+          Rs: {orderTotal}.00
         </Typography>
       </Box>
       <Box

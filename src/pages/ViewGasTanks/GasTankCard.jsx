@@ -1,5 +1,6 @@
 import { Delete, Edit } from "@mui/icons-material";
 import { Box, Button, Divider, Grid, Typography } from "@mui/material";
+import _ from "lodash";
 import React from "react";
 import ContentCard from "../../components/ContentCard/ContentCard";
 
@@ -24,8 +25,8 @@ const GasTankCard = ({
           <Grid item xs={4}>
             <Typography>Tank Type:</Typography>
           </Grid>
-          <Grid item xs>
-            {name} {type}
+          <Grid item xs display={"flex"} justifyContent="end">
+            {name} {_.capitalize(type)}
           </Grid>
         </Grid>
         <Divider sx={{ height: "5px", my: 1 }} />
@@ -38,7 +39,7 @@ const GasTankCard = ({
           <Grid item xs={6}>
             <Typography>Ordering Price:</Typography>
           </Grid>
-          <Grid item xs>
+          <Grid item xs display={"flex"} justifyContent="end">
             Rs. {orderedPriceDistributor}
           </Grid>
         </Grid>
@@ -46,7 +47,7 @@ const GasTankCard = ({
           <Grid item xs={6}>
             <Typography>Selling Price:</Typography>
           </Grid>
-          <Grid item xs>
+          <Grid item xs display={"flex"} justifyContent="end">
             Rs. {sellingPriceDistributor}
           </Grid>
         </Grid>
@@ -59,7 +60,7 @@ const GasTankCard = ({
           <Grid item xs={6}>
             <Typography>Ordering Price:</Typography>
           </Grid>
-          <Grid item xs>
+          <Grid item xs display={"flex"} justifyContent="end">
             Rs. {orderedPriceDealer}
           </Grid>
         </Grid>
@@ -67,7 +68,7 @@ const GasTankCard = ({
           <Grid item xs={6}>
             <Typography>Selling Price:</Typography>
           </Grid>
-          <Grid item xs>
+          <Grid item xs display={"flex"} justifyContent="end">
             Rs. {sellingPriceDealer}
           </Grid>
         </Grid>

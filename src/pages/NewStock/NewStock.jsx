@@ -9,14 +9,14 @@ import {
 import { styled } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 import { getReOrderLevel, newStock } from "../../app/api/gasStockServices";
 import { searchGasTank } from "../../app/api/gasTankServices";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import StyledAutoComplete from "../../components/StyledAutoComplete/StyledAutoComplete";
 
 const NewStock = () => {
-  //FIXME: SET USER ID FROM STORE
-  const userId = "638ba3bf0ebbd0625a8ccbc6";
+  const { userId } = useSelector((state) => state.loginDMS);
 
   // -------------------------use states -----------------------
   const [suggestedList, setSuggestedList] = useState([]);

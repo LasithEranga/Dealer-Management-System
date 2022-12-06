@@ -11,6 +11,7 @@ import {
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 import { showSystemAlert } from "../../app/alertServices";
 import {
   getAllDealers,
@@ -22,6 +23,8 @@ import CustomModal from "../../components/CustomModal/CustomModal";
 import EnhancedTable from "../../components/EnhancedTable/EnhancedTable";
 
 const Dealers = () => {
+  const { userId } = useSelector((state) => state.loginDMS);
+
   const [showEditModal, setShowEditModal] = useState(false);
   const [dealers, setDealers] = useState([]);
   const [refreshTable, setRefreshTable] = useState(false);
@@ -59,6 +62,7 @@ const Dealers = () => {
     console.log(data);
     data["password"] = Math.random() * 12458;
     data["type"] = "DEALER";
+    data["distributor"] = userId;
     newDealer(data, (response) => {
       console.log(response);
       clearAll();
@@ -72,6 +76,7 @@ const Dealers = () => {
   const onClickUpdate = (data) => {
     console.log(data);
     data["_id"] = update._id;
+    data["distributor"] = userId;
     updateDealer(data, (response) => {
       console.log(response);
       clearAll();

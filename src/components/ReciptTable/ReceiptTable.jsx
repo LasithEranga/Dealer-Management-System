@@ -1,7 +1,7 @@
 import React from "react";
 import "./index.css";
 
-const ReceiptTable = () => {
+const ReceiptTable = ({ orderList }) => {
   return (
     <table className="report-table">
       <thead className="report-table-head">
@@ -14,41 +14,17 @@ const ReceiptTable = () => {
         </tr>
       </thead>
       <tbody>
-        <tr className="report-tr">
-          <td className="report-td">5KG Tank</td>
-          <td className="report-td">New</td>
-          <td className="report-td">50</td>
-          <td className="report-td text-end">1500.00</td>
-          <td className="report-td text-end">75,000.00</td>
-        </tr>
-        <tr className="report-tr">
-          <td className="report-td">5KG Tank</td>
-          <td className="report-td">New</td>
-          <td className="report-td">50</td>
-          <td className="report-td text-end">1500.00</td>
-          <td className="report-td text-end">75,000.00</td>
-        </tr>
-        <tr className="report-tr">
-          <td className="report-td">5KG Tank</td>
-          <td className="report-td">New</td>
-          <td className="report-td">50</td>
-          <td className="report-td text-end">1500.00</td>
-          <td className="report-td text-end">75,000.00</td>
-        </tr>
-        <tr className="report-tr">
-          <td className="report-td">5KG Tank</td>
-          <td className="report-td">New</td>
-          <td className="report-td">50</td>
-          <td className="report-td text-end">1500.00</td>
-          <td className="report-td text-end">75,000.00</td>
-        </tr>
-        <tr className="report-tr">
-          <td className="report-td">5KG Tank</td>
-          <td className="report-td">New</td>
-          <td className="report-td">50</td>
-          <td className="report-td text-end">1500.00</td>
-          <td className="report-td text-end">75,000.00</td>
-        </tr>
+        {orderList.map((oneEl, index) => (
+          <tr className="report-tr">
+            <td className="report-td">{oneEl.name}</td>
+            <td className="report-td">{oneEl.type}</td>
+            <td className="report-td">{oneEl.quantity}</td>
+            <td className="report-td text-end">{oneEl.orderedPriceDealer}</td>
+            <td className="report-td text-end">
+              {oneEl.quantity * oneEl.orderedPriceDealer}
+            </td>
+          </tr>
+        ))}
       </tbody>
     </table>
   );
