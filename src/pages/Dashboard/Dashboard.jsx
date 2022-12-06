@@ -8,6 +8,7 @@ import DashboardCard from "../../components/DashboardCard/DashboardCard";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import BarChart from "../../components/BarChart/BarChart";
 import DoughnutChartLegends from "./DoughnutChartLegends";
+import { useSelector } from "react-redux";
 Chart.register(ArcElement);
 export const data = {
   labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
@@ -27,10 +28,11 @@ export const data = {
   ],
 };
 const Dashboard = () => {
+  const userName = useSelector((state) => state.loginDMS.name);
   return (
     <Box mt={2}>
       <Typography fontWeight={"bold"} fontSize="1.8rem" sx={{ my: 2 }}>
-        Hi Lasith, Welcome back
+        Hi {userName.split(" ")[0]}, Welcome back
       </Typography>
       <Grid container gap={2}>
         <DashboardCard />

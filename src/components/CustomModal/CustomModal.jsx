@@ -9,16 +9,22 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 500,
+
   maxHeight: "100%",
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 2,
-  pr: 0,
-  borderRadius: 1,
+
+  borderRadius: 0.5,
 };
 
-export default function CustomModal({ open, setOpen, children }) {
+export default function CustomModal({
+  open,
+  setOpen,
+  children,
+  width = 500,
+  pr = 0,
+}) {
   return (
     <div>
       <Modal
@@ -34,7 +40,7 @@ export default function CustomModal({ open, setOpen, children }) {
         }}
       >
         <Fade in={open}>
-          <Box sx={style}>{children}</Box>
+          <Box sx={{ ...style, width, pr }}>{children}</Box>
         </Fade>
       </Modal>
     </div>

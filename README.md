@@ -11,8 +11,8 @@ add dealer - done
 view dealers - done
 edit dealers - done
 
-login dealer - dealer dashboard done
-login distributor
+login dealer - done
+login distributor - done
 make a purchase order
 
 distributor receive order

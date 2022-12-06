@@ -9,9 +9,46 @@ import {
 import logo from "../../asessts/logo.png";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { userLogin } from "../../app/api/userServices";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../reducers/loginSlice";
+import { showAlert } from "../../reducers/alertSlice";
+import { showSystemAlert } from "../../app/alertServices";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    resetField,
+  } = useForm();
+
+  const onSubmit = (data) => {
+    console.log(data);
+    userLogin(data, (response) => {
+      console.log(response);
+      if (response.status === 0) {
+        const { _id, name, email, type, outstandingAmount } = response.data;
+        dispatch(
+          login({
+            _id,
+            name,
+            email,
+            type,
+            outstandingAmount,
+          })
+        );
+        showSystemAlert("Logged into the system", "success");
+
+        navigate("/");
+      }
+    });
+  };
+
   return (
     <Box
       sx={{
@@ -69,6 +106,16 @@ const Login = () => {
                   borderRadius: 0.2,
                 },
               }}
+              {...register("email", {
+                required: {
+                  value: true,
+                  message: "Email is required",
+                },
+              })}
+              {...(errors.email && {
+                error: true,
+                helperText: errors.email.message,
+              })}
             />
           </Box>
           <Box mt={3} px={4}>
@@ -85,6 +132,16 @@ const Login = () => {
                   borderRadius: 0.2,
                 },
               }}
+              {...register("password", {
+                required: {
+                  value: true,
+                  message: "Password is required",
+                },
+              })}
+              {...(errors.password && {
+                error: true,
+                helperText: errors.password.message,
+              })}
             />
           </Box>
 
@@ -107,9 +164,7 @@ const Login = () => {
                   backgroundColor: "#494949",
                 },
               }}
-              onClick={() => {
-                navigate("/");
-              }}
+              onClick={handleSubmit(onSubmit)}
             >
               Sign In
             </Button>

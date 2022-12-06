@@ -22,7 +22,7 @@ const HeaderItem = ({
             <ColouredLine
               width={"100%"}
               height="2px"
-              backgroundColor={"#7B7B7B"}
+              backgroundColor={"#5F36B1"}
             />
           </FlexBox>
         </Grid>
@@ -56,7 +56,7 @@ const HeaderItem = ({
             <ColouredLine
               width={"100%"}
               height="2px"
-              backgroundColor={"#7B7B7B"}
+              backgroundColor={"#5F36B1"}
             />
           </FlexBox>
         </Grid>

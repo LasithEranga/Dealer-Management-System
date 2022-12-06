@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Sidebar from "./components/Sidebar/Sidebar";
@@ -14,7 +15,9 @@ import ViewGasTanks from "./pages/ViewGasTanks/ViewGasTanks";
 import ViewStock from "./pages/ViewStock/ViewStock";
 
 function App() {
-  const user = "DEALER"; //TODO:
+  const user = useSelector((state) =>
+    state.loginDMS.type ? state.loginDMS.type : "DEALER"
+  );
   return (
     <BrowserRouter>
       <Routes>

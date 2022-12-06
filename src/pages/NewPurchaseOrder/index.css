@@ -1,0 +1,9 @@
+.quantity-input {
+  border: 1px solid black;
+  height: 25px;
+  padding: 10px;
+}
+.quantity-input:focus {
+  border: 1px solid black;
+  box-shadow: none;
+}

@@ -4,14 +4,24 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import ThemeProvider from "./theme";
+import { PersistGate } from "redux-persist/integration/react";
+import "./App.css";
+import { persistor, store } from "./app/api/store";
+import { Provider } from "react-redux";
+import SystemAlerts from "./components/SystemAlerts/SystemAlerts";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <ThemeProvider>
-      <App />
-    </ThemeProvider>
-  </React.StrictMode>
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <React.StrictMode>
+        <ThemeProvider>
+          <SystemAlerts />
+          <App />
+        </ThemeProvider>
+      </React.StrictMode>
+    </PersistGate>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

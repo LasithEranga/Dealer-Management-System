@@ -19,11 +19,12 @@ const StyledAutoComplete = ({
   setSuggestedList,
   setSelected,
   register,
-  errors,
+  errors = "",
+  mt = 3,
 }) => {
   return (
     <Box>
-      <Typography sx={{ mb: 1, mt: 3 }}>{title}</Typography>
+      <Typography sx={{ mb: 1, mt }}>{title}</Typography>
       <Box sx={{ position: "relative" }}>
         <TextField
           size="small"

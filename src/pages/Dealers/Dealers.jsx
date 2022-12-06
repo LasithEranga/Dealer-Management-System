@@ -11,6 +11,7 @@ import {
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { showSystemAlert } from "../../app/alertServices";
 import {
   getAllDealers,
   newDealer,
@@ -63,6 +64,7 @@ const Dealers = () => {
       clearAll();
       setShowEditModal(false);
       setRefreshTable((prev) => !prev);
+      showSystemAlert(response.message, "success");
     });
   };
 
@@ -75,6 +77,7 @@ const Dealers = () => {
       clearAll();
       setShowEditModal(false);
       setRefreshTable((prev) => !prev);
+      showSystemAlert(response.message, "success");
     });
   };
 

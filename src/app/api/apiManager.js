@@ -1,3 +1,6 @@
+import { showAlert } from "../../reducers/alertSlice";
+import { store } from "./store";
+
 export const post = (
   path,
   body,
@@ -15,6 +18,15 @@ export const post = (
   })
     .then((res) => res.json())
     .then((data) => {
+      if (data.status === 1) {
+        store.dispatch(
+          showAlert({
+            isVisible: true,
+            message: data.message ? data.message : "",
+            severity: "error",
+          })
+        );
+      }
       onSuccess(data);
     })
     .catch((error) => {

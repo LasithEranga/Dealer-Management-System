@@ -1,6 +1,7 @@
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { showSystemAlert } from "../../app/alertServices";
 import { getAllTanks, updateTank } from "../../app/api/gasTankServices";
 import CustomModal from "../../components/CustomModal/CustomModal";
 import GasTankCard from "./GasTankCard";
@@ -32,10 +33,15 @@ const ViewGasTanks = () => {
   const onSubmit = (data) => {
     console.log(data);
     data["_id"] = updatingTankId;
-    updateTank(data, () => {
-      clearAll();
-      setShowEditModal(false);
-      setUpdatingTankId("");
+    updateTank(data, (response) => {
+      if (response.status === 0) {
+        showSystemAlert(response.message, "success");
+        clearAll();
+        setShowEditModal(false);
+        setUpdatingTankId("");
+      } else {
+        showSystemAlert(response.error, "error");
+      }
     });
   };
 
@@ -214,7 +220,7 @@ const ViewGasTanks = () => {
             />
           </Box>
         </Box>
-        <Box display="flex" justifyContent={"end"} gap={1} pt={2}>
+        <Box display="flex" justifyContent={"end"} gap={1} pt={2} mr={2}>
           <Button
             variant="outlined"
             sx={{ px: 5 }}

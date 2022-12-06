@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import { useForm } from "react-hook-form";
 import { newTank } from "../../app/api/gasTankServices";
+import { showSystemAlert } from "../../app/alertServices";
 const NewGasTank = () => {
   const {
     register,
@@ -24,7 +25,12 @@ const NewGasTank = () => {
     console.log(data);
     newTank(data, (response) => {
       console.log(response);
-      clearAll();
+      if (response.status === 0) {
+        clearAll();
+        showSystemAlert(response.message, "success");
+      } else {
+        showSystemAlert(response.error, "error");
+      }
     });
   };
 

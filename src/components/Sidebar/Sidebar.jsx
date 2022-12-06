@@ -12,6 +12,7 @@ import { Outlet } from "react-router-dom";
 import SidebarItem from "./SidebarItem";
 import SubHeading from "./SubHeading";
 import logo from "../../asessts/logo.png";
+import { useSelector } from "react-redux";
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -62,7 +63,9 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function Sidebar() {
-  const userType = "DEALER";
+  const userType = useSelector((state) =>
+    state.loginDMS.type ? state.loginDMS.type : "DEALER"
+  );
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = () => {

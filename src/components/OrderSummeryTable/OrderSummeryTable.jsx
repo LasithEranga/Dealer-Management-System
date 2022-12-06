@@ -1,11 +1,27 @@
 import { Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 import ContentCard from "../ContentCard/ContentCard";
 import TitleAndContent from "../TitleAndContent/TitleAndContent";
 import "./index.css";
 
-const OrderSummeryTable = ({ title = " Sales Receipt", height = "10rem" }) => {
+const OrderSummeryTable = ({
+  title = " Sales Receipt",
+  height = "10rem",
+  orderList = [],
+}) => {
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    let total = 0;
+    orderList.forEach((oneEl) => {
+      total = total + oneEl.quantity * oneEl.orderedPriceDealer;
+    });
+    setTotal(total);
+  }, [orderList]);
+
   return (
     <Grid item xs>
       <ContentCard>
@@ -44,48 +60,19 @@ const OrderSummeryTable = ({ title = " Sales Receipt", height = "10rem" }) => {
               </tr>
             </thead>
             <tbody className="sales-body">
-              <tr className="sales-tr ">
-                <td className="sales-td">2.5Kg Tank</td>
-                <td className="sales-td">New</td>
-                <td className="sales-td">2</td>
-                <td className="sales-td">2500</td>
-                <td className="sales-td">5000</td>
-              </tr>
-              <tr className="sales-tr ">
-                <td className="sales-td">2.5Kg Tank</td>
-                <td className="sales-td">New</td>
-                <td className="sales-td">2</td>
-                <td className="sales-td">2500</td>
-                <td className="sales-td">5000</td>
-              </tr>
-              <tr className="sales-tr ">
-                <td className="sales-td">2.5Kg Tank</td>
-                <td className="sales-td">New</td>
-                <td className="sales-td">2</td>
-                <td className="sales-td">2500</td>
-                <td className="sales-td">5000</td>
-              </tr>
-              <tr className="sales-tr ">
-                <td className="sales-td">2.5Kg Tank</td>
-                <td className="sales-td">New</td>
-                <td className="sales-td">2</td>
-                <td className="sales-td">2500</td>
-                <td className="sales-td">5000</td>
-              </tr>
-              <tr className="sales-tr ">
-                <td className="sales-td">2.5Kg Tank</td>
-                <td className="sales-td">New</td>
-                <td className="sales-td">2</td>
-                <td className="sales-td">2500</td>
-                <td className="sales-td">5000</td>
-              </tr>
-              <tr className="sales-tr ">
-                <td className="sales-td">2.5Kg Tank</td>
-                <td className="sales-td">New</td>
-                <td className="sales-td">2</td>
-                <td className="sales-td">2500</td>
-                <td className="sales-td">5000</td>
-              </tr>
+              {orderList.map((oneEl, index) => {
+                return (
+                  <tr className="sales-tr " key={index}>
+                    <td className="sales-td">{oneEl.name}</td>
+                    <td className="sales-td">{oneEl.type}</td>
+                    <td className="sales-td">{oneEl.quantity}</td>
+                    <td className="sales-td">{oneEl.orderedPriceDealer}</td>
+                    <td className="sales-td">
+                      {oneEl.quantity * oneEl.orderedPriceDealer}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
           <Box
@@ -101,11 +88,7 @@ const OrderSummeryTable = ({ title = " Sales Receipt", height = "10rem" }) => {
             alignItems: "end",
           }}
         >
-          <TitleAndContent
-            title={"Total:"}
-            content="Rs: 5000.00"
-            sx={{ mr: 2 }}
-          />
+          <TitleAndContent title={"Total:"} content={total} sx={{ mr: 2 }} />
         </Box>
       </ContentCard>
     </Grid>
