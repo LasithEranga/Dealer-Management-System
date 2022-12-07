@@ -9,7 +9,6 @@ import StepTwo from "./StepTwo";
 const NewPurchaseOrder = () => {
   const [activeStep, setActiveStep] = useState(1);
   const [orderList, setOrderList] = useState([]);
-  const [open, setOpen] = useState(true);
 
   useEffect(() => {
     console.log(activeStep);

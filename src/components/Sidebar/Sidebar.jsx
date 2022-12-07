@@ -13,6 +13,28 @@ import SidebarItem from "./SidebarItem";
 import SubHeading from "./SubHeading";
 import logo from "../../asessts/logo.png";
 import { useSelector } from "react-redux";
+import LoupeIcon from "@mui/icons-material/Loupe";
+import Inventory2Icon from "@mui/icons-material/Inventory2";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
+import SkateboardingIcon from "@mui/icons-material/Skateboarding";
+import PropaneTankIcon from "@mui/icons-material/PropaneTank";
+import ViewInArIcon from "@mui/icons-material/ViewInAr";
+import GradeIcon from "@mui/icons-material/Grade";
+import ViewListIcon from "@mui/icons-material/ViewList";
+import PushPinIcon from "@mui/icons-material/PushPin";
+import PendingActionsIcon from "@mui/icons-material/PendingActions";
+import AutoGraphIcon from "@mui/icons-material/AutoGraph";
+import SellIcon from "@mui/icons-material/Sell";
+import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
+import AssignmentReturnIcon from "@mui/icons-material/AssignmentReturn";
+import SwipeRightAltIcon from "@mui/icons-material/SwipeRightAlt";
+import AddCardIcon from "@mui/icons-material/AddCard";
+import DownloadingIcon from "@mui/icons-material/Downloading";
+import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
+import HourglassTopIcon from "@mui/icons-material/HourglassTop";
+
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -112,7 +134,7 @@ export default function Sidebar() {
                 pl: 1,
                 pr: 1,
                 pt: 1,
-                pb: 3,
+                pb: 7,
                 scrollbarWidth: "thin",
                 ...(open ? { minWidth: 220 } : { minWidth: 220 }),
                 "&:hover": {
@@ -130,17 +152,17 @@ export default function Sidebar() {
               {/* ------------------ IN house stock ---------------- */}
               <SubHeading title="IN-HOUSE STOCK" />
               <SidebarItem
-                icon={<DashboardIcon />}
+                icon={<LoupeIcon />}
                 title="New Stock"
                 path={"new-stock"}
               />
               <SidebarItem
-                icon={<DashboardIcon />}
+                icon={<Inventory2Icon />}
                 title="View Stock Details"
                 path={"view-stock"}
               />
               <SidebarItem
-                icon={<DashboardIcon />}
+                icon={<LocalShippingIcon />}
                 title="Distribute Stock"
                 path={"distribute-stock"}
               />
@@ -150,14 +172,17 @@ export default function Sidebar() {
               {/* -------------------  Dealers --------------------------*/}
               <SubHeading title="DEALERS" />
               <SidebarItem
-                icon={<DashboardIcon />}
+                icon={<PeopleAltIcon />}
                 title="Dealers"
                 path={"dealers"}
               />
-              <SidebarItem icon={<DashboardIcon />} title="Dealer Stocks" />
-              <SidebarItem icon={<DashboardIcon />} title="Dealer Sales" />
+              <SidebarItem icon={<Inventory2Icon />} title="Dealer Stocks" />
               <SidebarItem
-                icon={<DashboardIcon />}
+                icon={<CurrencyExchangeIcon />}
+                title="Dealer Sales"
+              />
+              <SidebarItem
+                icon={<SkateboardingIcon />}
                 title="Dealer Performance"
               />
 
@@ -166,12 +191,12 @@ export default function Sidebar() {
               {/* -------------------  Gas tanks --------------------------*/}
               <SubHeading title="GAS TANKS" />
               <SidebarItem
-                icon={<DashboardIcon />}
+                icon={<PropaneTankIcon />}
                 title="New Gas Tank"
                 path={"new-gastank"}
               />
               <SidebarItem
-                icon={<DashboardIcon />}
+                icon={<ViewInArIcon />}
                 title="View Gas Tanks"
                 path={"view-gastanks"}
               />
@@ -181,15 +206,18 @@ export default function Sidebar() {
               {/* -------------------  PURCHASE ORDERS --------------------------*/}
 
               <SubHeading title="PURCHASE ORDERS" />
-              <SidebarItem icon={<DashboardIcon />} title="New Orders" />
-              <SidebarItem icon={<DashboardIcon />} title="View Orders" />
-              <SidebarItem icon={<DashboardIcon />} title="Saved Orders" />
-              <SidebarItem icon={<DashboardIcon />} title="Payment Pending" />
+              <SidebarItem icon={<GradeIcon />} title="New Orders" />
+              <SidebarItem icon={<ViewListIcon />} title="View Orders" />
+              <SidebarItem icon={<PushPinIcon />} title="Saved Orders" />
+              <SidebarItem
+                icon={<PendingActionsIcon />}
+                title="Payment Pending"
+              />
 
               {/* -------------------  PURCHASE ORDERS --------------------------*/}
               <SubHeading title="REPORTS" />
 
-              <SidebarItem icon={<DashboardIcon />} title="Reports" />
+              <SidebarItem icon={<AutoGraphIcon />} title="Reports" />
             </Box>
           )}
 
@@ -214,13 +242,9 @@ export default function Sidebar() {
             >
               {/* ------------------ SELLING ---------------- */}
               <SubHeading title="SELLING" />
+              <SidebarItem icon={<SellIcon />} title="Sell Tanks" path={""} />
               <SidebarItem
-                icon={<DashboardIcon />}
-                title="Sell Tanks"
-                path={""}
-              />
-              <SidebarItem
-                icon={<DashboardIcon />}
+                icon={<KeyboardReturnIcon />}
                 title="Accept Returns"
                 path={"accept-return"}
               />
@@ -230,13 +254,20 @@ export default function Sidebar() {
               {/* -------------------  MANAGE STOCK --------------------------*/}
               <SubHeading title="Manage Stock" />
               <SidebarItem
-                icon={<DashboardIcon />}
+                icon={<LoupeIcon />}
                 title="New Stock"
                 path={"new-stock"}
                 //TODO:
               />
-              <SidebarItem icon={<DashboardIcon />} title="View Stock" />
-              <SidebarItem icon={<DashboardIcon />} title="Return Stock" />
+              <SidebarItem
+                icon={<Inventory2Icon />}
+                title="View Stock"
+                path={"view-stock"}
+              />
+              <SidebarItem
+                icon={<AssignmentReturnIcon />}
+                title="Return Stock"
+              />
 
               {/* -------------------  MANAGE STOCK --------------------------*/}
 
@@ -244,19 +275,28 @@ export default function Sidebar() {
 
               <SubHeading title="PURCHASE ORDERS" />
               <SidebarItem
-                icon={<DashboardIcon />}
+                icon={<AddCardIcon />}
                 title="New Order"
                 path={"new-order"}
               />
-              <SidebarItem icon={<DashboardIcon />} title="Accepted Orders" />
-              <SidebarItem icon={<DashboardIcon />} title="Pending Orders" />
-              <SidebarItem icon={<DashboardIcon />} title="Declined Orders" />
-              <SidebarItem icon={<DashboardIcon />} title="Pending Payments" />
+              <SidebarItem
+                icon={<SwipeRightAltIcon />}
+                title="Accepted Orders"
+              />
+              <SidebarItem icon={<DownloadingIcon />} title="Pending Orders" />
+              <SidebarItem
+                icon={<ThumbDownAltIcon />}
+                title="Declined Orders"
+              />
+              <SidebarItem
+                icon={<HourglassTopIcon />}
+                title="Pending Payments"
+              />
 
               {/* -------------------  PURCHASE ORDERS --------------------------*/}
               <SubHeading title="REPORTS" />
 
-              <SidebarItem icon={<DashboardIcon />} title="Reports" />
+              <SidebarItem icon={<AutoGraphIcon />} title="Reports" />
             </Box>
           )}
 

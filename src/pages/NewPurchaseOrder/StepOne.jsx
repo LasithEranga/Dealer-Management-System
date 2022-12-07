@@ -1,6 +1,7 @@
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { searchGasTank } from "../../app/api/gasTankServices";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import OrderSummeryTable from "../../components/OrderSummeryTable/OrderSummeryTable";
@@ -9,6 +10,7 @@ import TitleAndContent from "../../components/TitleAndContent/TitleAndContent";
 import "./index.css";
 
 const StepOne = ({ orderList, setOrderList, setActiveStep }) => {
+  const { name, outstandingAmount } = useSelector((state) => state.loginDMS);
   const [suggestedList, setSuggestedList] = useState([]);
   const [keyword, setKeyword] = useState("");
   const [selected, setSelected] = useState({});
