@@ -1,5 +1,6 @@
 import { Avatar } from "@mui/material";
 import React from "react";
+import { covertToRupees } from "../../utils/convertToRupees";
 
 const NameAvatar = ({ name = "Lasith", amount = 0, priceEnabled = false }) => {
   function stringToColor(string) {
@@ -40,7 +41,7 @@ const NameAvatar = ({ name = "Lasith", amount = 0, priceEnabled = false }) => {
 
       <div className="ps-2">
         <div className="fw-bold">{name}</div>
-        {priceEnabled && <div>Rs.{amount}.00</div>}
+        {priceEnabled && <div>{covertToRupees(amount)}</div>}
       </div>
     </div>
   );

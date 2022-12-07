@@ -4,6 +4,7 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { covertToRupees } from "../../utils/convertToRupees";
 import ContentCard from "../ContentCard/ContentCard";
 import TitleAndContent from "../TitleAndContent/TitleAndContent";
 import "./index.css";
@@ -101,7 +102,11 @@ const OrderSummeryTable = ({
             alignItems: "end",
           }}
         >
-          <TitleAndContent title={"Total:"} content={total} sx={{ mr: 2 }} />
+          <TitleAndContent
+            title={"Total:"}
+            content={covertToRupees(total)}
+            sx={{ mr: 2 }}
+          />
         </Box>
       </ContentCard>
     </Grid>

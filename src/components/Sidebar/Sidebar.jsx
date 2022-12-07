@@ -206,7 +206,11 @@ export default function Sidebar() {
               {/* -------------------  PURCHASE ORDERS --------------------------*/}
 
               <SubHeading title="PURCHASE ORDERS" />
-              <SidebarItem icon={<GradeIcon />} title="New Orders" />
+              <SidebarItem
+                icon={<GradeIcon />}
+                title="New Orders"
+                path={"new-orders"}
+              />
               <SidebarItem icon={<ViewListIcon />} title="View Orders" />
               <SidebarItem icon={<PushPinIcon />} title="Saved Orders" />
               <SidebarItem

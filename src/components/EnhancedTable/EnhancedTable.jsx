@@ -16,6 +16,7 @@ const EnhancedTable = ({
   ],
   actionButtons = [],
   amountIndex = 5,
+  upto = 5,
   priceEnabled = true,
   enableAvatar = {
     isVisible: true,
@@ -57,13 +58,17 @@ const EnhancedTable = ({
                   )}
 
                   {Object.values(element)
-                    .slice(0, 5)
+                    .slice(0, upto)
                     .map((oneEl, index) => {
-                      return <td key={index}>{oneEl}</td>;
+                      return (
+                        <td key={index} className="eh-td">
+                          {oneEl}
+                        </td>
+                      );
                     })}
 
                   {actionButtons.map((oneEl, index) => (
-                    <td>
+                    <td className="eh-td" key={index}>
                       <Button
                         onClick={() => {
                           oneEl.action(element);

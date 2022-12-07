@@ -12,6 +12,7 @@ import NewPurchaseOrder from "./pages/NewPurchaseOrder/NewPurchaseOrder";
 import NewStock from "./pages/NewStock/NewStock";
 import SellTanks from "./pages/SellTanks/SellTanks";
 import ViewGasTanks from "./pages/ViewGasTanks/ViewGasTanks";
+import ViewPurchaseOrders from "./pages/NewPurchaseOrders/NewPurchaseOrders";
 import ViewStock from "./pages/ViewStock/ViewStock";
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
           <Route path="view-stock" element={<ViewStock />} />
           <Route path="distribute-stock" element={<DistributeStock />} />
           <Route path="new-order" element={<NewPurchaseOrder />} />
+          <Route path="new-orders" element={<ViewPurchaseOrders />} />
           <Route path="dealers" element={<Dealers />} />
           <Route path="new-gastank" element={<NewGasTank />} />
           <Route path="view-gastanks" element={<ViewGasTanks />} />

@@ -9,6 +9,7 @@ import ReceiptTable from "../../components/ReciptTable/ReceiptTable";
 import RowItem from "../../components/RowItem/RowItem";
 import logo from "../../asessts/logo.png";
 import { useEffect } from "react";
+import { covertToRupees } from "../../utils/convertToRupees";
 
 const style = {
   position: "absolute",
@@ -130,7 +131,7 @@ const StepTwo = ({ orderList, setActiveStep }) => {
           ORDER TOTAL
         </Box>
         <Typography fontWeight={"bold"} fontSize="1.2rem">
-          Rs: {orderTotal}.00
+          {covertToRupees(orderTotal)}
         </Typography>
       </Box>
       <Box

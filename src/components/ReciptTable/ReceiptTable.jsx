@@ -1,4 +1,5 @@
 import React from "react";
+import { covertToRupees } from "../../utils/convertToRupees";
 import "./index.css";
 
 const ReceiptTable = ({ orderList }) => {
@@ -15,13 +16,15 @@ const ReceiptTable = ({ orderList }) => {
       </thead>
       <tbody>
         {orderList.map((oneEl, index) => (
-          <tr className="report-tr">
+          <tr className="report-tr" key={index}>
             <td className="report-td">{oneEl.name}</td>
             <td className="report-td">{oneEl.type}</td>
             <td className="report-td">{oneEl.quantity}</td>
-            <td className="report-td text-end">{oneEl.orderedPriceDealer}</td>
             <td className="report-td text-end">
-              {oneEl.quantity * oneEl.orderedPriceDealer}
+              {covertToRupees(oneEl.orderedPriceDealer)}
+            </td>
+            <td className="report-td text-end">
+              {covertToRupees(oneEl.quantity * oneEl.orderedPriceDealer)}
             </td>
           </tr>
         ))}

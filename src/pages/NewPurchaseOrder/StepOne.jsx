@@ -7,6 +7,7 @@ import ContentCard from "../../components/ContentCard/ContentCard";
 import OrderSummeryTable from "../../components/OrderSummeryTable/OrderSummeryTable";
 import StyledAutoComplete from "../../components/StyledAutoComplete/StyledAutoComplete";
 import TitleAndContent from "../../components/TitleAndContent/TitleAndContent";
+import { covertToRupees } from "../../utils/convertToRupees";
 import "./index.css";
 
 const StepOne = ({ orderList, setOrderList, setActiveStep }) => {
@@ -109,11 +110,9 @@ const StepOne = ({ orderList, setOrderList, setActiveStep }) => {
               <TitleAndContent
                 title={"Selling Price:"}
                 titleSx={{ color: "black" }}
-                content={`Rs. ${
-                  selected.sellingPriceDealer
-                    ? selected.sellingPriceDealer
-                    : "0"
-                }.00`}
+                content={covertToRupees(
+                  selected.sellingPriceDealer ? selected.sellingPriceDealer : 0
+                )}
                 sx={{ mr: 2, gap: 3, pt: 2 }}
               />
             </Box>
@@ -161,7 +160,7 @@ const StepOne = ({ orderList, setOrderList, setActiveStep }) => {
             <TitleAndContent
               title={"Outstanding Balance"}
               titleSx={{ color: "black" }}
-              content="Rs. 5000.00"
+              content={covertToRupees(outstandingAmount)}
               sx={{ mr: 2, gap: 3, mt: 3 }}
             />
             <Box
