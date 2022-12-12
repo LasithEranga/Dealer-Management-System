@@ -49,10 +49,10 @@ const ViewGasTanks = () => {
     _id,
     name,
     type,
-    orderedPriceDealer,
-    sellingPriceDealer,
     orderedPriceDistributor,
-    sellingPriceDistributor
+    sellingPriceDistributor,
+    orderedPriceDealer,
+    sellingPriceDealer
   ) => {
     console.log(_id);
     setUpdatingTankId(_id);
@@ -129,7 +129,7 @@ const ViewGasTanks = () => {
 
           <Box>
             <Typography sx={{ my: 1 }} fontWeight="bold">
-              Ordered Price
+              Ordered Price - Distributor
             </Typography>
             <TextField
               size="small"
@@ -152,7 +152,7 @@ const ViewGasTanks = () => {
           </Box>
           <Box>
             <Typography sx={{ my: 1 }} fontWeight="bold">
-              Selling Price
+              Selling Price - Distributor
             </Typography>
             <TextField
               size="small"
@@ -175,7 +175,7 @@ const ViewGasTanks = () => {
           </Box>
           <Box>
             <Typography sx={{ my: 1 }} fontWeight="bold">
-              Ordered Price
+              Ordered Price - Dealer
             </Typography>
             <TextField
               size="small"
@@ -198,7 +198,7 @@ const ViewGasTanks = () => {
           </Box>
           <Box>
             <Typography sx={{ my: 1 }} fontWeight="bold">
-              Selling Price
+              Selling Price - Dealer
             </Typography>
             <TextField
               size="small"

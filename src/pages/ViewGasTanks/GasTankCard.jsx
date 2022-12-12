@@ -3,6 +3,7 @@ import { Box, Button, Divider, Grid, Typography } from "@mui/material";
 import _ from "lodash";
 import React from "react";
 import ContentCard from "../../components/ContentCard/ContentCard";
+import { covertToRupees } from "../../utils/convertToRupees";
 
 const GasTankCard = ({
   _id,
@@ -40,7 +41,7 @@ const GasTankCard = ({
             <Typography>Ordering Price:</Typography>
           </Grid>
           <Grid item xs display={"flex"} justifyContent="end">
-            Rs. {orderedPriceDistributor}
+            {covertToRupees(orderedPriceDistributor)}
           </Grid>
         </Grid>
         <Grid container my={0.2}>
@@ -48,7 +49,7 @@ const GasTankCard = ({
             <Typography>Selling Price:</Typography>
           </Grid>
           <Grid item xs display={"flex"} justifyContent="end">
-            Rs. {sellingPriceDistributor}
+            {covertToRupees(sellingPriceDistributor)}
           </Grid>
         </Grid>
         <Divider sx={{ height: "5px", my: 1 }} />
@@ -61,7 +62,7 @@ const GasTankCard = ({
             <Typography>Ordering Price:</Typography>
           </Grid>
           <Grid item xs display={"flex"} justifyContent="end">
-            Rs. {orderedPriceDealer}
+            {covertToRupees(orderedPriceDealer)}
           </Grid>
         </Grid>
         <Grid container my={0.2}>
@@ -69,7 +70,7 @@ const GasTankCard = ({
             <Typography>Selling Price:</Typography>
           </Grid>
           <Grid item xs display={"flex"} justifyContent="end">
-            Rs. {sellingPriceDealer}
+            {covertToRupees(sellingPriceDealer)}
           </Grid>
         </Grid>
         <Box display={"flex"} justifyContent="end" mt={2}>
@@ -79,10 +80,10 @@ const GasTankCard = ({
                 _id,
                 name,
                 type,
-                orderedPriceDealer,
                 orderedPriceDistributor,
-                sellingPriceDealer,
-                sellingPriceDistributor
+                sellingPriceDistributor,
+                orderedPriceDealer,
+                sellingPriceDealer
               );
               setShowEditModal(true);
             }}

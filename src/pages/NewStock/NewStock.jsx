@@ -10,6 +10,7 @@ import { styled } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
+import { showSystemAlert } from "../../app/alertServices";
 import { getReOrderLevel, newStock } from "../../app/api/gasStockServices";
 import { searchGasTank } from "../../app/api/gasTankServices";
 import ContentCard from "../../components/ContentCard/ContentCard";
@@ -66,8 +67,11 @@ const NewStock = () => {
           quantity: Number(data.quantity),
           reOrderLevel: data.reOrderLevel,
         },
-        () => {
-          clearAll();
+        (response) => {
+          if (response.status === 0) {
+            clearAll();
+            showSystemAlert(response.message, "success");
+          }
         }
       );
     } else {
