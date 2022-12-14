@@ -1,9 +1,114 @@
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import DealerDetails from "./DealerDetails";
 import StockDetails from "./StockDetails";
+import StyledAutoComplete from "../../components/StyledAutoComplete/StyledAutoComplete";
+import { searchDealer } from "../../app/api/userServices";
+import { useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
+import _ from "lodash";
+import { getInitials } from "../../utils/generateInitials";
+import { covertToRupees } from "../../utils/convertToRupees";
+import { getStockByUser } from "../../app/api/gasStockServices";
+
 const DistributeStock = () => {
+  const { userId } = useSelector((state) => state.loginDMS);
+
+  // -------------------------use states -----------------------
+  const [suggestedList, setSuggestedList] = useState([]);
+  const [selected, setSelected] = useState({});
+
+  const [suggestedGasStockList, setSuggestedGasStockList] = useState([]);
+  const [selectedGasStock, setSelectedGasStock] = useState({});
+  const [stopSearchGasStock, setStopSearchGasStock] = useState(false);
+
+  // -------------------------use states -----------------------
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    resetField,
+    setValue,
+    setError,
+    watch,
+    clearErrors,
+    setFocus,
+  } = useForm();
+
+  const setValues = (dealer) => {
+    setValue("name", dealer.name);
+  };
+
+  // useEffect(() => {
+  //   if (keyword !== selected.name) {
+  //     searchDealer({ keyword, distributor: userId }, (response) => {
+  //       setSuggestedList(response.data);
+  //     });
+  //   }
+  // }, [keyword]);
+
+  useEffect(() => {
+    console.log(selected);
+    selected.name = _.startCase(selected.name);
+    setValues(selected);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected]);
+
+  useEffect(() => {
+    console.log(selectedGasStock);
+    setValue("gasStock", selectedGasStock.name);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedGasStock]);
+
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      console.log(name);
+      if (name === "name") {
+        //if value is empty
+        if (value.name === "") {
+          setSuggestedList([]);
+          setValues({});
+        } else {
+          searchDealer(
+            { keyword: value.name, distributor: userId },
+            (response) => {
+              setSuggestedList(response.data);
+            }
+          );
+        }
+      }
+      if (name === "gasStock") {
+        //if value is empty
+        if (value.gasStock === "") {
+          setSuggestedGasStockList([]);
+          setSelectedGasStock({});
+          setStopSearchGasStock(false);
+        } else {
+          //if there are no selected gas tanks search
+          console.log(value.gasStock, selectedGasStock);
+          getStockByUser(
+            {
+              userID: userId,
+            },
+            (data) => {
+              setSuggestedGasStockList(
+                data.data.map((oneEl) => ({
+                  _id: oneEl._id,
+                  quantity: oneEl.quantity,
+                  ...oneEl.gasTank,
+                }))
+              );
+            }
+          );
+        }
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
+
   return (
     <Box mt={1}>
       <Box
@@ -24,12 +129,21 @@ const DistributeStock = () => {
               Search Dealer
             </Typography>
             <Box sx={{ mr: 2, my: 1 }}>
-              <TextField
-                fullWidth
-                size="small"
-                variant="outlined"
-                placeholder="Search dealer"
-                sx={{ mt: 1 }}
+              <StyledAutoComplete
+                title={""}
+                placeholder="Search Dealer"
+                suggestedList={suggestedList}
+                setSuggestedList={setSuggestedList}
+                setSelected={setSelected}
+                suggessionName={"Suggested Dealers"}
+                madeOf={["name"]}
+                register={register("name", {
+                  required: {
+                    value: true,
+                    message: "Please select the dealer",
+                  },
+                })}
+                errors={errors}
               />
             </Box>
 
@@ -51,17 +165,23 @@ const DistributeStock = () => {
                 }}
               >
                 <Typography fontSize={"3rem"} fontWeight={"bold"}>
-                  LE
+                  {selected.name ? getInitials(selected.name) : "search"}
                 </Typography>
               </Box>
             </Box>
 
-            <DealerDetails title={"Name:"} content={"Lasith Eranda "} />
-            <DealerDetails title={"Store:"} content={"Lasith's Store "} />
-            <DealerDetails title={"Outstanding:"} content={"Rs: 38467.89 "} />
+            <DealerDetails title={"Name:"} content={selected.name ?? ""} />
+            <DealerDetails
+              title={"Store:"}
+              content={selected.storeAddress ?? ""}
+            />
+            <DealerDetails
+              title={"Outstanding:"}
+              content={covertToRupees(selected.outstandingAmount ?? 0)}
+            />
             <DealerDetails
               title={"Address:"}
-              content={"200D, Thibbotugoda, Pokunuwita "}
+              content={selected.address ?? ""}
             />
 
             <Box display={"flex"} justifyContent="end" mt={2}>
@@ -80,7 +200,27 @@ const DistributeStock = () => {
             <Typography fontWeight={"bold"} fontSize="1.5rem">
               Stock details
             </Typography>
-            <StockDetails title={"Tank Type"} placeholder={"Search dealer"} />
+            <Box sx={{ mr: 2, my: 1 }}>
+              <Typography>Tank & Type</Typography>
+
+              <StyledAutoComplete
+                title={""}
+                mt={0}
+                placeholder="Search gas tank"
+                suggestedList={suggestedGasStockList}
+                setSuggestedList={setSuggestedGasStockList}
+                setSelected={setSelectedGasStock}
+                suggessionName={"Search gas stock"}
+                madeOf={["name"]}
+                register={register("gasStock", {
+                  required: {
+                    value: true,
+                    message: "Please select a gas stock",
+                  },
+                })}
+                errors={errors}
+              />
+            </Box>
             <StockDetails
               title={"Available Qty @ In-House"}
               placeholder={"568"}

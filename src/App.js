@@ -14,6 +14,7 @@ import SellTanks from "./pages/SellTanks/SellTanks";
 import ViewGasTanks from "./pages/ViewGasTanks/ViewGasTanks";
 import ViewPurchaseOrders from "./pages/NewPurchaseOrders/NewPurchaseOrders";
 import ViewStock from "./pages/ViewStock/ViewStock";
+import Test from "./pages/Test";
 
 function App() {
   const user = useSelector((state) =>
@@ -35,6 +36,7 @@ function App() {
           <Route path="new-order" element={<NewPurchaseOrder />} />
           <Route path="new-orders" element={<ViewPurchaseOrders />} />
           <Route path="dealers" element={<Dealers />} />
+          <Route path="test" element={<Test />} />
           <Route path="new-gastank" element={<NewGasTank />} />
           <Route path="view-gastanks" element={<ViewGasTanks />} />
         </Route>

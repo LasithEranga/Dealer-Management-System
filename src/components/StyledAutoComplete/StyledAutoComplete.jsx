@@ -13,14 +13,14 @@ const StyledBox = styled(Box)`
 const StyledAutoComplete = ({
   suggestedList,
   title,
-  keyword,
-  setKeyword,
   suggessionName,
   setSuggestedList,
   setSelected,
-  register,
-  errors = "",
   mt = 3,
+  placeholder = "",
+  keyword,
+  setKeyword,
+  madeOf = ["name", "type"],
 }) => {
   return (
     <Box>
@@ -29,15 +29,16 @@ const StyledAutoComplete = ({
         <TextField
           size="small"
           fullWidth
-          value={keyword ? keyword : ""}
-          {...register}
+          placeholder={placeholder}
+          value={keyword ?? ""}
+          // {...register}
           onChange={(e) => {
             setKeyword(e.target.value);
           }}
-          {...(errors.name && {
-            error: true,
-            helperText: errors.name.message,
-          })}
+          // {...(errors.name && {
+          //   error: true,
+          //   helperText: errors.name.message,
+          // })}
         />
         <StyledBox
           sx={{
@@ -76,7 +77,7 @@ const StyledAutoComplete = ({
                   setSuggestedList([]);
                 }}
               >
-                {Object.values(oneEl)[1]} {Object.values(oneEl)[3]}
+                {madeOf.map((element, index) => oneEl[element] + " ")}
               </div>
             );
           })}
