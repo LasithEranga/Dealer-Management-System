@@ -10,104 +10,47 @@ import { useForm } from "react-hook-form";
 import _ from "lodash";
 import { getInitials } from "../../utils/generateInitials";
 import { covertToRupees } from "../../utils/convertToRupees";
-import { getStockByUser } from "../../app/api/gasStockServices";
+import { getStockByUser, searchGasStock } from "../../app/api/gasStockServices";
+import useAutoComplete from "../../hooks/useAutoComplete";
 
 const DistributeStock = () => {
   const { userId } = useSelector((state) => state.loginDMS);
 
-  // -------------------------use states -----------------------
-  const [suggestedList, setSuggestedList] = useState([]);
-  const [selected, setSelected] = useState({});
-
-  const [suggestedGasStockList, setSuggestedGasStockList] = useState([]);
-  const [selectedGasStock, setSelectedGasStock] = useState({});
-  const [stopSearchGasStock, setStopSearchGasStock] = useState(false);
-
-  // -------------------------use states -----------------------
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    resetField,
-    setValue,
-    setError,
-    watch,
-    clearErrors,
-    setFocus,
-  } = useForm();
-
-  const setValues = (dealer) => {
-    setValue("name", dealer.name);
-  };
-
-  // useEffect(() => {
-  //   if (keyword !== selected.name) {
-  //     searchDealer({ keyword, distributor: userId }, (response) => {
-  //       setSuggestedList(response.data);
-  //     });
-  //   }
-  // }, [keyword]);
+  const [
+    dealerKeyword,
+    setDealerKeyword,
+    suggestedDealerList,
+    setSuggestedDealerList,
+    selectedDealer,
+    setSelectedDealer,
+    setSearchedDealer,
+  ] = useAutoComplete(searchDealer, { userId });
 
   useEffect(() => {
-    console.log(selected);
-    selected.name = _.startCase(selected.name);
-    setValues(selected);
+    if (selectedDealer.name) {
+      setDealerKeyword(selectedDealer.name);
+      setSearchedDealer(selectedDealer.name);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selected]);
+  }, [selectedDealer]);
+
+  const [
+    stockKeyword,
+    setStockKeyword,
+    suggestedStockList,
+    setSuggestedStockList,
+    selectedStock,
+    setSelectedStock,
+    setSearchedStock,
+  ] = useAutoComplete(searchGasStock, { userId });
 
   useEffect(() => {
-    console.log(selectedGasStock);
-    setValue("gasStock", selectedGasStock.name);
-
+    if (selectedStock.name) {
+      setStockKeyword(selectedStock.name + " " + selectedStock.gasTankType);
+      setSearchedStock(selectedStock.name + " " + selectedStock.gasTankType);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedGasStock]);
-
-  useEffect(() => {
-    const subscription = watch((value, { name }) => {
-      console.log(name);
-      if (name === "name") {
-        //if value is empty
-        if (value.name === "") {
-          setSuggestedList([]);
-          setValues({});
-        } else {
-          searchDealer(
-            { keyword: value.name, distributor: userId },
-            (response) => {
-              setSuggestedList(response.data);
-            }
-          );
-        }
-      }
-      if (name === "gasStock") {
-        //if value is empty
-        if (value.gasStock === "") {
-          setSuggestedGasStockList([]);
-          setSelectedGasStock({});
-          setStopSearchGasStock(false);
-        } else {
-          //if there are no selected gas tanks search
-          console.log(value.gasStock, selectedGasStock);
-          getStockByUser(
-            {
-              userID: userId,
-            },
-            (data) => {
-              setSuggestedGasStockList(
-                data.data.map((oneEl) => ({
-                  _id: oneEl._id,
-                  quantity: oneEl.quantity,
-                  ...oneEl.gasTank,
-                }))
-              );
-            }
-          );
-        }
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [watch]);
+  }, [selectedStock]);
 
   return (
     <Box mt={1}>
@@ -132,18 +75,13 @@ const DistributeStock = () => {
               <StyledAutoComplete
                 title={""}
                 placeholder="Search Dealer"
-                suggestedList={suggestedList}
-                setSuggestedList={setSuggestedList}
-                setSelected={setSelected}
+                suggestedList={suggestedDealerList}
+                setSuggestedList={setSuggestedDealerList}
+                setSelected={setSelectedDealer}
                 suggessionName={"Suggested Dealers"}
                 madeOf={["name"]}
-                register={register("name", {
-                  required: {
-                    value: true,
-                    message: "Please select the dealer",
-                  },
-                })}
-                errors={errors}
+                keyword={dealerKeyword}
+                setKeyword={setDealerKeyword}
               />
             </Box>
 
@@ -165,23 +103,28 @@ const DistributeStock = () => {
                 }}
               >
                 <Typography fontSize={"3rem"} fontWeight={"bold"}>
-                  {selected.name ? getInitials(selected.name) : "search"}
+                  {selectedDealer.name
+                    ? getInitials(selectedDealer.name)
+                    : "search"}
                 </Typography>
               </Box>
             </Box>
 
-            <DealerDetails title={"Name:"} content={selected.name ?? ""} />
+            <DealerDetails
+              title={"Name:"}
+              content={selectedDealer.name ?? ""}
+            />
             <DealerDetails
               title={"Store:"}
-              content={selected.storeAddress ?? ""}
+              content={selectedDealer.storeAddress ?? ""}
             />
             <DealerDetails
               title={"Outstanding:"}
-              content={covertToRupees(selected.outstandingAmount ?? 0)}
+              content={covertToRupees(selectedDealer.outstandingAmount ?? 0)}
             />
             <DealerDetails
               title={"Address:"}
-              content={selected.address ?? ""}
+              content={selectedDealer.address ?? ""}
             />
 
             <Box display={"flex"} justifyContent="end" mt={2}>
@@ -201,30 +144,33 @@ const DistributeStock = () => {
               Stock details
             </Typography>
             <Box sx={{ mr: 2, my: 1 }}>
-              <Typography>Tank & Type</Typography>
-
               <StyledAutoComplete
-                title={""}
+                title={"Tank & Type"}
+                placeholder="Search Dealer"
+                suggestedList={suggestedStockList}
+                setSuggestedList={setSuggestedStockList}
+                setSelected={setSelectedStock}
+                suggessionName={"Suggested Dealers"}
+                madeOf={["name", "gasTankType"]}
+                keyword={stockKeyword}
+                setKeyword={setStockKeyword}
                 mt={0}
-                placeholder="Search gas tank"
-                suggestedList={suggestedGasStockList}
-                setSuggestedList={setSuggestedGasStockList}
-                setSelected={setSelectedGasStock}
-                suggessionName={"Search gas stock"}
-                madeOf={["name"]}
-                register={register("gasStock", {
-                  required: {
-                    value: true,
-                    message: "Please select a gas stock",
-                  },
-                })}
-                errors={errors}
               />
             </Box>
-            <StockDetails
-              title={"Available Qty @ In-House"}
-              placeholder={"568"}
-            />
+            <Box sx={{ mr: 2, my: 1 }}>
+              <Typography>Available Qty @ In-House</Typography>
+              <TextField
+                fullWidth
+                size="small"
+                variant="outlined"
+                value={selectedStock.quantity ?? "0"}
+                sx={{ mt: 1 }}
+                inputProps={{
+                  readOnly: true,
+                }}
+              />
+            </Box>
+
             <StockDetails title={"Quantity"} placeholder={"50"} />
             <Box
               display="flex"
