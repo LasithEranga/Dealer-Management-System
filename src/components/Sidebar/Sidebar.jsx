@@ -211,11 +211,20 @@ export default function Sidebar() {
                 title="New Orders"
                 path={"new-orders"}
               />
-              <SidebarItem icon={<ViewListIcon />} title="View Orders" />
-              <SidebarItem icon={<PushPinIcon />} title="Saved Orders" />
+              <SidebarItem
+                icon={<PushPinIcon />}
+                title="Saved Orders"
+                path={"saved-orders"}
+              />
               <SidebarItem
                 icon={<PendingActionsIcon />}
-                title="Payment Pending"
+                title="Pending Payment"
+                path="payment-pending-orders"
+              />
+              <SidebarItem
+                icon={<ViewListIcon />}
+                title="View Orders"
+                path="view-orders"
               />
 
               {/* -------------------  PURCHASE ORDERS --------------------------*/}

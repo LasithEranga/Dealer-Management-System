@@ -12,9 +12,12 @@ import NewPurchaseOrder from "./pages/NewPurchaseOrder/NewPurchaseOrder";
 import NewStock from "./pages/NewStock/NewStock";
 import SellTanks from "./pages/SellTanks/SellTanks";
 import ViewGasTanks from "./pages/ViewGasTanks/ViewGasTanks";
-import ViewPurchaseOrders from "./pages/NewPurchaseOrders/NewPurchaseOrders";
 import ViewStock from "./pages/ViewStock/ViewStock";
 import Test from "./pages/Test";
+import SavedPurchaseOrders from "./pages/SavedPurchaseOrders/SavedPurchaseOrders";
+import PendingPaymentPurchaseOrders from "./pages/PendingPaymentPurchaseOrders/PendingPaymentPurchaseOrders";
+import NewPurchaseOrders from "./pages/NewPurchaseOrders/NewPurchaseOrders";
+import ViewPurchaseOrders from "./pages/ViewPurchaseOrders/ViewPurchaseOrders";
 
 function App() {
   const user = useSelector((state) =>
@@ -34,7 +37,13 @@ function App() {
           <Route path="view-stock" element={<ViewStock />} />
           <Route path="distribute-stock" element={<DistributeStock />} />
           <Route path="new-order" element={<NewPurchaseOrder />} />
-          <Route path="new-orders" element={<ViewPurchaseOrders />} />
+          <Route path="new-orders" element={<NewPurchaseOrders />} />
+          <Route path="saved-orders" element={<SavedPurchaseOrders />} />
+          <Route
+            path="payment-pending-orders"
+            element={<PendingPaymentPurchaseOrders />}
+          />
+          <Route path="view-orders" element={<ViewPurchaseOrders />} />
           <Route path="dealers" element={<Dealers />} />
           <Route path="test" element={<Test />} />
           <Route path="new-gastank" element={<NewGasTank />} />

@@ -12,6 +12,10 @@ import { getInitials } from "../../utils/generateInitials";
 import { covertToRupees } from "../../utils/convertToRupees";
 import { getStockByUser, searchGasStock } from "../../app/api/gasStockServices";
 import useAutoComplete from "../../hooks/useAutoComplete";
+import OrderSummeryTable from "../../components/OrderSummeryTable/OrderSummeryTable";
+import PlainTable from "../../components/PlainTable/PlainTable";
+import { acceptOrder, newOrder } from "../../app/api/purchaseOrderServices";
+import { showSystemAlert } from "../../app/alertServices";
 
 const DistributeStock = () => {
   const { userId } = useSelector((state) => state.loginDMS);
@@ -44,6 +48,10 @@ const DistributeStock = () => {
     setSearchedStock,
   ] = useAutoComplete(searchGasStock, { userId });
 
+  const [selectedStockList, setSelectedStockList] = useState([]);
+  const [quantity, setQuantity] = useState("");
+  const [newOrderId, setNewOrderId] = useState("");
+
   useEffect(() => {
     if (selectedStock.name) {
       setStockKeyword(selectedStock.name + " " + selectedStock.gasTankType);
@@ -51,6 +59,77 @@ const DistributeStock = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedStock]);
+
+  const handleAddClick = () => {
+    if (selectedStock.name) {
+      setSelectedStockList((prev) => [
+        ...prev,
+        {
+          _id: selectedStock.gasTankId,
+          orderedPriceDealer: selectedStock.orderedPriceDealer,
+          total: selectedStock.orderedPriceDealer * quantity,
+          name: selectedStock.name,
+          gasTankType: selectedStock.gasTankType,
+          quantity: quantity,
+          orderedPriceDealerLabel: covertToRupees(
+            selectedStock.orderedPriceDealer
+          ),
+          totalLabel: covertToRupees(
+            selectedStock.orderedPriceDealer * quantity
+          ),
+        },
+      ]);
+      setSelectedStock({});
+      setStockKeyword("");
+      setQuantity("");
+    }
+  };
+
+  const handleOnClickDistribute = () => {
+    // place a purchase order and then accept it automatically
+    const request = {
+      distributorId: userId,
+      dealerId: selectedDealer._id,
+      gasTanks: selectedStockList.map((stock) => {
+        return {
+          _id: stock._id,
+          quantity: stock.quantity,
+          unitState: "PENDING",
+        };
+      }),
+      state: "PENDING",
+    };
+
+    newOrder(
+      request,
+      (response) => {
+        console.log(response);
+        acceptOrder(
+          {
+            purchaseOrderId: response.data._id,
+          },
+          (response) => {
+            console.log(response);
+            if (response.status === 0) {
+              showSystemAlert("Distribution Success!", "success");
+              setSelectedStockList([]);
+              setSelectedDealer({});
+            } else {
+              showSystemAlert("Distribution Failed!", "error");
+            }
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+
+    //accept the order
+  };
 
   return (
     <Box mt={1}>
@@ -120,16 +199,16 @@ const DistributeStock = () => {
             />
             <DealerDetails
               title={"Outstanding:"}
-              content={covertToRupees(selectedDealer.outstandingAmount ?? 0)}
+              content={
+                selectedDealer.outstandingAmount
+                  ? covertToRupees(selectedDealer.outstandingAmount)
+                  : ""
+              }
             />
             <DealerDetails
               title={"Address:"}
               content={selectedDealer.address ?? ""}
             />
-
-            <Box display={"flex"} justifyContent="end" mt={2}>
-              <Button variant="contained">Okay</Button>
-            </Box>
           </ContentCard>
         </Grid>
         <Grid item xs display={"flex"} flexDirection="column">
@@ -143,35 +222,63 @@ const DistributeStock = () => {
             <Typography fontWeight={"bold"} fontSize="1.5rem">
               Stock details
             </Typography>
-            <Box sx={{ mr: 2, my: 1 }}>
-              <StyledAutoComplete
-                title={"Tank & Type"}
-                placeholder="Search Dealer"
-                suggestedList={suggestedStockList}
-                setSuggestedList={setSuggestedStockList}
-                setSelected={setSelectedStock}
-                suggessionName={"Suggested Dealers"}
-                madeOf={["name", "gasTankType"]}
-                keyword={stockKeyword}
-                setKeyword={setStockKeyword}
-                mt={0}
-              />
-            </Box>
-            <Box sx={{ mr: 2, my: 1 }}>
-              <Typography>Available Qty @ In-House</Typography>
-              <TextField
-                fullWidth
-                size="small"
-                variant="outlined"
-                value={selectedStock.quantity ?? "0"}
-                sx={{ mt: 1 }}
-                inputProps={{
-                  readOnly: true,
-                }}
-              />
+            <Grid container spacing={1}>
+              <Grid item xs={4}>
+                <StyledAutoComplete
+                  title={"Tank & Type"}
+                  placeholder="Search stock"
+                  suggestedList={suggestedStockList}
+                  setSuggestedList={setSuggestedStockList}
+                  setSelected={setSelectedStock}
+                  suggessionName={"Suggested Stocks"}
+                  madeOf={["name", "gasTankType"]}
+                  keyword={stockKeyword}
+                  setKeyword={setStockKeyword}
+                  mt={0}
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Box>
+                  <Typography>Available Qty @ In-House</Typography>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    variant="outlined"
+                    value={selectedStock.quantity ?? "0"}
+                    sx={{ mt: 1 }}
+                    inputProps={{
+                      readOnly: true,
+                    }}
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={4}>
+                <Box>
+                  <Typography>Quantity</Typography>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    variant="outlined"
+                    value={quantity}
+                    onChange={(e) => setQuantity(e.target.value)}
+                    sx={{ mt: 1 }}
+                  />
+                </Box>
+              </Grid>
+            </Grid>
+            <Box mt={2} display="flex" justifyContent="flex-end">
+              <Button variant="contained" onClick={handleAddClick}>
+                Add
+              </Button>
             </Box>
 
-            <StockDetails title={"Quantity"} placeholder={"50"} />
+            <Box>
+              <PlainTable
+                dataList={selectedStockList}
+                height="10rem"
+                ignoreFirstColumns={3}
+              />
+            </Box>
             <Box
               display="flex"
               flexGrow={1}
@@ -180,8 +287,10 @@ const DistributeStock = () => {
               justifyContent="end"
               mr={2}
             >
-              <Button variant="outlined">Clear</Button>
-              <Button variant="contained">Allocate</Button>
+              <Button variant="outlined">Clear All</Button>
+              <Button variant="contained" onClick={handleOnClickDistribute}>
+                Distribute
+              </Button>
             </Box>
           </Box>
         </Grid>
