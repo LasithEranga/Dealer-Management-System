@@ -1,13 +1,5 @@
-import {
-  Box,
-  Button,
-  Divider,
-  Grid,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { styled } from "@mui/system";
-import React, { useEffect, useState } from "react";
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { showSystemAlert } from "../../app/alertServices";
@@ -15,15 +7,20 @@ import { getReOrderLevel, newStock } from "../../app/api/gasStockServices";
 import { searchGasTank } from "../../app/api/gasTankServices";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import StyledAutoComplete from "../../components/StyledAutoComplete/StyledAutoComplete";
+import useAutoComplete from "../../hooks/useAutoComplete";
 
 const NewStock = () => {
   const { userId } = useSelector((state) => state.loginDMS);
 
-  // -------------------------use states -----------------------
-  const [suggestedList, setSuggestedList] = useState([]);
-  const [keyword, setKeyword] = useState("");
-  const [selected, setSelected] = useState({});
-  // -------------------------use states -----------------------
+  const [
+    keyword,
+    setKeyword,
+    suggestedTankList,
+    setSuggestedTankList,
+    selectedTank,
+    setSelectedTank,
+    setSearchedTank,
+  ] = useAutoComplete(searchGasTank, {});
 
   const {
     register,
@@ -59,11 +56,12 @@ const NewStock = () => {
   };
 
   const onSubmit = (data) => {
-    if (selected._id) {
+    console.log(data);
+    if (selectedTank._id) {
       newStock(
         {
           user: userId,
-          gasTank: selected._id,
+          gasTank: selectedTank._id,
           quantity: Number(data.quantity),
           reOrderLevel: data.reOrderLevel,
         },
@@ -82,30 +80,26 @@ const NewStock = () => {
   };
 
   useEffect(() => {
-    if (keyword !== "") {
-      searchGasTank({ keyword }, (response) => {
-        setSuggestedList(response.data);
-      });
-    }
-  }, [keyword]);
-
-  useEffect(() => {
-    setValues(selected);
-    clearErrors(["name", "type"]);
-    if (selected._id) {
-      setFocus("quantity");
-    }
-    // get re-order level if gas tank already has a stock
-    getReOrderLevel({ userId, gasTankId: selected._id }, (response) => {
-      if (response.data !== "NOT_FOUND") {
-        setValue("reOrderLevel", response.data.reOrderLevel);
-        clearErrors("reOrderLevel");
-      } else {
-        setValue("reOrderLevel", "");
+    if (selectedTank.name) {
+      setValues(selectedTank);
+      clearErrors(["name", "type"]);
+      if (selectedTank._id) {
+        setFocus("quantity");
       }
-    });
+      // get re-order level if gas tank already has a stock
+      getReOrderLevel({ userId, gasTankId: selectedTank._id }, (response) => {
+        if (response.data !== "NOT_FOUND") {
+          setValue("reOrderLevel", response.data.reOrderLevel);
+          clearErrors("reOrderLevel");
+        } else {
+          setValue("reOrderLevel", "");
+        }
+      });
+      setKeyword(selectedTank.name + " " + selectedTank.type);
+      setSearchedTank(selectedTank.name + " " + selectedTank.type);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selected]);
+  }, [selectedTank]);
 
   return (
     <Box mt={1}>
@@ -126,21 +120,17 @@ const NewStock = () => {
             <Typography sx={{ fontSize: "1rem", fontWeight: "bold" }}>
               Gas Tank Details
             </Typography>
+
             <StyledAutoComplete
               title={"Gas Tank Name"}
-              suggestedList={suggestedList}
+              placeholder="Search stock"
+              suggestedList={suggestedTankList}
+              setSuggestedList={setSuggestedTankList}
+              setSelected={setSelectedTank}
+              suggessionName={"Suggested Stocks"}
+              madeOf={["name", "type"]}
               keyword={keyword}
               setKeyword={setKeyword}
-              setSuggestedList={setSuggestedList}
-              setSelected={setSelected}
-              suggessionName={"Suggested Gas Tanks"}
-              register={register("name", {
-                required: {
-                  value: true,
-                  message: "Please select a gas tank",
-                },
-              })}
-              errors={errors}
             />
             <Box>
               <Typography sx={{ mb: 1, mt: 3 }}>Gas Tank Type</Typography>

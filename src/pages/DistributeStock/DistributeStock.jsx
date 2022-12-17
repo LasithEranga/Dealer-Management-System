@@ -1,21 +1,17 @@
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import ContentCard from "../../components/ContentCard/ContentCard";
-import DealerDetails from "./DealerDetails";
-import StockDetails from "./StockDetails";
-import StyledAutoComplete from "../../components/StyledAutoComplete/StyledAutoComplete";
-import { searchDealer } from "../../app/api/userServices";
 import { useSelector } from "react-redux";
-import { useForm } from "react-hook-form";
-import _ from "lodash";
-import { getInitials } from "../../utils/generateInitials";
-import { covertToRupees } from "../../utils/convertToRupees";
-import { getStockByUser, searchGasStock } from "../../app/api/gasStockServices";
-import useAutoComplete from "../../hooks/useAutoComplete";
-import OrderSummeryTable from "../../components/OrderSummeryTable/OrderSummeryTable";
-import PlainTable from "../../components/PlainTable/PlainTable";
-import { acceptOrder, newOrder } from "../../app/api/purchaseOrderServices";
 import { showSystemAlert } from "../../app/alertServices";
+import { searchGasStock } from "../../app/api/gasStockServices";
+import { acceptOrder, newOrder } from "../../app/api/purchaseOrderServices";
+import { searchDealer } from "../../app/api/userServices";
+import ContentCard from "../../components/ContentCard/ContentCard";
+import PlainTable from "../../components/PlainTable/PlainTable";
+import StyledAutoComplete from "../../components/StyledAutoComplete/StyledAutoComplete";
+import useAutoComplete from "../../hooks/useAutoComplete";
+import { covertToRupees } from "../../utils/convertToRupees";
+import { getInitials } from "../../utils/generateInitials";
+import DealerDetails from "./DealerDetails";
 
 const DistributeStock = () => {
   const { userId } = useSelector((state) => state.loginDMS);

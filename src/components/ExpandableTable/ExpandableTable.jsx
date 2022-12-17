@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import NameAvatar from "../NameAvatar/NameAvatar";
 import "./index.css";
 
-const EnhancedTable = ({
+const ExpandableTable = ({
   headCells = [
     "Dealer",
     "Name",
@@ -14,9 +14,6 @@ const EnhancedTable = ({
     "Actions",
   ],
   actionButtons = [],
-  amountIndex = 5,
-  upto = 5,
-  priceEnabled = true,
   enableAvatar = {
     isVisible: true,
     madeBy: [0],
@@ -42,7 +39,7 @@ const EnhancedTable = ({
             .map((element, index) => {
               return (
                 <tr key={index} className="eh-tr">
-                  {enableAvatar.isVisible && (
+                  {/* {enableAvatar.isVisible && (
                     <td className="eh-td">
                       <NameAvatar
                         priceEnabled={priceEnabled}
@@ -76,7 +73,7 @@ const EnhancedTable = ({
                         {oneEl.name}
                       </Button>
                     </td>
-                  ))}
+                  ))} */}
                 </tr>
               );
             })}
@@ -145,4 +142,4 @@ const EnhancedTable = ({
   );
 };
 
-export default EnhancedTable;
+export default ExpandableTable;

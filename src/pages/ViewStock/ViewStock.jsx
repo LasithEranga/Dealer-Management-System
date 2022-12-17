@@ -95,8 +95,9 @@ const ViewStock = () => {
                 gap={2}
                 pl={1}
               >
-                {chartData.map((oneEl) => (
+                {chartData.map((oneEl, index) => (
                   <PieChartLegend
+                    key={index}
                     label={`${_.capitalize(oneEl._id)} tanks`}
                     indicatorColor={oneEl.color}
                     count={oneEl.quantity}
