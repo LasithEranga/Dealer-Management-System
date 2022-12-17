@@ -1,7 +1,21 @@
-import { Button, Typography } from "@mui/material";
+import { DownhillSkiing, Download } from "@mui/icons-material";
+import {
+  Button,
+  Divider,
+  Grid,
+  Paper,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import NameAvatar from "../NameAvatar/NameAvatar";
 import "./index.css";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import PlainTable from "../PlainTable/PlainTable";
+import { Box } from "@mui/system";
+import { covertToRupees } from "../../utils/convertToRupees";
+import { getColorFromName } from "../../utils/getColorFromName";
 
 const ExpandableTable = ({
   headCells = [
@@ -18,10 +32,52 @@ const ExpandableTable = ({
     isVisible: true,
     madeBy: [0],
   },
-  data = [],
+  data = [
+    {
+      name: "John Doe",
+      address: "1234 Main St",
+      storeAddress: "1234 Main St",
+      field3: "1234 Main St",
+      phoneNo: "123-456-7890",
+      email: "lasith@gmail.com",
+    },
+    {
+      name: "John Doe",
+      address: "1234 Main St",
+      storeAddress: "1234 Main St",
+      field3: "1234 Main St",
+      phoneNo: "123-456-7890",
+      email: "lasith@gmail.com",
+    },
+    {
+      name: "John Doe",
+      address: "1234 Main St",
+      storeAddress: "1234 Main St",
+      field3: "1234 Main St",
+      phoneNo: "123-456-7890",
+      email: "lasith@gmail.com",
+    },
+    {
+      name: "John Doe",
+      address: "1234 Main St",
+      storeAddress: "1234 Main St",
+      field3: "1234 Main St",
+      phoneNo: "123-456-7890",
+      email: "lasith@gmail.com",
+    },
+    {
+      name: "John Doe",
+      address: "1234 Main St",
+      storeAddress: "1234 Main St",
+      field3: "1234 Main St",
+      phoneNo: "123-456-7890",
+      email: "lasith@gmail.com",
+    },
+  ],
 }) => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
+  const [expanded, setExpanded] = useState(-1);
 
   return (
     <div>
@@ -29,7 +85,9 @@ const ExpandableTable = ({
         <thead>
           <tr className="eh-tr">
             {headCells.map((oneEl, index) => (
-              <th className="eh-th">{oneEl}</th>
+              <th className="eh-th" key={index}>
+                {oneEl}
+              </th>
             ))}
           </tr>
         </thead>
@@ -38,43 +96,142 @@ const ExpandableTable = ({
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((element, index) => {
               return (
-                <tr key={index} className="eh-tr">
-                  {/* {enableAvatar.isVisible && (
-                    <td className="eh-td">
-                      <NameAvatar
-                        priceEnabled={priceEnabled}
-                        {...(priceEnabled && {
-                          amount: Object.values(element)[amountIndex],
-                        })}
-                        name={enableAvatar.madeBy
-                          .map((oneEl) => Object.values(element)[oneEl])
-                          .join("")}
-                      />
-                    </td>
-                  )}
-
-                  {Object.values(element)
-                    .slice(0, upto)
-                    .map((oneEl, index) => {
+                <>
+                  <tr key={index} className="eh-tr">
+                    {Object.values(element).map((oneEl, index) => {
                       return (
-                        <td key={index} className="eh-td">
-                          {oneEl}
+                        <td className="eh-td" key={index}>
+                          {enableAvatar.isVisible &&
+                          enableAvatar.madeBy.includes(index) ? (
+                            <NameAvatar name={oneEl} />
+                          ) : (
+                            oneEl
+                          )}
                         </td>
                       );
                     })}
 
-                  {actionButtons.map((oneEl, index) => (
-                    <td className="eh-td" key={index}>
+                    <td className="eh-td">
                       <Button
+                        color="primary"
                         onClick={() => {
-                          oneEl.action(element);
+                          setExpanded(expanded === index ? -1 : index);
                         }}
                       >
-                        {oneEl.name}
+                        {expanded === index ? (
+                          <ArrowDropUpIcon />
+                        ) : (
+                          <ArrowDropDownIcon />
+                        )}
                       </Button>
                     </td>
-                  ))} */}
-                </tr>
+                  </tr>
+                  <tr>
+                    <td colSpan={headCells.length}>
+                      <div
+                        className={`
+                      eh-td-more 
+                      ${expanded === index ? "eh-td-expanded" : ""}
+                    `}
+                      >
+                        <Grid container spacing={2}>
+                          <Grid item xs={8}>
+                            <PlainTable
+                              dataList={[
+                                {
+                                  gasTank: "12.5Kg Tank",
+                                  gasType: "New",
+                                  quantity: "10",
+                                  cqDealer: "10",
+                                  cqInhouse: "10",
+                                  price: "500",
+                                  total: "500",
+                                },
+                                {
+                                  gasTank: "12.5Kg Tank",
+                                  gasType: "New",
+                                  quantity: "10",
+                                  cqDealer: "10",
+                                  cqInhouse: "10",
+                                  price: "500",
+                                  total: "500",
+                                },
+                              ]}
+                              headCells={[
+                                "Gas Tank",
+                                "Gas Type",
+                                "Quantity",
+                                <Tooltip title="Current Quantity @ Dealer Stock">
+                                  <span>CQ @ Dealer Stock</span>
+                                </Tooltip>,
+                                <Tooltip title="Current Quantity @ In-House Stock">
+                                  <span>CQ @ In-House Stock</span>
+                                </Tooltip>,
+                                "Price",
+                                "Total",
+                              ]}
+                            />
+                          </Grid>
+                          <Divider
+                            orientation="vertical"
+                            flexItem
+                            sx={{ ml: 2, mt: 4 }}
+                          />
+
+                          <Grid item xs>
+                            <Grid container spacing={2}>
+                              <Grid item xs={6}>
+                                <Paper elevation={1} sx={{ p: 1, mt: 2 }}>
+                                  <Box>
+                                    <Typography
+                                      fontWeight={"bold"}
+                                      fontSize="0.8rem"
+                                    >
+                                      Order Total
+                                    </Typography>
+                                    <Typography
+                                      textAlign={"right"}
+                                      fontSize="1.2rem"
+                                      sx={{ mt: 4 }}
+                                    >
+                                      {covertToRupees(500)}
+                                    </Typography>
+                                  </Box>
+                                </Paper>
+                              </Grid>
+                              <Grid item xs={6}>
+                                <Paper elevation={1} sx={{ p: 1, mt: 2 }}>
+                                  <Box>
+                                    <Tooltip title="Outstanding balance after accepting">
+                                      <Typography
+                                        fontWeight={"bold"}
+                                        fontSize="0.8rem"
+                                      >
+                                        OB After Accepting
+                                      </Typography>
+                                    </Tooltip>
+                                    <Typography
+                                      textAlign={"right"}
+                                      fontSize="1.2rem"
+                                      sx={{ mt: 4 }}
+                                    >
+                                      {covertToRupees(500)}
+                                    </Typography>
+                                  </Box>
+                                </Paper>
+                              </Grid>
+                            </Grid>
+                            <Box mt={2}>
+                              <Typography fontSize="0.75rem" textAlign={"end"}>
+                                Order Placed By Lasith 22/12/2022 12:02:00PM
+                              </Typography>
+                            </Box>
+                          </Grid>
+                        </Grid>
+                      </div>
+                    </td>
+                  </tr>
+                </>
               );
             })}
         </tbody>

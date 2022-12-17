@@ -1,44 +1,76 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { searchGasStock } from "../app/api/gasStockServices";
-import StyledAutoComplete from "../components/StyledAutoComplete/StyledAutoComplete";
-import useAutoComplete from "../hooks/useAutoComplete";
+import {
+  Box,
+  Button,
+  Divider,
+  FormControl,
+  Grid,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
+import React from "react";
+import ContentCard from "../components/ContentCard/ContentCard";
+import ExpandableTable from "../components/ExpandableTable/ExpandableTable";
 
 const Test = () => {
-  const { userId } = useSelector((state) => state.loginDMS);
-
-  const [
-    keyword,
-    setKeyword,
-    suggestedList,
-    setSuggestedList,
-    selected,
-    setSelected,
-    setSearched,
-  ] = useAutoComplete(searchGasStock, { userId });
-
-  useEffect(() => {
-    if (selected.name) {
-      setKeyword(selected.name + " " + selected.gasTankType);
-      setSearched(selected.name + " " + selected.gasTankType);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selected]);
-
   return (
-    <div>
-      <StyledAutoComplete
-        title={"Test search"}
-        placeholder="Search Dealer"
-        suggestedList={suggestedList}
-        setSuggestedList={setSuggestedList}
-        setSelected={setSelected}
-        suggessionName={"Suggested Dealers"}
-        madeOf={["name", "gasTankType"]}
-        keyword={keyword}
-        setKeyword={setKeyword}
-      />
-    </div>
+    <Box>
+      <ContentCard>
+        <Box
+          display={"flex"}
+          justifyContent="space-between"
+          alignItems={"center"}
+          my={1}
+        >
+          <Typography fontSize={"1.5rem"} fontWeight="bold">
+            Saved Purchase Orders
+          </Typography>
+          <Box>
+            <Button variant="outlined">Export to PDF</Button>
+          </Box>
+        </Box>
+        <Divider orientation="horizontal" sx={{ my: 2 }} />
+        <Box>
+          <Grid container>
+            <Grid item xs={4}>
+              <TextField
+                fullWidth
+                size="small"
+                placeholder="Search by Dealer name"
+              />
+            </Grid>
+            <Grid item xs></Grid>
+            <Grid item xs={5} display="flex" gap={1}>
+              <FormControl size="small" sx={{ flexGrow: 1 }}>
+                <Select defaultValue={""} value="Date">
+                  <MenuItem value={"Date"} disabled>
+                    Date
+                  </MenuItem>
+                </Select>
+              </FormControl>
+              <FormControl size="small" sx={{ flexGrow: 1 }}>
+                <Select defaultValue={""} value="Status">
+                  <MenuItem value={"Status"} disabled>
+                    Status
+                  </MenuItem>
+                </Select>
+              </FormControl>
+              <FormControl size="small" sx={{ flexGrow: 1 }}>
+                <Select defaultValue={""} value="ob">
+                  <MenuItem value={"ob"} disabled>
+                    Outstanding balance
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+        </Box>
+        <Divider orientation="horizontal" sx={{ my: 2 }} />
+
+        <ExpandableTable />
+      </ContentCard>
+    </Box>
   );
 };
 

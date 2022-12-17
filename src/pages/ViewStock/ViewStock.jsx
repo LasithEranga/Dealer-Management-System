@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { getChartData, getStockSummery } from "../../app/api/gasStockServices";
 import _ from "lodash";
 import { useSelector } from "react-redux";
+import { getColorFromName } from "../../utils/getColorFromName";
 
 const ViewStock = () => {
   const { userId } = useSelector((state) => state.loginDMS);
@@ -20,14 +21,7 @@ const ViewStock = () => {
   useEffect(() => {
     getChartData({ userId }, (response) => {
       let tempData = response.data;
-      tempData.map(
-        (oneEl) =>
-          (oneEl["color"] = `rgba( ${
-            oneEl._id.length * 3 > 255 ? 125 : oneEl._id.length * 3
-          }, ${oneEl._id.length * 25 > 255 ? 125 : oneEl._id.length * 25}, ${
-            oneEl._id.length * 50 > 255 ? 125 : oneEl._id.length * 50
-          }, 1)`)
-      );
+      tempData.map((oneEl) => (oneEl["color"] = getColorFromName(oneEl._id)));
       console.log("tempData", tempData);
       setChartData(tempData);
     });

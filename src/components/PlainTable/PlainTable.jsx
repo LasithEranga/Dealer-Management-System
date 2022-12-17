@@ -37,7 +37,7 @@ const PlainTable = ({
                 {Object.values(oneEl)
                   .slice(ignoreFirstColumns)
                   .map((oneEl, index) => (
-                    <td className="sales-td" key={index}>
+                    <td className="sales-td text-center" key={index}>
                       {oneEl}
                     </td>
                   ))}

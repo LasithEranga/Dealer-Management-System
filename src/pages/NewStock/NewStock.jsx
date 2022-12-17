@@ -123,7 +123,7 @@ const NewStock = () => {
 
             <StyledAutoComplete
               title={"Gas Tank Name"}
-              placeholder="Search stock"
+              placeholder="Search gas tank"
               suggestedList={suggestedTankList}
               setSuggestedList={setSuggestedTankList}
               setSelected={setSelectedTank}

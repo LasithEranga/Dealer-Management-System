@@ -1,3 +1,4 @@
+import { Search } from "@mui/icons-material";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -109,6 +110,7 @@ const DistributeStock = () => {
             if (response.status === 0) {
               showSystemAlert("Distribution Success!", "success");
               setSelectedStockList([]);
+              setDealerKeyword("");
               setSelectedDealer({});
             } else {
               showSystemAlert("Distribution Failed!", "error");
@@ -178,9 +180,11 @@ const DistributeStock = () => {
                 }}
               >
                 <Typography fontSize={"3rem"} fontWeight={"bold"}>
-                  {selectedDealer.name
-                    ? getInitials(selectedDealer.name)
-                    : "search"}
+                  {selectedDealer.name ? (
+                    getInitials(selectedDealer.name)
+                  ) : (
+                    <Search sx={{ fontSize: "5rem", mt: 3 }} />
+                  )}
                 </Typography>
               </Box>
             </Box>

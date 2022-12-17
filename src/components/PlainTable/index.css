@@ -21,6 +21,9 @@
 .sales-td {
   padding-left: 10px;
 }
+.text-center {
+  text-align: center;
+}
 .py-5 {
   padding-top: 15px;
   padding-bottom: 15px;
