@@ -20,11 +20,11 @@ import { getColorFromName } from "../../utils/getColorFromName";
 const ExpandableTable = ({
   headCells = [
     "Dealer",
-    "Name",
-    "Address",
+    "Date",
     "Store Address",
     "Phone No",
-    "Email",
+    "Order Total",
+    "State",
     "Actions",
   ],
   actionButtons = [],
@@ -73,6 +73,22 @@ const ExpandableTable = ({
       phoneNo: "123-456-7890",
       email: "lasith@gmail.com",
     },
+    {
+      name: "John Doe",
+      address: "1234 Main St",
+      storeAddress: "1234 Main St",
+      field3: "1234 Main St",
+      phoneNo: "123-456-7890",
+      email: "lasith@gmail.com",
+    },
+    {
+      name: "John Doe",
+      address: "1234 Main St",
+      storeAddress: "1234 Main St",
+      field3: "1234 Main St",
+      phoneNo: "123-456-7890",
+      email: "lasith@gmail.com",
+    },
   ],
 }) => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -81,11 +97,11 @@ const ExpandableTable = ({
 
   return (
     <div>
-      <table style={{ width: "100%" }} className="eh-table">
+      <table style={{ width: "100%" }} className="ep-table">
         <thead>
-          <tr className="eh-tr">
+          <tr className="ep-tr">
             {headCells.map((oneEl, index) => (
-              <th className="eh-th" key={index}>
+              <th className="ep-th" key={index}>
                 {oneEl}
               </th>
             ))}
@@ -97,10 +113,10 @@ const ExpandableTable = ({
             .map((element, index) => {
               return (
                 <>
-                  <tr key={index} className="eh-tr">
+                  <tr key={index} className="ep-tr">
                     {Object.values(element).map((oneEl, index) => {
                       return (
-                        <td className="eh-td" key={index}>
+                        <td className="ep-td" key={index}>
                           {enableAvatar.isVisible &&
                           enableAvatar.madeBy.includes(index) ? (
                             <NameAvatar name={oneEl} />
@@ -111,7 +127,7 @@ const ExpandableTable = ({
                       );
                     })}
 
-                    <td className="eh-td">
+                    <td className="ep-td">
                       <Button
                         color="primary"
                         onClick={() => {
@@ -130,10 +146,11 @@ const ExpandableTable = ({
                     <td colSpan={headCells.length}>
                       <div
                         className={`
-                      eh-td-more 
-                      ${expanded === index ? "eh-td-expanded" : ""}
+                      ep-td-more 
+                      ${expanded === index ? "ep-td-expanded" : ""}
                     `}
                       >
+                        <Divider sx={{ mt: 1 }} />
                         <Grid container spacing={2}>
                           <Grid item xs={8}>
                             <PlainTable
@@ -159,7 +176,7 @@ const ExpandableTable = ({
                               ]}
                               headCells={[
                                 "Gas Tank",
-                                "Gas Type",
+                                "Type",
                                 "Quantity",
                                 <Tooltip title="Current Quantity @ Dealer Stock">
                                   <span>CQ @ Dealer Stock</span>
@@ -175,7 +192,7 @@ const ExpandableTable = ({
                           <Divider
                             orientation="vertical"
                             flexItem
-                            sx={{ ml: 2, mt: 4 }}
+                            sx={{ ml: 2, mt: 4, mb: 2 }}
                           />
 
                           <Grid item xs>
@@ -228,6 +245,7 @@ const ExpandableTable = ({
                             </Box>
                           </Grid>
                         </Grid>
+                        <Divider />
                       </div>
                     </td>
                   </tr>

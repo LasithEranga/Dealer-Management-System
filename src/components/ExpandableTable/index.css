@@ -1,8 +1,8 @@
-.eh-table {
+.ep-table {
   border-collapse: collapse;
 }
 
-.eh-th {
+.ep-th {
   text-align: left;
   padding-left: 10px;
   padding-right: 30px;
@@ -10,15 +10,15 @@
   height: 50px;
   white-space: nowrap;
 }
-.eh-tr {
+.ep-tr {
   height: 60px;
 }
 
-.eh-td {
+.ep-td {
   padding-left: 8px;
 }
 
-.eh-td-more {
+.ep-td-more {
   height: 0rem;
   overflow: hidden;
   background-color: white;
@@ -27,15 +27,17 @@
 
   transition: all 0.5s;
 }
-.eh-td-expanded {
+.ep-td-expanded {
   height: 10rem;
 }
-.eh-tr:nth-child(even) {
-  background-color: rgb(255, 255, 244);
+
+.ep-tr:nth-child(n) {
+  background-color: rgba(150, 212, 212, 0.247);
 }
-.eh-tr:nth-child(odd) {
-  background-color: rgba(222, 253, 248, 0.801);
+.ep-tr:nth-child(4n-1) {
+  background-color: white;
 }
+
 .d-flex {
   display: flex;
 }
