@@ -38,9 +38,9 @@ const ViewPurchaseOrders = () => {
 
   const headCells = [
     "Dealer",
+    "Date",
     "Store Address",
     "Phone No",
-    "Outstanding Amount",
     "Order Total",
     "State",
     "Actions",
@@ -48,19 +48,19 @@ const ViewPurchaseOrders = () => {
 
   const createData = (
     name,
-    outstandingAmount,
-    phoneNumber,
-    total,
-    state,
+    date,
     storeAddress,
+    phoneNumber,
+    orderTotal,
+    state,
     _id
   ) => {
     return {
       name,
+      date,
       storeAddress,
       phoneNumber,
-      outstandingAmount: convertToRupees(outstandingAmount),
-      total: convertToRupees(total),
+      total: convertToRupees(orderTotal),
       state: (
         <>
           <Chip
@@ -77,16 +77,15 @@ const ViewPurchaseOrders = () => {
   useEffect(() => {
     getAllOrders((response) => {
       console.log(response);
-
       setDealers(
         response.data.map((oneEl) =>
           createData(
             oneEl.dealer?.name,
-            oneEl.dealer?.outstandingAmount,
+            oneEl.createdAt,
+            oneEl.dealer?.storeAddress,
             oneEl.dealer?.phoneNumber,
             oneEl.total,
             oneEl.state,
-            oneEl.dealer?.storeAddress,
             oneEl._id
           )
         )

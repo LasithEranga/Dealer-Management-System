@@ -9,7 +9,7 @@ import { newOrder } from "../../app/api/purchaseOrderServices";
 import { useSelector } from "react-redux";
 import { showSystemAlert } from "../../app/alertServices";
 const StepThree = ({ orderList, setActiveStep, setOrderList }) => {
-  const { userId, distributor } = useSelector((state) => state.loginDMS);
+  const { userId, name, distributor } = useSelector((state) => state.loginDMS);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -17,6 +17,7 @@ const StepThree = ({ orderList, setActiveStep, setOrderList }) => {
       {
         distributorId: distributor._id,
         dealerId: userId,
+        placedBy: name,
         gasTanks: orderList,
         state: "PENDING",
       },

@@ -23,7 +23,7 @@ const NewPurchaseOrders = () => {
   const { userId } = useSelector((state) => state.loginDMS);
 
   const [showEditModal, setShowEditModal] = useState(false);
-  const [dealers, setDealers] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [refreshTable, setRefreshTable] = useState(false);
   const [update, setUpdate] = useState({
     isUpdating: true,
@@ -39,26 +39,42 @@ const NewPurchaseOrders = () => {
 
   const headCells = [
     "Dealer",
+    "Date",
     "Store Address",
     "Phone No",
-    "Outstanding Amount",
-    "Order Total",
+    <Box display={"flex"} justifyContent={"center"} ml={2}>
+      Outstanding
+    </Box>,
     "State",
     "Actions",
   ];
 
-  const createData = (order) => {
+  const createData = (
+    order,
+    name,
+    date,
+    storeAddress,
+    phoneNumber,
+    outstandingBalance,
+    state
+  ) => {
     return {
-      order: order,
-      name: order.name,
-      date: order.createdAt,
-      phoneNumber: order.phoneNumber,
-      total: convertToRupees(order.total),
+      order,
+      name,
+      date,
+      storeAddress,
+      phoneNumber,
+      total: (
+        <Box display={"flex"} justifyContent={"center"}>
+          {convertToRupees(outstandingBalance)}
+        </Box>
+      ),
+
       state: (
         <>
           <Chip
             size="small"
-            label={_.capitalize(order.state)}
+            label={_.capitalize(state)}
             color="warning"
             sx={{ color: "white", fontWeight: "bold" }}
           />
@@ -71,16 +87,16 @@ const NewPurchaseOrders = () => {
     getAllOrders((response) => {
       console.log(response);
 
-      setDealers(
+      setOrders(
         response.data.map((oneEl) =>
           createData(
+            oneEl,
             oneEl.dealer?.name,
-            oneEl.dealer?.outstandingAmount,
-            oneEl.dealer?.phoneNumber,
-            oneEl.total,
-            oneEl.state,
+            new Date(oneEl.createdAt).toLocaleDateString(),
             oneEl.dealer?.storeAddress,
-            oneEl._id
+            oneEl.dealer?.phoneNumber,
+            oneEl.dealer?.outstandingAmount,
+            oneEl.state
           )
         )
       );
@@ -165,7 +181,7 @@ const NewPurchaseOrders = () => {
           </Box>
           <Divider orientation="horizontal" sx={{ my: 2 }} />
 
-          <ExpandableTable />
+          <ExpandableTable headCells={headCells} data={orders} ignoreTill={1} />
         </ContentCard>
       </Box>
       {/* --------------------------- table section ------------------------------- */}

@@ -18,78 +18,14 @@ import { convertToRupees } from "../../utils/convertToRupees";
 import { getColorFromName } from "../../utils/getColorFromName";
 
 const ExpandableTable = ({
-  headCells = [
-    "Dealer",
-    "Date",
-    "Store Address",
-    "Phone No",
-    "Order Total",
-    "State",
-    "Actions",
-  ],
+  headCells = [],
   actionButtons = [],
   enableAvatar = {
     isVisible: true,
     madeBy: [0],
   },
-  data = [
-    {
-      name: "John Doe",
-      address: "1234 Main St",
-      storeAddress: "1234 Main St",
-      field3: "1234 Main St",
-      phoneNo: "123-456-7890",
-      email: "lasith@gmail.com",
-    },
-    {
-      name: "John Doe",
-      address: "1234 Main St",
-      storeAddress: "1234 Main St",
-      field3: "1234 Main St",
-      phoneNo: "123-456-7890",
-      email: "lasith@gmail.com",
-    },
-    {
-      name: "John Doe",
-      address: "1234 Main St",
-      storeAddress: "1234 Main St",
-      field3: "1234 Main St",
-      phoneNo: "123-456-7890",
-      email: "lasith@gmail.com",
-    },
-    {
-      name: "John Doe",
-      address: "1234 Main St",
-      storeAddress: "1234 Main St",
-      field3: "1234 Main St",
-      phoneNo: "123-456-7890",
-      email: "lasith@gmail.com",
-    },
-    {
-      name: "John Doe",
-      address: "1234 Main St",
-      storeAddress: "1234 Main St",
-      field3: "1234 Main St",
-      phoneNo: "123-456-7890",
-      email: "lasith@gmail.com",
-    },
-    {
-      name: "John Doe",
-      address: "1234 Main St",
-      storeAddress: "1234 Main St",
-      field3: "1234 Main St",
-      phoneNo: "123-456-7890",
-      email: "lasith@gmail.com",
-    },
-    {
-      name: "John Doe",
-      address: "1234 Main St",
-      storeAddress: "1234 Main St",
-      field3: "1234 Main St",
-      phoneNo: "123-456-7890",
-      email: "lasith@gmail.com",
-    },
-  ],
+  data = [],
+  ignoreTill = 0,
 }) => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
@@ -114,20 +50,35 @@ const ExpandableTable = ({
               return (
                 <>
                   <tr key={index} className="ep-tr">
-                    {Object.values(element).map((oneEl, index) => {
-                      return (
-                        <td className="ep-td" key={index}>
-                          {enableAvatar.isVisible &&
-                          enableAvatar.madeBy.includes(index) ? (
-                            <NameAvatar name={oneEl} />
-                          ) : (
-                            oneEl
-                          )}
-                        </td>
-                      );
-                    })}
+                    {Object.values(element)
+                      .slice(ignoreTill)
+                      .map((oneEl, index) => {
+                        return (
+                          <td className="ep-td " key={index}>
+                            {enableAvatar.isVisible &&
+                            enableAvatar.madeBy.includes(index) ? (
+                              <NameAvatar name={oneEl} />
+                            ) : (
+                              oneEl
+                            )}
+                          </td>
+                        );
+                      })}
 
                     <td className="ep-td">
+                      {actionButtons.map((oneEl, index) => {
+                        return (
+                          <td className="ep-td " key={index}>
+                            {enableAvatar.isVisible &&
+                            enableAvatar.madeBy.includes(index) ? (
+                              <NameAvatar name={oneEl} />
+                            ) : (
+                              oneEl
+                            )}
+                          </td>
+                        );
+                      })}
+
                       <Button
                         color="primary"
                         onClick={() => {
@@ -154,38 +105,56 @@ const ExpandableTable = ({
                         <Grid container spacing={2}>
                           <Grid item xs={8}>
                             <PlainTable
-                              dataList={[
-                                {
-                                  gasTank: "12.5Kg Tank",
-                                  gasType: "New",
-                                  quantity: "10",
-                                  cqDealer: "10",
-                                  cqInhouse: "10",
-                                  price: "500",
-                                  total: "500",
-                                },
-                                {
-                                  gasTank: "12.5Kg Tank",
-                                  gasType: "New",
-                                  quantity: "10",
-                                  cqDealer: "10",
-                                  cqInhouse: "10",
-                                  price: "500",
-                                  total: "500",
-                                },
-                              ]}
+                              height={"7rem"}
+                              dataList={Object.values(
+                                element
+                              )[0]?.gasTanks?.map((oneEl) => {
+                                console.log(oneEl);
+                                return {
+                                  gasTank: oneEl.gasTank.name,
+                                  gasType: oneEl.gasTank.type,
+                                  quantity: oneEl.quantity,
+                                  cqDealer: oneEl.dealerStockQty,
+                                  cqInhouse: oneEl.distributorStockQty,
+                                  price: (
+                                    <Box
+                                      display={"flex"}
+                                      justifyContent={"end"}
+                                      ml={2}
+                                    >
+                                      {convertToRupees(
+                                        oneEl.orderedPriceDealer
+                                      )}
+                                    </Box>
+                                  ),
+
+                                  total: (
+                                    <Box
+                                      display={"flex"}
+                                      justifyContent={"end"}
+                                      ml={2}
+                                    >
+                                      {convertToRupees(oneEl.subTotal)}
+                                    </Box>
+                                  ),
+                                };
+                              })}
                               headCells={[
                                 "Gas Tank",
                                 "Type",
-                                "Quantity",
+                                "Qty",
                                 <Tooltip title="Current Quantity @ Dealer Stock">
-                                  <span>CQ @ Dealer Stock</span>
+                                  <span>CQ @ Dealer</span>
                                 </Tooltip>,
                                 <Tooltip title="Current Quantity @ In-House Stock">
-                                  <span>CQ @ In-House Stock</span>
+                                  <span>CQ @ In-House</span>
                                 </Tooltip>,
-                                "Price",
-                                "Total",
+                                <Box display={"flex"} justifyContent={"center"}>
+                                  Price
+                                </Box>,
+                                <Box display={"flex"} justifyContent={"center"}>
+                                  Total
+                                </Box>,
                               ]}
                             />
                           </Grid>
@@ -211,7 +180,9 @@ const ExpandableTable = ({
                                       fontSize="1.2rem"
                                       sx={{ mt: 4 }}
                                     >
-                                      {convertToRupees(500)}
+                                      {convertToRupees(
+                                        Object.values(element)[0]?.total
+                                      )}
                                     </Typography>
                                   </Box>
                                 </Paper>
@@ -232,7 +203,11 @@ const ExpandableTable = ({
                                       fontSize="1.2rem"
                                       sx={{ mt: 4 }}
                                     >
-                                      {convertToRupees(500)}
+                                      {convertToRupees(
+                                        Object.values(element)[0]?.dealer
+                                          ?.outstandingAmount +
+                                          Object.values(element)[0]?.total
+                                      )}
                                     </Typography>
                                   </Box>
                                 </Paper>
@@ -240,7 +215,11 @@ const ExpandableTable = ({
                             </Grid>
                             <Box mt={2}>
                               <Typography fontSize="0.75rem" textAlign={"end"}>
-                                Order Placed By Lasith 22/12/2022 12:02:00PM
+                                Order Placed By{" "}
+                                {Object.values(element)[0]?.placedBy}{" "}
+                                {new Date(
+                                  Object.values(element)[0]?.createdAt
+                                ).toLocaleString()}
                               </Typography>
                             </Box>
                           </Grid>
