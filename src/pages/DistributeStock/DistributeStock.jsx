@@ -10,7 +10,7 @@ import ContentCard from "../../components/ContentCard/ContentCard";
 import PlainTable from "../../components/PlainTable/PlainTable";
 import StyledAutoComplete from "../../components/StyledAutoComplete/StyledAutoComplete";
 import useAutoComplete from "../../hooks/useAutoComplete";
-import { covertToRupees } from "../../utils/convertToRupees";
+import { convertToRupees } from "../../utils/convertToRupees";
 import { getInitials } from "../../utils/generateInitials";
 import DealerDetails from "./DealerDetails";
 
@@ -68,10 +68,10 @@ const DistributeStock = () => {
           name: selectedStock.name,
           gasTankType: selectedStock.gasTankType,
           quantity: quantity,
-          orderedPriceDealerLabel: covertToRupees(
+          orderedPriceDealerLabel: convertToRupees(
             selectedStock.orderedPriceDealer
           ),
-          totalLabel: covertToRupees(
+          totalLabel: convertToRupees(
             selectedStock.orderedPriceDealer * quantity
           ),
         },
@@ -201,7 +201,7 @@ const DistributeStock = () => {
               title={"Outstanding:"}
               content={
                 selectedDealer.outstandingAmount
-                  ? covertToRupees(selectedDealer.outstandingAmount)
+                  ? convertToRupees(selectedDealer.outstandingAmount)
                   : ""
               }
             />

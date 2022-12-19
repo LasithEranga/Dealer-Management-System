@@ -4,7 +4,7 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { covertToRupees } from "../../utils/convertToRupees";
+import { convertToRupees } from "../../utils/convertToRupees";
 import ContentCard from "../ContentCard/ContentCard";
 import TitleAndContent from "../TitleAndContent/TitleAndContent";
 import "./index.css";
@@ -104,7 +104,7 @@ const OrderSummeryTable = ({
         >
           <TitleAndContent
             title={"Total:"}
-            content={covertToRupees(total)}
+            content={convertToRupees(total)}
             sx={{ mr: 2 }}
           />
         </Box>

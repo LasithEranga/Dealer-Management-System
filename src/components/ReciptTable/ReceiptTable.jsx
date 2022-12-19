@@ -1,5 +1,5 @@
 import React from "react";
-import { covertToRupees } from "../../utils/convertToRupees";
+import { convertToRupees } from "../../utils/convertToRupees";
 import "./index.css";
 
 const ReceiptTable = ({ orderList }) => {
@@ -21,10 +21,10 @@ const ReceiptTable = ({ orderList }) => {
             <td className="report-td">{oneEl.type}</td>
             <td className="report-td">{oneEl.quantity}</td>
             <td className="report-td text-end">
-              {covertToRupees(oneEl.orderedPriceDealer)}
+              {convertToRupees(oneEl.orderedPriceDealer)}
             </td>
             <td className="report-td text-end">
-              {covertToRupees(oneEl.quantity * oneEl.orderedPriceDealer)}
+              {convertToRupees(oneEl.quantity * oneEl.orderedPriceDealer)}
             </td>
           </tr>
         ))}

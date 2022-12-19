@@ -3,7 +3,7 @@ import { Box, Button, Divider, Grid, Typography } from "@mui/material";
 import _ from "lodash";
 import React from "react";
 import ContentCard from "../../components/ContentCard/ContentCard";
-import { covertToRupees } from "../../utils/convertToRupees";
+import { convertToRupees } from "../../utils/convertToRupees";
 
 const GasTankCard = ({
   _id,
@@ -41,7 +41,7 @@ const GasTankCard = ({
             <Typography>Ordering Price:</Typography>
           </Grid>
           <Grid item xs display={"flex"} justifyContent="end">
-            {covertToRupees(orderedPriceDistributor)}
+            {convertToRupees(orderedPriceDistributor)}
           </Grid>
         </Grid>
         <Grid container my={0.2}>
@@ -49,7 +49,7 @@ const GasTankCard = ({
             <Typography>Selling Price:</Typography>
           </Grid>
           <Grid item xs display={"flex"} justifyContent="end">
-            {covertToRupees(sellingPriceDistributor)}
+            {convertToRupees(sellingPriceDistributor)}
           </Grid>
         </Grid>
         <Divider sx={{ height: "5px", my: 1 }} />
@@ -62,7 +62,7 @@ const GasTankCard = ({
             <Typography>Ordering Price:</Typography>
           </Grid>
           <Grid item xs display={"flex"} justifyContent="end">
-            {covertToRupees(orderedPriceDealer)}
+            {convertToRupees(orderedPriceDealer)}
           </Grid>
         </Grid>
         <Grid container my={0.2}>
@@ -70,7 +70,7 @@ const GasTankCard = ({
             <Typography>Selling Price:</Typography>
           </Grid>
           <Grid item xs display={"flex"} justifyContent="end">
-            {covertToRupees(sellingPriceDealer)}
+            {convertToRupees(sellingPriceDealer)}
           </Grid>
         </Grid>
         <Box display={"flex"} justifyContent="end" mt={2}>

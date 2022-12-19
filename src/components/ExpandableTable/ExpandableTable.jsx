@@ -14,7 +14,7 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import PlainTable from "../PlainTable/PlainTable";
 import { Box } from "@mui/system";
-import { covertToRupees } from "../../utils/convertToRupees";
+import { convertToRupees } from "../../utils/convertToRupees";
 import { getColorFromName } from "../../utils/getColorFromName";
 
 const ExpandableTable = ({
@@ -211,7 +211,7 @@ const ExpandableTable = ({
                                       fontSize="1.2rem"
                                       sx={{ mt: 4 }}
                                     >
-                                      {covertToRupees(500)}
+                                      {convertToRupees(500)}
                                     </Typography>
                                   </Box>
                                 </Paper>
@@ -232,7 +232,7 @@ const ExpandableTable = ({
                                       fontSize="1.2rem"
                                       sx={{ mt: 4 }}
                                     >
-                                      {covertToRupees(500)}
+                                      {convertToRupees(500)}
                                     </Typography>
                                   </Box>
                                 </Paper>

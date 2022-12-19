@@ -39,11 +39,6 @@ export const data = {
 
   datasets: [
     {
-      label: "Dataset 1",
-      data: [10, 20, 30, 45, 50, 20, 10],
-      backgroundColor: "rgba(255, 99, 132, 1)",
-    },
-    {
       label: "Dataset 2",
       data: [10, 20, 30, 45, 50, 20, 10],
       backgroundColor: "rgba(53, 162, 235, 1)",

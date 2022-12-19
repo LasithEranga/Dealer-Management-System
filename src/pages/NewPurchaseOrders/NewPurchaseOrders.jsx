@@ -16,7 +16,8 @@ import { useSelector } from "react-redux";
 import { getAllOrders } from "../../app/api/purchaseOrderServices";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import EnhancedTable from "../../components/EnhancedTable/EnhancedTable";
-import { covertToRupees } from "../../utils/convertToRupees";
+import ExpandableTable from "../../components/ExpandableTable/ExpandableTable";
+import { convertToRupees } from "../../utils/convertToRupees";
 
 const NewPurchaseOrders = () => {
   const { userId } = useSelector((state) => state.loginDMS);
@@ -46,26 +47,18 @@ const NewPurchaseOrders = () => {
     "Actions",
   ];
 
-  const createData = (
-    name,
-    outstandingAmount,
-    phoneNumber,
-    total,
-    state,
-    storeAddress,
-    _id
-  ) => {
+  const createData = (order) => {
     return {
-      name,
-      storeAddress,
-      phoneNumber,
-      outstandingAmount: covertToRupees(outstandingAmount),
-      total: covertToRupees(total),
+      order: order,
+      name: order.name,
+      date: order.createdAt,
+      phoneNumber: order.phoneNumber,
+      total: convertToRupees(order.total),
       state: (
         <>
           <Chip
             size="small"
-            label={_.capitalize(state)}
+            label={_.capitalize(order.state)}
             color="warning"
             sx={{ color: "white", fontWeight: "bold" }}
           />
@@ -172,21 +165,7 @@ const NewPurchaseOrders = () => {
           </Box>
           <Divider orientation="horizontal" sx={{ my: 2 }} />
 
-          <EnhancedTable
-            headCells={headCells}
-            data={dealers}
-            amountIndex={3}
-            enableAvatar={{
-              isVisible: false,
-            }}
-            upto={6}
-            actionButtons={[
-              {
-                name: "Accept",
-                action: () => {},
-              },
-            ]}
-          />
+          <ExpandableTable />
         </ContentCard>
       </Box>
       {/* --------------------------- table section ------------------------------- */}

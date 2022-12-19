@@ -16,7 +16,7 @@ import { useSelector } from "react-redux";
 import { getAllOrders } from "../../app/api/purchaseOrderServices";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import EnhancedTable from "../../components/EnhancedTable/EnhancedTable";
-import { covertToRupees } from "../../utils/convertToRupees";
+import { convertToRupees } from "../../utils/convertToRupees";
 
 const ViewPurchaseOrders = () => {
   const { userId } = useSelector((state) => state.loginDMS);
@@ -59,8 +59,8 @@ const ViewPurchaseOrders = () => {
       name,
       storeAddress,
       phoneNumber,
-      outstandingAmount: covertToRupees(outstandingAmount),
-      total: covertToRupees(total),
+      outstandingAmount: convertToRupees(outstandingAmount),
+      total: convertToRupees(total),
       state: (
         <>
           <Chip
