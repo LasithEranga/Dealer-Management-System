@@ -45,8 +45,12 @@ const NewPurchaseOrders = () => {
     <Box display={"flex"} justifyContent={"center"} ml={2}>
       Outstanding
     </Box>,
-    "State",
-    "Actions",
+    <Box display={"flex"} justifyContent={"center"} ml={2}>
+      State
+    </Box>,
+    <Box display={"flex"} justifyContent={"center"} ml={2}>
+      Actions
+    </Box>,
   ];
 
   const createData = (
@@ -72,12 +76,14 @@ const NewPurchaseOrders = () => {
 
       state: (
         <>
-          <Chip
-            size="small"
-            label={_.capitalize(state)}
-            color="warning"
-            sx={{ color: "white", fontWeight: "bold" }}
-          />
+          <Box display={"flex"} justifyContent={"center"}>
+            <Chip
+              size="small"
+              label={_.capitalize(state)}
+              color="warning"
+              sx={{ color: "white", fontWeight: "bold" }}
+            />
+          </Box>
         </>
       ),
     };

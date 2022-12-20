@@ -16,10 +16,36 @@ import PlainTable from "../PlainTable/PlainTable";
 import { Box } from "@mui/system";
 import { convertToRupees } from "../../utils/convertToRupees";
 import { getColorFromName } from "../../utils/getColorFromName";
+import CustomButton from "../CustomButton/CustomButton";
+import SaveAltIcon from "@mui/icons-material/SaveAlt";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import SwipeRightIcon from "@mui/icons-material/SwipeRight";
 
 const ExpandableTable = ({
   headCells = [],
-  actionButtons = [],
+  actionButtons = [
+    {
+      tooltip: "Accept",
+      icon: <SwipeRightIcon />,
+      onClick: (order) => {
+        console.log(order);
+      },
+    },
+    {
+      tooltip: "Save",
+      icon: <SaveAltIcon />,
+      onClick: (order) => {
+        console.log(order);
+      },
+    },
+    {
+      tooltip: "Reject",
+      icon: <ThumbDownIcon />,
+      onClick: (order) => {
+        console.log(order);
+      },
+    },
+  ],
   enableAvatar = {
     isVisible: true,
     madeBy: [0],
@@ -66,31 +92,47 @@ const ExpandableTable = ({
                       })}
 
                     <td className="ep-td">
-                      {actionButtons.map((oneEl, index) => {
-                        return (
-                          <td className="ep-td " key={index}>
-                            {enableAvatar.isVisible &&
-                            enableAvatar.madeBy.includes(index) ? (
-                              <NameAvatar name={oneEl} />
-                            ) : (
-                              oneEl
-                            )}
-                          </td>
-                        );
-                      })}
-
-                      <Button
-                        color="primary"
-                        onClick={() => {
-                          setExpanded(expanded === index ? -1 : index);
-                        }}
+                      <Box
+                        display={"flex"}
+                        justifyContent={"center"}
+                        flexWrap="nowrap"
                       >
-                        {expanded === index ? (
-                          <ArrowDropUpIcon />
-                        ) : (
-                          <ArrowDropDownIcon />
-                        )}
-                      </Button>
+                        {actionButtons.map((oneEl, index) => {
+                          return (
+                            <CustomButton
+                              onClick={() => {
+                                oneEl.onClick(Object.values(element)[0]);
+                              }}
+                              sx={{ ml: 1 }}
+                            >
+                              <Tooltip title={oneEl.tooltip}>
+                                <span>{oneEl.icon}</span>
+                              </Tooltip>
+                            </CustomButton>
+                          );
+                        })}
+
+                        <CustomButton
+                          onClick={() => {
+                            setExpanded(expanded === index ? -1 : index);
+                          }}
+                          sx={{ p: 0.1, ml: 1 }}
+                        >
+                          {expanded === index ? (
+                            <ArrowDropUpIcon
+                              sx={{
+                                fontSize: "1.7rem",
+                              }}
+                            />
+                          ) : (
+                            <ArrowDropDownIcon
+                              sx={{
+                                fontSize: "1.7rem",
+                              }}
+                            />
+                          )}
+                        </CustomButton>
+                      </Box>
                     </td>
                   </tr>
                   <tr>
@@ -109,7 +151,6 @@ const ExpandableTable = ({
                               dataList={Object.values(
                                 element
                               )[0]?.gasTanks?.map((oneEl) => {
-                                console.log(oneEl);
                                 return {
                                   gasTank: oneEl.gasTank.name,
                                   gasType: oneEl.gasTank.type,
