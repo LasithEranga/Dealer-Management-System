@@ -13,13 +13,25 @@ import {
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getAllOrders } from "../../app/api/purchaseOrderServices";
+import {
+  getAllOrders,
+  getOrderByState,
+  rejectOrder,
+  saveOrder,
+} from "../../app/api/purchaseOrderServices";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import EnhancedTable from "../../components/EnhancedTable/EnhancedTable";
 import ExpandableTable from "../../components/ExpandableTable/ExpandableTable";
 import { convertToRupees } from "../../utils/convertToRupees";
 
+import SaveAltIcon from "@mui/icons-material/SaveAlt";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import SwipeRightIcon from "@mui/icons-material/SwipeRight";
+import { useNavigate } from "react-router-dom";
+import { showSystemAlert } from "../../app/alertServices";
+
 const NewPurchaseOrders = () => {
+  const navigate = useNavigate();
   const { userId } = useSelector((state) => state.loginDMS);
 
   const [showEditModal, setShowEditModal] = useState(false);
@@ -36,6 +48,59 @@ const NewPurchaseOrders = () => {
     min: "",
     max: "",
   });
+
+  const actionButtons = [
+    {
+      tooltip: "Accept",
+      icon: <SwipeRightIcon />,
+      onClick: (order) => {
+        navigate("/distribute-stock", {
+          state: {
+            order: order,
+          },
+        });
+        console.log(order);
+      },
+    },
+    {
+      tooltip: "Save",
+      icon: <SaveAltIcon />,
+      onClick: (order) => {
+        saveOrder(
+          {
+            purchaseOrderId: order._id,
+          },
+          (response) => {
+            if (response.status === 0) {
+              setRefreshTable(!refreshTable);
+              showSystemAlert(response.message, "success");
+            } else {
+              showSystemAlert(response.message, "error");
+            }
+          }
+        );
+      },
+    },
+    {
+      tooltip: "Reject",
+      icon: <ThumbDownIcon />,
+      onClick: (order) => {
+        rejectOrder(
+          {
+            purchaseOrderId: order._id,
+          },
+          (response) => {
+            if (response.status === 0) {
+              setRefreshTable(!refreshTable);
+              showSystemAlert(response.message, "success");
+            } else {
+              showSystemAlert(response.message, "error");
+            }
+          }
+        );
+      },
+    },
+  ];
 
   const headCells = [
     "Dealer",
@@ -90,7 +155,7 @@ const NewPurchaseOrders = () => {
   };
 
   useEffect(() => {
-    getAllOrders((response) => {
+    getOrderByState({ state: "PENDING" }, (response) => {
       console.log(response);
 
       setOrders(
@@ -187,7 +252,12 @@ const NewPurchaseOrders = () => {
           </Box>
           <Divider orientation="horizontal" sx={{ my: 2 }} />
 
-          <ExpandableTable headCells={headCells} data={orders} ignoreTill={1} />
+          <ExpandableTable
+            headCells={headCells}
+            data={orders}
+            ignoreTill={1}
+            actionButtons={actionButtons}
+          />
         </ContentCard>
       </Box>
       {/* --------------------------- table section ------------------------------- */}

@@ -23,29 +23,7 @@ import SwipeRightIcon from "@mui/icons-material/SwipeRight";
 
 const ExpandableTable = ({
   headCells = [],
-  actionButtons = [
-    {
-      tooltip: "Accept",
-      icon: <SwipeRightIcon />,
-      onClick: (order) => {
-        console.log(order);
-      },
-    },
-    {
-      tooltip: "Save",
-      icon: <SaveAltIcon />,
-      onClick: (order) => {
-        console.log(order);
-      },
-    },
-    {
-      tooltip: "Reject",
-      icon: <ThumbDownIcon />,
-      onClick: (order) => {
-        console.log(order);
-      },
-    },
-  ],
+  actionButtons = [],
   enableAvatar = {
     isVisible: true,
     madeBy: [0],
@@ -272,6 +250,21 @@ const ExpandableTable = ({
                 </>
               );
             })}
+          {data.length === 0 && (
+            <tr>
+              <td colSpan={headCells.length}>
+                <Box
+                  display={"flex"}
+                  justifyContent={"center"}
+                  alignItems={"center"}
+                  height={"100%"}
+                  my={2}
+                >
+                  <Typography fontSize={"1.5rem"}>No Orders Found!</Typography>
+                </Box>
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
 

@@ -2,6 +2,7 @@ import { Search } from "@mui/icons-material";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import { showSystemAlert } from "../../app/alertServices";
 import { searchGasStock } from "../../app/api/gasStockServices";
 import { acceptOrder, newOrder } from "../../app/api/purchaseOrderServices";
@@ -16,6 +17,10 @@ import DealerDetails from "./DealerDetails";
 
 const DistributeStock = () => {
   const { userId } = useSelector((state) => state.loginDMS);
+  const locationState = useLocation().state;
+  const [order, setOrder] = useState(
+    locationState ? locationState.order : null
+  );
 
   const [
     dealerKeyword,
@@ -26,15 +31,6 @@ const DistributeStock = () => {
     setSelectedDealer,
     setSearchedDealer,
   ] = useAutoComplete(searchDealer, { userId });
-
-  useEffect(() => {
-    if (selectedDealer.name) {
-      setDealerKeyword(selectedDealer.name);
-      setSearchedDealer(selectedDealer.name);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDealer]);
-
   const [
     stockKeyword,
     setStockKeyword,
@@ -45,9 +41,41 @@ const DistributeStock = () => {
     setSearchedStock,
   ] = useAutoComplete(searchGasStock, { userId });
 
+  useEffect(() => {
+    if (selectedDealer.name) {
+      setDealerKeyword(selectedDealer.name);
+      setSearchedDealer(selectedDealer.name);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedDealer]);
+
+  useEffect(() => {
+    console.log(order);
+    if (order) {
+      //setting the gas tank details
+      setSelectedStockList(
+        order.gasTanks.map((oneEl) => {
+          return {
+            _id: oneEl.gasTank._id,
+            orderedPriceDistributor: oneEl.orderedPriceDealer,
+            orderedPriceDealer: oneEl.orderedPriceDealer,
+            total: oneEl.subTotal,
+            name: oneEl.gasTank.name,
+            gasTankType: oneEl.gasTank.type,
+            quantity: oneEl.quantity,
+            orderedPriceDealerLabel: convertToRupees(oneEl.orderedPriceDealer),
+            totalLabel: convertToRupees(oneEl.subTotal),
+          };
+        })
+      );
+      //setting the dealer details
+      setSelectedDealer(order.dealer);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [order]);
+
   const [selectedStockList, setSelectedStockList] = useState([]);
   const [quantity, setQuantity] = useState("");
-  const [newOrderId, setNewOrderId] = useState("");
 
   useEffect(() => {
     if (selectedStock.name) {
@@ -64,6 +92,7 @@ const DistributeStock = () => {
         {
           _id: selectedStock.gasTankId,
           orderedPriceDealer: selectedStock.orderedPriceDealer,
+          orderedPriceDistributor: selectedStock.orderedPriceDealer,
           total: selectedStock.orderedPriceDealer * quantity,
           name: selectedStock.name,
           gasTankType: selectedStock.gasTankType,
@@ -83,14 +112,37 @@ const DistributeStock = () => {
   };
 
   const handleOnClickDistribute = () => {
+    //accept order directly, if the deaker has previously made the order
+    if (order) {
+      acceptOrder(
+        {
+          purchaseOrderId: order._id,
+        },
+        (response) => {
+          console.log(response);
+          if (response.status === 0) {
+            showSystemAlert("Distribution Success!", "success");
+            setSelectedStockList([]);
+            setOrder(null);
+            setSelectedDealer({});
+            setDealerKeyword("");
+          }
+        }
+      );
+      return;
+    }
+
     // place a purchase order and then accept it automatically
     const request = {
       distributorId: userId,
       dealerId: selectedDealer._id,
+      placedBy: "Distributor",
       gasTanks: selectedStockList.map((stock) => {
         return {
           _id: stock._id,
           quantity: stock.quantity,
+          orderedPriceDealer: stock.orderedPriceDealer,
+          orderedPriceDistributor: stock.orderedPriceDistributor,
           unitState: "PENDING",
         };
       }),
@@ -276,7 +328,7 @@ const DistributeStock = () => {
               <PlainTable
                 dataList={selectedStockList}
                 height="10rem"
-                ignoreFirstColumns={3}
+                ignoreFirstColumns={4}
               />
             </Box>
             <Box
