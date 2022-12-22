@@ -176,7 +176,11 @@ export default function Sidebar() {
                 title="Dealers"
                 path={"dealers"}
               />
-              <SidebarItem icon={<Inventory2Icon />} title="Dealer Stocks" />
+              <SidebarItem
+                icon={<Inventory2Icon />}
+                path="dealer-stocks"
+                title="Dealer Stocks"
+              />
               <SidebarItem
                 icon={<CurrencyExchangeIcon />}
                 title="Dealer Sales"

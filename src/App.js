@@ -18,6 +18,7 @@ import SavedPurchaseOrders from "./pages/SavedPurchaseOrders/SavedPurchaseOrders
 import PendingPaymentPurchaseOrders from "./pages/PendingPaymentPurchaseOrders/PendingPaymentPurchaseOrders";
 import NewPurchaseOrders from "./pages/NewPurchaseOrders/NewPurchaseOrders";
 import ViewPurchaseOrders from "./pages/ViewPurchaseOrders/ViewPurchaseOrders";
+import ViewDealerStocks from "./pages/ViewDealerStocks/ViewDealerStocks";
 
 function App() {
   const user = useSelector((state) =>
@@ -45,6 +46,7 @@ function App() {
           />
           <Route path="view-orders" element={<ViewPurchaseOrders />} />
           <Route path="dealers" element={<Dealers />} />
+          <Route path="dealer-stocks" element={<ViewDealerStocks />} />
           <Route path="test" element={<Test />} />
           <Route path="new-gastank" element={<NewGasTank />} />
           <Route path="view-gastanks" element={<ViewGasTanks />} />

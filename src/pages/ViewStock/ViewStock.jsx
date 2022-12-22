@@ -36,7 +36,8 @@ const ViewStock = () => {
       {
         data: chartData.map((oneEl) => oneEl.quantity),
         backgroundColor: chartData.map((oneEl) => oneEl.color),
-        borderWidth: 1,
+
+        borderWidth: 0.3,
       },
     ],
   };

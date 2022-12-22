@@ -13,16 +13,26 @@ import {
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getAllOrders } from "../../app/api/purchaseOrderServices";
+import {
+  getAllOrders,
+  getOrderByState,
+} from "../../app/api/purchaseOrderServices";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import EnhancedTable from "../../components/EnhancedTable/EnhancedTable";
+import ExpandableTable from "../../components/ExpandableTable/ExpandableTable";
 import { convertToRupees } from "../../utils/convertToRupees";
 
+import SaveAltIcon from "@mui/icons-material/SaveAlt";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import SwipeRightIcon from "@mui/icons-material/SwipeRight";
+import { useNavigate } from "react-router-dom";
+
 const ViewPurchaseOrders = () => {
+  const navigate = useNavigate();
   const { userId } = useSelector((state) => state.loginDMS);
 
   const [showEditModal, setShowEditModal] = useState(false);
-  const [dealers, setDealers] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [refreshTable, setRefreshTable] = useState(false);
   const [update, setUpdate] = useState({
     isUpdating: true,
@@ -36,39 +46,75 @@ const ViewPurchaseOrders = () => {
     max: "",
   });
 
+  const actionButtons = [
+    // {
+    //   tooltip: "Accept",
+    //   icon: <SwipeRightIcon />,
+    //   onClick: (order) => {
+    //     navigate("/distribute-stock", {
+    //       state: {
+    //         order: order,
+    //       },
+    //     });
+    //     console.log(order);
+    //   },
+    // },
+    // {
+    //   tooltip: "Reject",
+    //   icon: <ThumbDownIcon />,
+    //   onClick: (order) => {
+    //     console.log(order);
+    //   },
+    // },
+  ];
+
   const headCells = [
     "Dealer",
     "Date",
     "Store Address",
     "Phone No",
-    "Order Total",
-    "State",
-    "Actions",
+    <Box display={"flex"} justifyContent={"center"} ml={2}>
+      Outstanding
+    </Box>,
+    <Box display={"flex"} justifyContent={"center"} ml={2}>
+      State
+    </Box>,
+    <Box display={"flex"} justifyContent={"center"} ml={2}>
+      Actions
+    </Box>,
   ];
 
   const createData = (
+    order,
     name,
     date,
     storeAddress,
     phoneNumber,
-    orderTotal,
-    state,
-    _id
+    outstandingBalance,
+    state
   ) => {
     return {
+      order,
       name,
       date,
       storeAddress,
       phoneNumber,
-      total: convertToRupees(orderTotal),
+      total: (
+        <Box display={"flex"} justifyContent={"center"}>
+          {convertToRupees(outstandingBalance)}
+        </Box>
+      ),
+
       state: (
         <>
-          <Chip
-            size="small"
-            label={_.capitalize(state)}
-            color="warning"
-            sx={{ color: "white", fontWeight: "bold" }}
-          />
+          <Box display={"flex"} justifyContent={"center"}>
+            <Chip
+              size="small"
+              label={_.capitalize(state)}
+              color="warning"
+              sx={{ color: "white", fontWeight: "bold" }}
+            />
+          </Box>
         </>
       ),
     };
@@ -77,16 +123,17 @@ const ViewPurchaseOrders = () => {
   useEffect(() => {
     getAllOrders((response) => {
       console.log(response);
-      setDealers(
+
+      setOrders(
         response.data.map((oneEl) =>
           createData(
+            oneEl,
             oneEl.dealer?.name,
-            oneEl.createdAt,
+            new Date(oneEl.createdAt).toLocaleDateString(),
             oneEl.dealer?.storeAddress,
             oneEl.dealer?.phoneNumber,
-            oneEl.total,
-            oneEl.state,
-            oneEl._id
+            oneEl.dealer?.outstandingAmount,
+            oneEl.state
           )
         )
       );
@@ -105,7 +152,7 @@ const ViewPurchaseOrders = () => {
             my={1}
           >
             <Typography fontSize={"1.5rem"} fontWeight="bold">
-              View Purchase Orders
+              All Purchase Orders
             </Typography>
             <Box>
               <Button variant="outlined">Export to PDF</Button>
@@ -171,20 +218,11 @@ const ViewPurchaseOrders = () => {
           </Box>
           <Divider orientation="horizontal" sx={{ my: 2 }} />
 
-          <EnhancedTable
+          <ExpandableTable
             headCells={headCells}
-            data={dealers}
-            amountIndex={3}
-            enableAvatar={{
-              isVisible: false,
-            }}
-            upto={6}
-            actionButtons={[
-              {
-                name: "Accept",
-                action: () => {},
-              },
-            ]}
+            data={orders}
+            ignoreTill={1}
+            actionButtons={actionButtons}
           />
         </ContentCard>
       </Box>
