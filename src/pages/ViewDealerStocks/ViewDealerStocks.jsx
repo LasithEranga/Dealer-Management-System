@@ -16,8 +16,9 @@ const ViewDealerStocks = () => {
         </Typography>
         <Box>
           <TextField
-            label="Search dealer name"
+            label=""
             variant="outlined"
+            placeholder="Search by dealer name"
             size="small"
             sx={{ width: "20rem" }}
           />

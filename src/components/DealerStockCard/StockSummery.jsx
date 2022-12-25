@@ -7,7 +7,7 @@ const StockSummery = () => {
     <Box>
       <Typography
         sx={{
-          mt: 2,
+          mt: 1,
           fontSize: "0.8rem",
           fontWeight: "bold",
         }}
@@ -15,7 +15,7 @@ const StockSummery = () => {
         Gas tank
       </Typography>
       <Box display={"flex"}>
-        <VeriticalBarCount count={30} title={"New "} color="#0002A1" />
+        <VeriticalBarCount count={100} title={"New "} color="#0002A1" />
         <VeriticalBarCount count={30} title={"Refilled "} color="#0002A1" />
         <VeriticalBarCount count={30} title={"Returned "} color="#0002A1" />
         <VeriticalBarCount count={30} title={"Empty "} color="#0002A1" />
