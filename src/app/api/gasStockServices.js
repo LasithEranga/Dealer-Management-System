@@ -20,3 +20,12 @@ export const newStock = (body, onSuccess, onFailed, onComplete) => {
 export const getReOrderLevel = (body, onSuccess, onFailed, onComplete) => {
   post("/stocks/getReOrderLevel", body, onSuccess, onFailed, onComplete);
 };
+
+export const getDealerStockSummery = (
+  body,
+  onSuccess,
+  onFailed,
+  onComplete
+) => {
+  post("/stocks/getDealerStockSummery", body, onSuccess, onFailed, onComplete);
+};

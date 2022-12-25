@@ -9,17 +9,10 @@ const VeriticalBarCount = ({
   count = 0,
   maxCount = 100,
   color,
-  badges = [
-    {
-      title: "Fast moving stock",
-      icon: <OfflineBoltIcon sx={{ fontSize: "0.8rem", color: "blue" }} />,
-    },
-  ],
+  badges = [],
 }) => {
   return (
     <Box width="70px" sx={{ minHeight: { xs: "6.5rem", lg: "5rem" }, mt: 1 }}>
-      <FlexBox></FlexBox>
-
       <Tooltip title={count + " tanks"}>
         <Box
           position={"relative"}
@@ -33,7 +26,7 @@ const VeriticalBarCount = ({
           <Box
             sx={{
               backgroundColor: color,
-              opacity: 0.15,
+              opacity: 0.2,
               height: "100%",
               width: "15px",
               position: "absolute",
@@ -58,15 +51,15 @@ const VeriticalBarCount = ({
       <Typography textAlign={"center"} fontSize="0.8rem">
         {count}
       </Typography>
-      <FlexBox sx={{ gap: 0.5 }}>
-        <Typography
-          textAlign={"center"}
-          fontSize="0.6rem"
-          fontWeight={"bold"}
-          lineHeight={0.5}
-        >
-          {title}
-        </Typography>
+      <Typography
+        textAlign={"center"}
+        fontSize="0.6rem"
+        fontWeight={"bold"}
+        lineHeight={1}
+      >
+        {title}
+      </Typography>
+      <FlexBox sx={{ my: 0.5 }}>
         {badges.map((badge, index) => {
           return (
             <Tooltip title={badge.title} key={index}>

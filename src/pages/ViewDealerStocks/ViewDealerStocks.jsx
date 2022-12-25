@@ -1,8 +1,30 @@
 import { Box, MenuItem, Select, TextField, Typography } from "@mui/material";
 import React from "react";
+import { useState } from "react";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { getDealerStockSummery } from "../../app/api/gasStockServices";
 import DealerStockCard from "../../components/DealerStockCard/DealerStockCard";
 
 const ViewDealerStocks = () => {
+  const { userId } = useSelector((state) => state.loginDMS);
+  const [dealerDetails, setDealerDetails] = useState([]);
+
+  useEffect(() => {
+    getDealerStockSummery(
+      {
+        userId: userId,
+      },
+      (response) => {
+        console.log("response", response);
+        setDealerDetails(response.data);
+      },
+      (error) => {
+        console.log("error", error);
+      }
+    );
+  }, []);
+
   return (
     <Box>
       <Box
@@ -45,13 +67,9 @@ const ViewDealerStocks = () => {
         px={4}
         justifyContent={"space-between"}
       >
-        <DealerStockCard />
-        <DealerStockCard />
-        <DealerStockCard />
-        <DealerStockCard />
-        <DealerStockCard />
-        <DealerStockCard />
-        <DealerStockCard />
+        {dealerDetails.map((dealer, index) => {
+          return <DealerStockCard dealer={dealer} key={index} />;
+        })}
       </Box>
     </Box>
   );

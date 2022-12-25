@@ -3,7 +3,7 @@ import React from "react";
 import VeriticalBarCount from "../VeriticalBarCount/VeriticalBarCount";
 import StockSummery from "./StockSummery";
 
-const DealerStockCard = () => {
+const DealerStockCard = ({ dealer = {} }) => {
   return (
     <Box
       sx={{
@@ -28,22 +28,12 @@ const DealerStockCard = () => {
               fontWeight: "bold",
             }}
           >
-            Dealer Name
+            {dealer.name ? dealer.name : ""}
           </Typography>
-          <Box>
-            <Chip
-              label="Active"
-              color="success"
-              size="small"
-              variant="outlined"
-            />
-          </Box>
         </Box>
-
-        <StockSummery />
-        <StockSummery />
-        <StockSummery />
-        <StockSummery />
+        {dealer.stocks.map((stock, index) => {
+          return <StockSummery stock={stock} key={index} />;
+        })}
       </Paper>
     </Box>
   );
