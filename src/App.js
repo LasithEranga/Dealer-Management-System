@@ -8,7 +8,6 @@ import Dealers from "./pages/Dealers/Dealers";
 import DistributeStock from "./pages/DistributeStock/DistributeStock";
 import Login from "./pages/Login/Login";
 import NewGasTank from "./pages/NewGasTank/NewGasTank";
-import NewPurchaseOrder from "./pages/NewPurchaseOrder/NewPurchaseOrder";
 import NewStock from "./pages/NewStock/NewStock";
 import SellTanks from "./pages/SellTanks/SellTanks";
 import ViewGasTanks from "./pages/ViewGasTanks/ViewGasTanks";
@@ -19,6 +18,7 @@ import PendingPaymentPurchaseOrders from "./pages/PendingPaymentPurchaseOrders/P
 import NewPurchaseOrders from "./pages/NewPurchaseOrders/NewPurchaseOrders";
 import ViewPurchaseOrders from "./pages/ViewPurchaseOrders/ViewPurchaseOrders";
 import ViewDealerStocks from "./pages/ViewDealerStocks/ViewDealerStocks";
+import NewPurchaseOrder from "./pages/DealerPurchaseOrders/NewPurchaseOrder/NewPurchaseOrder";
 
 function App() {
   const user = useSelector((state) =>

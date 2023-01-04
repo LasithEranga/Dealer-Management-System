@@ -1,8 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useEffect } from "react";
-import ContentCard from "../../components/ContentCard/ContentCard";
-import Stepper from "../../components/Stepper/Stepper";
+import ContentCard from "../../../components/ContentCard/ContentCard";
+import Stepper from "../../../components/Stepper/Stepper";
 import StepOne from "./StepOne";
 import StepThree from "./StepThree";
 import StepTwo from "./StepTwo";

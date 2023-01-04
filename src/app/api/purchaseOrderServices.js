@@ -17,9 +17,29 @@ export const getAllOrders = (onSuccess, onFailed, onComplete) => {
   post("/purchase-orders/getAll", {}, onSuccess, onFailed, onComplete);
 };
 
-export const getOrderByState = (body, onSuccess, onFailed, onComplete) => {
+export const getOrderByStateAndDistributor = (
+  body,
+  onSuccess,
+  onFailed,
+  onComplete
+) => {
   post(
-    "/purchase-orders/getOrderByState",
+    "/purchase-orders/getOrderByStateAndDistributor",
+    body,
+    onSuccess,
+    onFailed,
+    onComplete
+  );
+};
+
+export const getAllOrdersByStateAndDealer = (
+  body,
+  onSuccess,
+  onFailed,
+  onComplete
+) => {
+  post(
+    "/purchase-orders/getAllOrdersByStateAndDealer",
     body,
     onSuccess,
     onFailed,

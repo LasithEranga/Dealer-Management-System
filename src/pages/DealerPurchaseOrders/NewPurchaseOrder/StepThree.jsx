@@ -1,13 +1,13 @@
 import { Done } from "@mui/icons-material";
 import { Box, Button, Typography } from "@mui/material";
 import React, { useState } from "react";
-import ContentCard from "../../components/ContentCard/ContentCard";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import DotsAnimation from "../../components/DotsAnimation/DotsAnimation";
+import DotsAnimation from "../../../components/DotsAnimation/DotsAnimation";
 import { useEffect } from "react";
-import { newOrder } from "../../app/api/purchaseOrderServices";
+import { newOrder } from "../../../app/api/purchaseOrderServices";
 import { useSelector } from "react-redux";
-import { showSystemAlert } from "../../app/alertServices";
+import { showSystemAlert } from "../../../app/alertServices";
+import ContentCard from "../../../components/ContentCard/ContentCard";
 const StepThree = ({ orderList, setActiveStep, setOrderList }) => {
   const { userId, name, distributor } = useSelector((state) => state.loginDMS);
   const [loading, setLoading] = useState(true);

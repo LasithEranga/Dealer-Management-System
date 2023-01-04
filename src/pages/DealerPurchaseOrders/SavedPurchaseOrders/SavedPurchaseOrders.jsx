@@ -13,10 +13,10 @@ import {
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getOrderByStateAndDistributor } from "../../app/api/purchaseOrderServices";
-import ContentCard from "../../components/ContentCard/ContentCard";
-import ExpandableTable from "../../components/ExpandableTable/ExpandableTable";
-import { convertToRupees } from "../../utils/convertToRupees";
+import { getOrderByState } from "../../../app/api/purchaseOrderServices";
+import ContentCard from "../../../components/ContentCard/ContentCard";
+import ExpandableTable from "../../../components/ExpandableTable/ExpandableTable";
+import { convertToRupees } from "../../../utils/convertToRupees";
 
 import SwipeRightIcon from "@mui/icons-material/SwipeRight";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
@@ -117,26 +117,23 @@ const SavedPurchaseOrders = () => {
   };
 
   useEffect(() => {
-    getOrderByStateAndDistributor(
-      { distributor: userId, state: "SAVED" },
-      (response) => {
-        console.log(response);
+    getOrderByState({ state: "SAVED" }, (response) => {
+      console.log(response);
 
-        setOrders(
-          response.data.map((oneEl) =>
-            createData(
-              oneEl,
-              oneEl.dealer?.name,
-              new Date(oneEl.createdAt).toLocaleDateString(),
-              oneEl.dealer?.storeAddress,
-              oneEl.dealer?.phoneNumber,
-              oneEl.dealer?.outstandingAmount,
-              oneEl.state
-            )
+      setOrders(
+        response.data.map((oneEl) =>
+          createData(
+            oneEl,
+            oneEl.dealer?.name,
+            new Date(oneEl.createdAt).toLocaleDateString(),
+            oneEl.dealer?.storeAddress,
+            oneEl.dealer?.phoneNumber,
+            oneEl.dealer?.outstandingAmount,
+            oneEl.state
           )
-        );
-      }
-    );
+        )
+      );
+    });
   }, [refreshTable]);
 
   return (

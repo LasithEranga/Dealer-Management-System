@@ -795,3 +795,5 @@ export const DEALERS = [
   //   outstandingAmount: 7595,
   // },
 ];
+
+const string = "";

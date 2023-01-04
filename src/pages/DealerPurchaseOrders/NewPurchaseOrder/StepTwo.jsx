@@ -4,12 +4,12 @@ import Box from "@mui/material/Box";
 import Fade from "@mui/material/Fade";
 import Modal from "@mui/material/Modal";
 import React, { useState } from "react";
-import CustomModal from "../../components/CustomModal/CustomModal";
-import ReceiptTable from "../../components/ReciptTable/ReceiptTable";
-import RowItem from "../../components/RowItem/RowItem";
-import logo from "../../asessts/logo.png";
+import CustomModal from "../../../components/CustomModal/CustomModal";
+import ReceiptTable from "../../../components/ReciptTable/ReceiptTable";
+import RowItem from "../../../components/RowItem/RowItem";
+import logo from "../../../asessts/logo.png";
 import { useEffect } from "react";
-import { convertToRupees } from "../../utils/convertToRupees";
+import { convertToRupees } from "../../../utils/convertToRupees";
 
 const style = {
   position: "absolute",

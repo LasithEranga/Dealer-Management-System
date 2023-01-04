@@ -1,13 +1,13 @@
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { searchGasTank } from "../../app/api/gasTankServices";
-import ContentCard from "../../components/ContentCard/ContentCard";
-import OrderSummeryTable from "../../components/OrderSummeryTable/OrderSummeryTable";
-import StyledAutoComplete from "../../components/StyledAutoComplete/StyledAutoComplete";
-import TitleAndContent from "../../components/TitleAndContent/TitleAndContent";
-import { convertToRupees } from "../../utils/convertToRupees";
+import { searchGasTank } from "../../../app/api/gasTankServices";
+import ContentCard from "../../../components/ContentCard/ContentCard";
+import OrderSummeryTable from "../../../components/OrderSummeryTable/OrderSummeryTable";
+import StyledAutoComplete from "../../../components/StyledAutoComplete/StyledAutoComplete";
+import TitleAndContent from "../../../components/TitleAndContent/TitleAndContent";
+import { convertToRupees } from "../../../utils/convertToRupees";
 import "./index.css";
 
 const StepOne = ({ orderList, setOrderList, setActiveStep }) => {
