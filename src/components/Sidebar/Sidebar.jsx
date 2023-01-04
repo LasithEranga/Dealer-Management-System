@@ -299,15 +299,22 @@ export default function Sidebar() {
               <SidebarItem
                 icon={<SwipeRightAltIcon />}
                 title="Accepted Orders"
+                path={"accepted-orders"}
               />
-              <SidebarItem icon={<DownloadingIcon />} title="Pending Orders" />
+              <SidebarItem
+                icon={<DownloadingIcon />}
+                title="Pending Orders"
+                path={"pending-orders"}
+              />
               <SidebarItem
                 icon={<ThumbDownAltIcon />}
                 title="Declined Orders"
+                path={"declined-orders"}
               />
               <SidebarItem
                 icon={<HourglassTopIcon />}
                 title="Pending Payments"
+                path={"pending-payments-dealer"}
               />
 
               {/* -------------------  PURCHASE ORDERS --------------------------*/}

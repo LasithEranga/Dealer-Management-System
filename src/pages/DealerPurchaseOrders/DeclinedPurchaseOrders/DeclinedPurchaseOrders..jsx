@@ -13,16 +13,15 @@ import {
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getOrderByState } from "../../../app/api/purchaseOrderServices";
+import { getAllOrdersByStateAndDealer } from "../../../app/api/purchaseOrderServices";
 import ContentCard from "../../../components/ContentCard/ContentCard";
 import ExpandableTable from "../../../components/ExpandableTable/ExpandableTable";
 import { convertToRupees } from "../../../utils/convertToRupees";
-
 import SwipeRightIcon from "@mui/icons-material/SwipeRight";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import { useNavigate } from "react-router-dom";
 
-const SavedPurchaseOrders = () => {
+const DeclinedPurchaseOrders = () => {
   const navigate = useNavigate();
   const { userId } = useSelector((state) => state.loginDMS);
 
@@ -117,23 +116,26 @@ const SavedPurchaseOrders = () => {
   };
 
   useEffect(() => {
-    getOrderByState({ state: "SAVED" }, (response) => {
-      console.log(response);
+    getAllOrdersByStateAndDealer(
+      { dealer: userId, state: "REJECTED" },
+      (response) => {
+        console.log(response);
 
-      setOrders(
-        response.data.map((oneEl) =>
-          createData(
-            oneEl,
-            oneEl.dealer?.name,
-            new Date(oneEl.createdAt).toLocaleDateString(),
-            oneEl.dealer?.storeAddress,
-            oneEl.dealer?.phoneNumber,
-            oneEl.dealer?.outstandingAmount,
-            oneEl.state
+        setOrders(
+          response.data.map((oneEl) =>
+            createData(
+              oneEl,
+              oneEl.dealer?.name,
+              new Date(oneEl.createdAt).toLocaleDateString(),
+              oneEl.dealer?.storeAddress,
+              oneEl.dealer?.phoneNumber,
+              oneEl.dealer?.outstandingAmount,
+              oneEl.state
+            )
           )
-        )
-      );
-    });
+        );
+      }
+    );
   }, [refreshTable]);
 
   return (
@@ -148,7 +150,7 @@ const SavedPurchaseOrders = () => {
             my={1}
           >
             <Typography fontSize={"1.5rem"} fontWeight="bold">
-              Saved Purchase Orders
+              Accepted Purchase Orders
             </Typography>
             <Box>
               <Button variant="outlined">Export to PDF</Button>
@@ -227,4 +229,4 @@ const SavedPurchaseOrders = () => {
   );
 };
 
-export default SavedPurchaseOrders;
+export default DeclinedPurchaseOrders;

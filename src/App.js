@@ -19,6 +19,10 @@ import NewPurchaseOrders from "./pages/NewPurchaseOrders/NewPurchaseOrders";
 import ViewPurchaseOrders from "./pages/ViewPurchaseOrders/ViewPurchaseOrders";
 import ViewDealerStocks from "./pages/ViewDealerStocks/ViewDealerStocks";
 import NewPurchaseOrder from "./pages/DealerPurchaseOrders/NewPurchaseOrder/NewPurchaseOrder";
+import AcceptedPurchaseOrders from "./pages/DealerPurchaseOrders/AcceptedPurchaseOrders/AcceptedPurchaseOrders";
+import PendingPurchaseOrders from "./pages/DealerPurchaseOrders/PendingPurchaseOrders/PendingPurchaseOrders";
+import DeclinedPurchaseOrders from "./pages/DealerPurchaseOrders/DeclinedPurchaseOrders/DeclinedPurchaseOrders.";
+import PendingPaymentPurchaseOrdersDealer from "./pages/DealerPurchaseOrders/PendingPaymentPurchaseOrdersDealer/PendingPaymentPurchaseOrdersDealer";
 
 function App() {
   const user = useSelector((state) =>
@@ -39,6 +43,13 @@ function App() {
           <Route path="distribute-stock" element={<DistributeStock />} />
           <Route path="new-order" element={<NewPurchaseOrder />} />
           <Route path="new-orders" element={<NewPurchaseOrders />} />
+          <Route path="accepted-orders" element={<AcceptedPurchaseOrders />} />
+          <Route path="pending-orders" element={<PendingPurchaseOrders />} />
+          <Route path="declined-orders" element={<DeclinedPurchaseOrders />} />
+          <Route
+            path="pending-payments-dealer"
+            element={<PendingPaymentPurchaseOrdersDealer />}
+          />
           <Route path="saved-orders" element={<SavedPurchaseOrders />} />
           <Route
             path="payment-pending-orders"
