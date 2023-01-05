@@ -10,25 +10,41 @@ import Titlebar from "../../components/Titlebar/Titlebar";
 import { useEffect } from "react";
 import { getChartData, getStockSummery } from "../../app/api/gasStockServices";
 import _ from "lodash";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getColorFromName } from "../../utils/getColorFromName";
-
+import { Menu } from "@mui/icons-material";
+import { setTankTypeColors } from "../../reducers/chartColorSlice";
+import CustomModal from "../../components/CustomModal/CustomModal";
+import "./style.css";
 const ViewStock = () => {
   const { userId } = useSelector((state) => state.loginDMS);
+  const { tankTypeColors } = useSelector((state) => state.chartColorsDMS);
   const [chartData, setChartData] = useState([]);
   const [stockSummery, setStockSummery] = useState({});
+  const [showColorModal, setShowColorModal] = useState(false);
+  const [tankTypes, setTankTypes] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getChartData({ userId }, (response) => {
-      let tempData = response.data;
-      tempData.map((oneEl) => (oneEl["color"] = getColorFromName(oneEl._id)));
-      console.log("tempData", tempData);
-      setChartData(tempData);
-    });
-    getStockSummery({ userId }, (response) => {
-      setStockSummery(response.data);
-    });
-  }, []);
+    if (!showColorModal) {
+      getChartData({ userId }, (response) => {
+        let tempData = response.data;
+        console.log("tempData", tempData);
+        setTankTypes(tempData.map((oneEl) => oneEl._id));
+        tempData.map(
+          (oneEl) =>
+            (oneEl["color"] = tankTypeColors[oneEl._id]
+              ? tankTypeColors[oneEl._id]
+              : "#000")
+        );
+        console.log("tempData", tempData);
+        setChartData(tempData);
+      });
+      getStockSummery({ userId }, (response) => {
+        setStockSummery(response.data);
+      });
+    }
+  }, [showColorModal]);
 
   const data = {
     labels: chartData.map((oneEl) => `${_.capitalize(oneEl._id)} tanks`),
@@ -44,6 +60,33 @@ const ViewStock = () => {
 
   return (
     <Box>
+      <CustomModal open={showColorModal} setOpen={setShowColorModal}>
+        <Typography fontSize={"1.5rem"}> Set Chart Colors </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 2,
+            mt: 4,
+            mb: 5,
+          }}
+        >
+          {tankTypes.map((oneEl) => (
+            <Box display={"flex"} alignItems="center" gap={1} width={"100px"}>
+              <input
+                className="color-picker"
+                type={"color"}
+                value={tankTypeColors[oneEl]}
+                onChange={(event) => {
+                  let colors = { ...tankTypeColors };
+                  colors[oneEl] = event.target.value;
+                  dispatch(setTankTypeColors({ tankTypeColors: colors }));
+                }}
+              />
+              <Typography>{oneEl}</Typography>
+            </Box>
+          ))}
+        </Box>
+      </CustomModal>
       <Box
         display={"flex"}
         justifyContent="space-between"
@@ -58,7 +101,16 @@ const ViewStock = () => {
       <Grid container display={"flex"} mt={2}>
         <Grid item xs={5} p={1} pl={0}>
           <ContentCard>
-            <Titlebar title={"In-House Stock"} />
+            <Box display={"flex"} justifyContent="space-between">
+              <Titlebar title={"In-House Stock"} />
+              <div
+                onClick={() => {
+                  setShowColorModal(true);
+                }}
+              >
+                <Menu />
+              </div>
+            </Box>
             <Grid container style={{ height: "15rem" }}>
               <Grid
                 item

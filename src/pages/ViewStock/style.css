@@ -1,0 +1,18 @@
+.color-picker {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+.color-picker::-webkit-color-swatch {
+  border-radius: 5px;
+  border: none;
+}
+.color-picker::-moz-color-swatch {
+  border-radius: 5px;
+  border: none;
+}

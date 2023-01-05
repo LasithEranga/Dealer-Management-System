@@ -17,6 +17,10 @@ export const getChartData = (body, onSuccess, onFailed, onComplete) => {
 export const newStock = (body, onSuccess, onFailed, onComplete) => {
   post("/stocks/new", body, onSuccess, onFailed, onComplete);
 };
+export const newStockDealer = (body, onSuccess, onFailed, onComplete) => {
+  post("/stocks/newStockDealer", body, onSuccess, onFailed, onComplete);
+};
+
 export const getReOrderLevel = (body, onSuccess, onFailed, onComplete) => {
   post("/stocks/getReOrderLevel", body, onSuccess, onFailed, onComplete);
 };

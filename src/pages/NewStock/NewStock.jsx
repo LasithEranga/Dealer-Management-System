@@ -3,7 +3,11 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { showSystemAlert } from "../../app/alertServices";
-import { getReOrderLevel, newStock } from "../../app/api/gasStockServices";
+import {
+  getReOrderLevel,
+  newStock,
+  newStockDealer,
+} from "../../app/api/gasStockServices";
 import { searchGasTank } from "../../app/api/gasTankServices";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import StyledAutoComplete from "../../components/StyledAutoComplete/StyledAutoComplete";
@@ -11,6 +15,7 @@ import useAutoComplete from "../../hooks/useAutoComplete";
 
 const NewStock = () => {
   const { userId } = useSelector((state) => state.loginDMS);
+  const { type } = useSelector((state) => state.loginDMS);
 
   const [
     keyword,
@@ -58,20 +63,40 @@ const NewStock = () => {
   const onSubmit = (data) => {
     console.log(data);
     if (selectedTank._id) {
-      newStock(
-        {
-          user: userId,
-          gasTank: selectedTank._id,
-          quantity: Number(data.quantity),
-          reOrderLevel: data.reOrderLevel,
-        },
-        (response) => {
-          if (response.status === 0) {
-            clearAll();
-            showSystemAlert(response.message, "success");
+      //set two branches base on user type
+      if (type === "DISTRIBUTOR") {
+        newStock(
+          {
+            user: userId,
+            gasTank: selectedTank._id,
+            quantity: Number(data.quantity),
+            reOrderLevel: data.reOrderLevel,
+          },
+          (response) => {
+            if (response.status === 0) {
+              clearAll();
+              showSystemAlert(response.message, "success");
+            }
           }
-        }
-      );
+        );
+      } else if (type === "DEALER") {
+        newStockDealer(
+          {
+            user: userId,
+            gasTank: selectedTank._id,
+            quantity: Number(data.quantity),
+            reOrderLevel: data.reOrderLevel,
+          },
+          (response) => {
+            if (response.status === 0) {
+              clearAll();
+              showSystemAlert(response.message, "success");
+            } else if (response.status === 1) {
+              showSystemAlert(response.error, "error");
+            }
+          }
+        );
+      }
     } else {
       setError("name");
     }

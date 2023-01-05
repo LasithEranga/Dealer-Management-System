@@ -4,6 +4,7 @@ import storage from "redux-persist/lib/storage";
 import thunk from "redux-thunk";
 import loginReducer from "../../reducers/loginSlice";
 import alertReducer from "../../reducers/alertSlice";
+import chartColorsReducer from "../../reducers/chartColorSlice";
 
 const persistConfig = {
   key: "root",
@@ -13,6 +14,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   loginDMS: loginReducer,
   alertDMS: alertReducer,
+  chartColorsDMS: chartColorsReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
