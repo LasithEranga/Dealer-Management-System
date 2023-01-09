@@ -23,6 +23,7 @@ import AcceptedPurchaseOrders from "./pages/DealerPurchaseOrders/AcceptedPurchas
 import PendingPurchaseOrders from "./pages/DealerPurchaseOrders/PendingPurchaseOrders/PendingPurchaseOrders";
 import DeclinedPurchaseOrders from "./pages/DealerPurchaseOrders/DeclinedPurchaseOrders/DeclinedPurchaseOrders.";
 import PendingPaymentPurchaseOrdersDealer from "./pages/DealerPurchaseOrders/PendingPaymentPurchaseOrdersDealer/PendingPaymentPurchaseOrdersDealer";
+import DistributorReports from "./pages/Reports/DistributorReports";
 
 function App() {
   const user = useSelector((state) =>
@@ -46,6 +47,7 @@ function App() {
           <Route path="accepted-orders" element={<AcceptedPurchaseOrders />} />
           <Route path="pending-orders" element={<PendingPurchaseOrders />} />
           <Route path="declined-orders" element={<DeclinedPurchaseOrders />} />
+          <Route path="distributor-reports" element={<DistributorReports />} />
           <Route
             path="pending-payments-dealer"
             element={<PendingPaymentPurchaseOrdersDealer />}

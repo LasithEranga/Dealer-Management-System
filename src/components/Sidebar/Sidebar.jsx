@@ -234,7 +234,11 @@ export default function Sidebar() {
               {/* -------------------  PURCHASE ORDERS --------------------------*/}
               <SubHeading title="REPORTS" />
 
-              <SidebarItem icon={<AutoGraphIcon />} title="Reports" />
+              <SidebarItem
+                icon={<AutoGraphIcon />}
+                title="Reports"
+                path="distributor-reports"
+              />
             </Box>
           )}
 

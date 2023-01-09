@@ -1,12 +1,88 @@
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
-import React from "react";
+import _ from "lodash";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { showSystemAlert } from "../../app/alertServices";
+import { searchGasTank } from "../../app/api/gasTankServices";
+import { newRecipt } from "../../app/api/salesReceiptServices";
 import ButtonCard from "../../components/ButtonCard/ButtonCard";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import DoughnutChartWithText from "../../components/DoughnutChartWithText/DoughnutChartWithText";
 import OrderSummeryTable from "../../components/OrderSummeryTable/OrderSummeryTable";
+import StyledAutoComplete from "../../components/StyledAutoComplete/StyledAutoComplete";
 import TitleAndContent from "../../components/TitleAndContent/TitleAndContent";
 import "./index.css";
 const SellTanks = () => {
+  const { userId } = useSelector((state) => state.loginDMS);
+
+  const [suggestedList, setSuggestedList] = useState([]);
+  const [keyword, setKeyword] = useState("");
+  const [selected, setSelected] = useState({});
+  const [quantity, setQuantity] = useState("");
+  const [validationError, setValidationError] = useState({
+    isVisible: false,
+    message: "",
+  });
+
+  const [orderList, setOrderList] = useState([]);
+  useEffect(() => {
+    if (keyword !== "") {
+      searchGasTank({ keyword }, (response) => {
+        setSuggestedList(response.data);
+      });
+    }
+  }, [keyword]);
+
+  useEffect(() => {
+    console.log(orderList);
+    if (selected.name) {
+      setKeyword(selected.name + " " + _.capitalize(selected.type));
+    }
+  }, [selected]);
+
+  const onAddClick = () => {
+    if (selected.name) {
+      if (Number(quantity) > 0) {
+        setValidationError({
+          isVisible: false,
+          message: "",
+        });
+        const tempSelected = { ...selected };
+        tempSelected["quantity"] = Number(quantity);
+        setOrderList((prev) => [...prev, tempSelected]);
+        setKeyword("");
+        setSelected({});
+        setQuantity("");
+      } else {
+        setValidationError({
+          isVisible: true,
+          message: "Please type the quantity",
+        });
+      }
+    } else {
+      setValidationError({
+        isVisible: true,
+        message: "Please select a gas tank",
+      });
+    }
+  };
+
+  const onPrintClick = () => {
+    console.log("print");
+    newRecipt(
+      {
+        dealerId: userId,
+        gasTanks: orderList.map((oneEl) => ({
+          _id: oneEl._id,
+          quantity: oneEl.quantity,
+        })),
+      },
+      (response) => {
+        showSystemAlert("Recipt printed", "success");
+      }
+    );
+  };
+
   return (
     <Box my={1} mb={2}>
       <Typography fontSize="1.5rem" fontWeight="bold">
@@ -14,7 +90,7 @@ const SellTanks = () => {
       </Typography>
 
       <Grid container gap={2} mt={2}>
-        <OrderSummeryTable />
+        <OrderSummeryTable orderList={orderList} />
         <Grid item xs={5}>
           <ContentCard sx={{ pl: 3 }}>
             <Typography fontSize={"1.3rem"} fontWeight="bold">
@@ -27,11 +103,16 @@ const SellTanks = () => {
                 flexDirection: "column",
               }}
             >
-              <Box my={2} mr={5}>
-                <TextField
-                  fullWidth
-                  size="small"
-                  placeholder="Search Gas tank name"
+              <Box my={2}>
+                <StyledAutoComplete
+                  title={"Gas Tank Name"}
+                  suggestedList={suggestedList}
+                  keyword={keyword}
+                  setKeyword={setKeyword}
+                  setSuggestedList={setSuggestedList}
+                  setSelected={setSelected}
+                  suggessionName={"Suggested Gas Tanks"}
+                  mt={0}
                 />
               </Box>
               <Box>
@@ -54,12 +135,21 @@ const SellTanks = () => {
                 <TitleAndContent
                   title={"Quantity"}
                   titleSx={{ color: "black" }}
-                  content={<input type={"text"} />}
+                  content={
+                    <input
+                      type={"text"}
+                      value={quantity}
+                      onChange={(e) => {
+                        setQuantity(e.target.value);
+                      }}
+                    />
+                  }
                   sx={{ mr: 2, gap: 7, pt: 2 }}
                 />
               </Box>
               <Box
                 flexGrow={1}
+                mt={1}
                 display="flex"
                 justifyContent={"end"}
                 alignItems="end"
@@ -69,6 +159,7 @@ const SellTanks = () => {
                   variant="contained"
                   color="secondary"
                   sx={{ borderRadius: 0 }}
+                  onClick={onPrintClick}
                 >
                   Print Bill
                 </Button>
@@ -76,6 +167,7 @@ const SellTanks = () => {
                   variant="contained"
                   color="primary"
                   sx={{ borderRadius: 0 }}
+                  onClick={onAddClick}
                 >
                   Add
                 </Button>
