@@ -1,12 +1,12 @@
 import React from "react";
 import { Doughnut, Pie } from "react-chartjs-2";
 
-const DoughnutChart = () => {
+const DoughnutChart = ({ dataSet = [] }) => {
   const data = {
-    labels: ["klds"],
+    labels: [],
     datasets: [
       {
-        data: [1, 2],
+        data: dataSet,
         backgroundColor: ["#685FC2", "#888888"],
         borderWidth: 1,
       },
@@ -19,6 +19,9 @@ const DoughnutChart = () => {
       options={{
         responsive: true,
         plugins: {
+          tooltip: {
+            enabled: false,
+          },
           legend: {
             display: false,
           },

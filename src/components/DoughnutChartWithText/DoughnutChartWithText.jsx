@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import React from "react";
 import DoughnutChart from "../DoughnutChart/DoughnutChart";
 
-const DoughnutChartWithText = () => {
+const DoughnutChartWithText = ({ chartTitle, dataSet = [], count = 0 }) => {
   return (
     <Box sx={{ height: "6rem", position: "relative" }}>
       <Typography
@@ -13,10 +13,10 @@ const DoughnutChartWithText = () => {
           mb: 1,
         }}
       >
-        Refilled Tanks
+        {chartTitle}
       </Typography>
 
-      <DoughnutChart />
+      <DoughnutChart dataSet={dataSet} />
       <Typography
         sx={{
           position: "absolute",
@@ -26,7 +26,7 @@ const DoughnutChartWithText = () => {
           fontWeight: "bold",
         }}
       >
-        45
+        {count}
       </Typography>
     </Box>
   );

@@ -40,28 +40,7 @@ const DeclinedPurchaseOrders = () => {
     max: "",
   });
 
-  const actionButtons = [
-    {
-      tooltip: "Accept",
-      icon: <SwipeRightIcon />,
-      onClick: (order) => {
-        navigate("/distribute-stock", {
-          state: {
-            order: order,
-          },
-        });
-        console.log(order);
-      },
-    },
-
-    {
-      tooltip: "Reject",
-      icon: <ThumbDownIcon />,
-      onClick: (order) => {
-        console.log(order);
-      },
-    },
-  ];
+  const actionButtons = [];
 
   const headCells = [
     "Dealer",

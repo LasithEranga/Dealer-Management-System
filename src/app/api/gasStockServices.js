@@ -25,6 +25,10 @@ export const getReOrderLevel = (body, onSuccess, onFailed, onComplete) => {
   post("/stocks/getReOrderLevel", body, onSuccess, onFailed, onComplete);
 };
 
+export const stockInfoChartData = (body, onSuccess, onFailed, onComplete) => {
+  post("/stocks/stockInfoChartData", body, onSuccess, onFailed, onComplete);
+};
+
 export const getDealerStockSummery = (
   body,
   onSuccess,

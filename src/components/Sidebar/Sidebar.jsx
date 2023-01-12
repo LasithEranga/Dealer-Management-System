@@ -301,14 +301,14 @@ export default function Sidebar() {
                 path={"new-order"}
               />
               <SidebarItem
-                icon={<SwipeRightAltIcon />}
-                title="Accepted Orders"
-                path={"accepted-orders"}
-              />
-              <SidebarItem
                 icon={<DownloadingIcon />}
                 title="Pending Orders"
                 path={"pending-orders"}
+              />
+              <SidebarItem
+                icon={<SwipeRightAltIcon />}
+                title="Accepted Orders"
+                path={"accepted-orders"}
               />
               <SidebarItem
                 icon={<ThumbDownAltIcon />}

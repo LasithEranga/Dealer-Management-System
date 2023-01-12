@@ -3,6 +3,7 @@ import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { showSystemAlert } from "../../app/alertServices";
+import { stockInfoChartData } from "../../app/api/gasStockServices";
 import { searchGasTank } from "../../app/api/gasTankServices";
 import { newRecipt } from "../../app/api/salesReceiptServices";
 import ButtonCard from "../../components/ButtonCard/ButtonCard";
@@ -25,6 +26,23 @@ const SellTanks = () => {
   });
 
   const [orderList, setOrderList] = useState([]);
+  const [chartData, setChartData] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+
+  useEffect(() => {
+    stockInfoChartData(
+      {
+        userId,
+      },
+      (response) => {
+        setChartData(response.data);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }, [refresh]);
+
   useEffect(() => {
     if (keyword !== "") {
       searchGasTank({ keyword }, (response) => {
@@ -79,6 +97,8 @@ const SellTanks = () => {
       },
       (response) => {
         showSystemAlert("Recipt printed", "success");
+        setOrderList([]);
+        setRefresh((prev) => !prev);
       }
     );
   };
@@ -183,10 +203,16 @@ const SellTanks = () => {
               Stock Info
             </Typography>
             <Box display={"flex"} gap={3}>
-              <DoughnutChartWithText />
-              <DoughnutChartWithText />
-              <DoughnutChartWithText />
-              <DoughnutChartWithText />
+              {chartData.map((oneEl) => (
+                <DoughnutChartWithText
+                  chartTitle={_.capitalize(oneEl._id) + " Tank"}
+                  dataSet={[
+                    oneEl.quantity,
+                    oneEl.fullStockValue - oneEl.quantity,
+                  ]}
+                  count={oneEl.quantity}
+                />
+              ))}
             </Box>
           </ContentCard>
         </Grid>

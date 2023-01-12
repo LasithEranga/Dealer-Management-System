@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../reducers/loginSlice";
 import { showAlert } from "../../reducers/alertSlice";
 import { showSystemAlert } from "../../app/alertServices";
+import LoadingAnimation from "../../components/LoadingAnimation/LoadingAnimation";
 
 const Login = () => {
   const navigate = useNavigate();
