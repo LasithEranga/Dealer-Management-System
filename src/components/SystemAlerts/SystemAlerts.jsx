@@ -6,14 +6,12 @@ import { hideAlert } from "../../reducers/alertSlice";
 const SystemAlerts = () => {
   const alertState = useSelector((state) => state.alertDMS);
   const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState("");
-  const [severity, setSeverity] = useState("");
+
   const [transition, setTransition] = useState(undefined);
   const dispatch = useDispatch();
 
   const handleClose = () => {
     setOpen(false);
-    dispatch(hideAlert());
   };
   useEffect(() => {
     if (alertState.isVisible) {
@@ -24,9 +22,10 @@ const SystemAlerts = () => {
   }, [alertState]);
 
   useEffect(() => {
-    if (open) {
-      setMessage(alertState.message);
-      setSeverity(alertState.severity);
+    if (!open) {
+      setTimeout(() => {
+        dispatch(hideAlert());
+      }, 1000);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
@@ -45,11 +44,11 @@ const SystemAlerts = () => {
       }}
       message={
         <Alert
-          {...(severity.length > 1 && {
+          {...(alertState.severity.length > 1 && {
             severity: alertState.severity,
           })}
         >
-          {message}
+          {alertState.message}
         </Alert>
       }
       key={transition ? transition.name : ""}

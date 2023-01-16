@@ -13,6 +13,8 @@ const OrderSummeryTable = ({
   title = " Sales Receipt",
   height = "10rem",
   orderList = [],
+  headingCells = ["Gas Tank", "Type", "Quantity", "Unit Price", "Total"],
+  cols = ["name", "type", "quantity", "orderedPriceDealer", "total"],
 }) => {
   const { name, outstandingAmount } = useSelector((state) => state.loginDMS);
 
@@ -59,24 +61,31 @@ const OrderSummeryTable = ({
           <table className="sales-table">
             <thead style={{ position: "sticky", top: 0 }}>
               <tr className="sales-tr">
-                <th className="sales-th">Gas Tank</th>
-                <th className="sales-th">Type</th>
-                <th className="sales-th">Quantity</th>
-                <th className="sales-th">Unit Price</th>
-                <th className="sales-th">Total</th>
+                {headingCells.map((oneEl, index) => (
+                  <th className="sales-th" key={index}>
+                    {oneEl}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody className="sales-body">
               {orderList.map((oneEl, index) => {
                 return (
                   <tr className="sales-tr " key={index}>
-                    <td className="sales-td">{oneEl.name}</td>
+                    {cols.map((oneCol, index) => {
+                      return (
+                        <td className="sales-td" key={index}>
+                          {oneEl[oneCol]}
+                        </td>
+                      );
+                    })}
+                    {/* <td className="sales-td">{oneEl.name}</td>
                     <td className="sales-td">{oneEl.type}</td>
                     <td className="sales-td">{oneEl.quantity}</td>
                     <td className="sales-td">{oneEl.orderedPriceDealer}</td>
                     <td className="sales-td">
                       {oneEl.quantity * oneEl.orderedPriceDealer}
-                    </td>
+                    </td> */}
                   </tr>
                 );
               })}

@@ -15,6 +15,8 @@ export const alertSlice = createSlice({
     },
     hideAlert: (state) => {
       state.isVisible = false;
+      state.message = "";
+      state.severity = "";
     },
   },
 });
