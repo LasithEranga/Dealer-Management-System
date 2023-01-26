@@ -286,6 +286,7 @@ export default function Sidebar() {
                 path={"view-stock"}
               />
               <SidebarItem
+                path={"return-to-distributor"}
                 icon={<AssignmentReturnIcon />}
                 title="Return Stock"
               />

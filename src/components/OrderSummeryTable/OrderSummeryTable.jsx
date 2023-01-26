@@ -36,15 +36,12 @@ const OrderSummeryTable = ({
         </Typography>
 
         <Box>
-          <Box display={"flex"} justifyContent="space-between">
-            <TitleAndContent title={"Receipt No:"} content="65468" />
+          <Box display={"flex"} justifyContent="space-between" py={2}>
+            <TitleAndContent title={"Dealer:"} content={name} />
             <TitleAndContent
               title={"Date:"}
               content={new Date().toISOString().substring(0, 10)}
             />
-          </Box>
-          <Box mt={1}>
-            <TitleAndContent title={"Dealer:"} content={name} />
           </Box>
         </Box>
 
@@ -79,13 +76,6 @@ const OrderSummeryTable = ({
                         </td>
                       );
                     })}
-                    {/* <td className="sales-td">{oneEl.name}</td>
-                    <td className="sales-td">{oneEl.type}</td>
-                    <td className="sales-td">{oneEl.quantity}</td>
-                    <td className="sales-td">{oneEl.orderedPriceDealer}</td>
-                    <td className="sales-td">
-                      {oneEl.quantity * oneEl.orderedPriceDealer}
-                    </td> */}
                   </tr>
                 );
               })}
