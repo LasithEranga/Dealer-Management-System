@@ -45,8 +45,8 @@ export const data = {
     },
   ],
 };
-const BarChart = () => {
-  return <Bar options={options} data={data} height={200} />;
+const BarChart = ({ height = 200 }) => {
+  return <Bar options={options} data={data} height={height} />;
 };
 
 export default BarChart;

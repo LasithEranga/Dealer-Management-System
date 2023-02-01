@@ -184,10 +184,7 @@ export default function Sidebar() {
               <SidebarItem
                 icon={<CurrencyExchangeIcon />}
                 title="Dealer Sales"
-              />
-              <SidebarItem
-                icon={<SkateboardingIcon />}
-                title="Dealer Performance"
+                path={"dealer-sales"}
               />
 
               {/* -------------------  Dealers --------------------------*/}
