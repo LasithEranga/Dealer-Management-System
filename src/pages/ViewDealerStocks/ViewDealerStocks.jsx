@@ -1,4 +1,11 @@
-import { Box, MenuItem, Select, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Grid,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -59,18 +66,11 @@ const ViewDealerStocks = () => {
         </Box>
       </Box>
       {/* content area */}
-      <Box
-        mt={4}
-        display={"flex"}
-        gap={4}
-        flexWrap="wrap"
-        px={4}
-        justifyContent={"space-between"}
-      >
+      <Grid container columnSpacing={4} rowSpacing={4} mt={2}>
         {dealerDetails.map((dealer, index) => {
           return <DealerStockCard dealer={dealer} key={index} />;
         })}
-      </Box>
+      </Grid>
     </Box>
   );
 };

@@ -1,0 +1,93 @@
+table,
+td,
+th {
+  /* border: 1px solid black; */
+  border: none;
+}
+td {
+  vertical-align: top;
+  text-align: right;
+  width: 50px;
+  height: 40px;
+  text-decoration-color: red;
+}
+/* td:hover {
+  background-color: aqua;
+} */
+.tableStyle {
+  border-collapse: collapse;
+}
+
+/* styling the buttons */
+
+.action-btns {
+  background-color: #e5edf500;
+  border: none;
+  font-weight: bold;
+  padding: 8px 10px 5px 12px;
+  color: rgb(0, 0, 0);
+}
+
+.action-btns:hover {
+  background-color: #385068;
+  color: white;
+}
+
+.pointer-hand {
+  cursor: pointer;
+}
+
+@media screen and (min-width: 300px) {
+  .day-with-events {
+    width: 95%;
+    height: 75%;
+  }
+  .session-dot {
+    width: 5px;
+    height: 5px;
+  }
+}
+
+@media screen and (min-width: 350px) {
+  .day-with-events {
+    width: 85%;
+    height: 80%;
+  }
+  .session-dot {
+    width: 5px;
+    height: 5px;
+  }
+}
+@media screen and (min-width: 375px) {
+  .day-with-events {
+    width: 80%;
+    height: 80%;
+  }
+}
+@media screen and (min-width: 400px) {
+  .day-with-events {
+    width: 75%;
+    height: 80%;
+  }
+}
+
+@media screen and (min-width: 420px) {
+  .day-with-events {
+    width: 70%;
+    height: 83%;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .day-with-events {
+    width: 80%;
+    height: 85%;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .day-with-events {
+    width: 82%;
+    height: 100%;
+  }
+}

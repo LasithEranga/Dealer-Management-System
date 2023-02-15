@@ -20,7 +20,7 @@ const StockSummery = ({ stock = {} }) => {
       >
         {stock.tankName ? stock.tankName : ""}
       </Typography>
-      <Box display={"flex"}>
+      <Box display={"flex"} ml={2}>
         {stock.quantities.map((quantity, index) => {
           const badges = [];
 

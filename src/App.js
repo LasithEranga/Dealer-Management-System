@@ -12,7 +12,6 @@ import NewStock from "./pages/NewStock/NewStock";
 import SellTanks from "./pages/SellTanks/SellTanks";
 import ViewGasTanks from "./pages/ViewGasTanks/ViewGasTanks";
 import ViewStock from "./pages/ViewStock/ViewStock";
-import Test from "./pages/Test";
 import SavedPurchaseOrders from "./pages/SavedPurchaseOrders/SavedPurchaseOrders";
 import PendingPaymentPurchaseOrders from "./pages/PendingPaymentPurchaseOrders/PendingPaymentPurchaseOrders";
 import NewPurchaseOrders from "./pages/NewPurchaseOrders/NewPurchaseOrders";
@@ -26,6 +25,7 @@ import PendingPaymentPurchaseOrdersDealer from "./pages/DealerPurchaseOrders/Pen
 import DistributorReports from "./pages/Reports/DistributorReports";
 import ReturnStockToDistributor from "./pages/ReturnStockToDistributor/ReturnStockToDistributor";
 import DealerSales from "./pages/DealerSales/DealerSales";
+import Test from "./pages/Test";
 
 function App() {
   const user = useSelector((state) =>
@@ -40,6 +40,8 @@ function App() {
             path=""
             element={user === "DISTRIBUTOR" ? <Dashboard /> : <SellTanks />}
           />
+
+          <Route path="test" element={<Test />} />
           <Route path="new-stock" element={<NewStock />} />
           <Route path="accept-return" element={<AcceptReturns />} />
           <Route path="view-stock" element={<ViewStock />} />

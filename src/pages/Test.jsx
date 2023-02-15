@@ -1,75 +1,53 @@
-import {
-  Box,
-  Button,
-  Divider,
-  FormControl,
-  Grid,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-} from "@mui/material";
-import React from "react";
-import ContentCard from "../components/ContentCard/ContentCard";
-import ExpandableTable from "../components/ExpandableTable/ExpandableTable";
+import { Box } from "@mui/material";
+import React, { Component } from "react";
+import Chart from "react-apexcharts";
 
 const Test = () => {
+  const options = {
+    chart: {
+      id: "basic-bar",
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    fill: {
+      type: "gradient",
+      gradient: {
+        shadeIntensity: 1,
+        opacityFrom: 0.7,
+        opacityTo: 0.9,
+        stops: [0, 90, 100],
+      },
+    },
+
+    xaxis: {
+      categories: [
+        "01 Jan",
+        "02 Jan",
+        "03 Jan",
+        "04 Jan",
+        "05 Jan",
+        "06 Jan",
+        "07 Jan",
+      ],
+    },
+  };
+  const series = [
+    {
+      name: "Series 1",
+      data: [45, 52, 38, 45, 19, 23, 2],
+    },
+  ];
+
   return (
     <Box>
-      <ContentCard>
-        <Box
-          display={"flex"}
-          justifyContent="space-between"
-          alignItems={"center"}
-          my={1}
-        >
-          <Typography fontSize={"1.5rem"} fontWeight="bold">
-            Saved Purchase Orders
-          </Typography>
-          <Box>
-            <Button variant="outlined">Export to PDF</Button>
-          </Box>
-        </Box>
-        <Divider orientation="horizontal" sx={{ my: 2 }} />
-        <Box>
-          <Grid container>
-            <Grid item xs={4}>
-              <TextField
-                fullWidth
-                size="small"
-                placeholder="Search by Dealer name"
-              />
-            </Grid>
-            <Grid item xs></Grid>
-            <Grid item xs={5} display="flex" gap={1}>
-              <FormControl size="small" sx={{ flexGrow: 1 }}>
-                <Select defaultValue={""} value="Date">
-                  <MenuItem value={"Date"} disabled>
-                    Date
-                  </MenuItem>
-                </Select>
-              </FormControl>
-              <FormControl size="small" sx={{ flexGrow: 1 }}>
-                <Select defaultValue={""} value="Status">
-                  <MenuItem value={"Status"} disabled>
-                    Status
-                  </MenuItem>
-                </Select>
-              </FormControl>
-              <FormControl size="small" sx={{ flexGrow: 1 }}>
-                <Select defaultValue={""} value="ob">
-                  <MenuItem value={"ob"} disabled>
-                    Outstanding balance
-                  </MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-          </Grid>
-        </Box>
-        <Divider orientation="horizontal" sx={{ my: 2 }} />
-
-        <ExpandableTable />
-      </ContentCard>
+      <Chart
+        options={options}
+        series={series}
+        type="area"
+        height="350"
+        width="50%"
+      />
     </Box>
   );
 };

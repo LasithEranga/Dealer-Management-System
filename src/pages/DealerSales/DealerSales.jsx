@@ -1,10 +1,46 @@
 import { Box, Grid, Typography } from "@mui/material";
 import React from "react";
-import BarChart from "../../components/BarChart/BarChart";
+import Chart from "react-apexcharts";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import SalesCard from "../../components/SalesCard/SalesCard";
 
 const DealerSales = () => {
+  const options = {
+    chart: {
+      id: "basic-bar",
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    fill: {
+      type: "gradient",
+      gradient: {
+        shadeIntensity: 1,
+        opacityFrom: 0.7,
+        opacityTo: 0.9,
+        stops: [0, 90, 100],
+      },
+    },
+
+    xaxis: {
+      categories: [
+        "01 Jan",
+        "02 Jan",
+        "03 Jan",
+        "04 Jan",
+        "05 Jan",
+        "06 Jan",
+        "07 Jan",
+      ],
+    },
+  };
+  const series = [
+    {
+      name: "Series 1",
+      data: [45, 52, 38, 45, 19, 23, 2],
+    },
+  ];
+
   return (
     <Box>
       <Box
@@ -21,18 +57,32 @@ const DealerSales = () => {
       <Grid container>
         <Grid item xs={12} md={9} pr={2}>
           <ContentCard>
-            <Box
-              sx={{
-                height: "15.5rem",
-                display: "flex",
-                justifyContent: "center",
-              }}
-              mb={1.5}
-            >
-              <BarChart height={100} />
-            </Box>
+            <Chart
+              options={options}
+              series={series}
+              type="area"
+              height="350"
+              width="100%"
+            />
           </ContentCard>
-          <Box mb={1.5}>sdf</Box>
+          <Box mb={1.5}>
+            <Grid container>
+              <Grid item xs={12} md={6}>
+                <Grid container>
+                  {[1, 2, 3, 4, 5].map((oneEl) => (
+                    <Grid item xs={12} md={6}>
+                      {oneEl}
+                    </Grid>
+                  ))}
+                </Grid>
+                1
+              </Grid>
+
+              <Grid item xs={12} md={6}>
+                2
+              </Grid>
+            </Grid>
+          </Box>
         </Grid>
         <Grid item xs={12} md={3}>
           <Typography

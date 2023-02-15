@@ -3,7 +3,10 @@ import { createSlice } from "@reduxjs/toolkit";
 export const chartColorsSlice = createSlice({
   name: "chartColors",
   initialState: {
-    tankTypeColors: {},
+    tankTypeColors: {
+      NEW: "#34cba9",
+      RETURNED: "#ff8000",
+    },
   },
   reducers: {
     setTankTypeColors: (state, action) => {

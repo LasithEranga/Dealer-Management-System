@@ -1,15 +1,11 @@
-import { Box, Chip, Divider, Paper, Typography } from "@mui/material";
+import { Box, Chip, Divider, Grid, Paper, Typography } from "@mui/material";
 import React from "react";
 import VeriticalBarCount from "../VeriticalBarCount/VeriticalBarCount";
 import StockSummery from "./StockSummery";
 
 const DealerStockCard = ({ dealer = {} }) => {
   return (
-    <Box
-      sx={{
-        width: "20rem",
-      }}
-    >
+    <Grid item xs={3.8}>
       <Paper
         sx={{
           p: 1,
@@ -35,7 +31,7 @@ const DealerStockCard = ({ dealer = {} }) => {
           return <StockSummery stock={stock} key={index} />;
         })}
       </Paper>
-    </Box>
+    </Grid>
   );
 };
 
