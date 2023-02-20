@@ -3,22 +3,30 @@ import { Box, Typography } from "@mui/material";
 import React from "react";
 import ContentCard from "../ContentCard/ContentCard";
 
-const ReportCard = () => {
+const ReportCard = ({ icon, title, onClick }) => {
   return (
-    <ContentCard sx={{ width: "10rem", height: "10rem", m: 1 }}>
+    <ContentCard
+      sx={{
+        width: "10rem",
+        height: "10rem",
+        m: 1,
+        boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.1)",
+        ":hover": {
+          boxShadow: "0px 0px 20px 0px rgba(0,0,0,0.2)",
+          cursor: "pointer",
+        },
+      }}
+      onClick={onClick}
+    >
       <Box
         sx={{
-          height: "70%",
+          height: "65%",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
         }}
       >
-        <ReportOff
-          sx={{
-            fontSize: "4.5rem",
-          }}
-        />
+        {icon}
       </Box>
       <Box>
         <Typography
@@ -29,7 +37,7 @@ const ReportCard = () => {
             textAlign: "center",
           }}
         >
-          Purchase Order
+          {title}
         </Typography>
       </Box>
     </ContentCard>

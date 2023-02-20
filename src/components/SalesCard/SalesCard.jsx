@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
 
-const SalesCard = () => {
+const SalesCard = ({ title, price, description }) => {
   return (
     <Box
       sx={{
@@ -21,7 +21,7 @@ const SalesCard = () => {
           fontWeight: "bold",
         }}
       >
-        Avg Sales
+        {title}
       </Typography>
       <Typography
         sx={{
@@ -29,7 +29,7 @@ const SalesCard = () => {
           fontWeight: "bold",
         }}
       >
-        Rs. 10,000
+        {price}
       </Typography>
       <Typography
         sx={{
@@ -38,7 +38,7 @@ const SalesCard = () => {
           color: "grey",
         }}
       >
-        Average sales made by the dealer in last year
+        {description}
       </Typography>
     </Box>
   );
