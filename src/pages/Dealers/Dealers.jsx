@@ -21,6 +21,7 @@ import {
 import ContentCard from "../../components/ContentCard/ContentCard";
 import CustomModal from "../../components/CustomModal/CustomModal";
 import EnhancedTable from "../../components/EnhancedTable/EnhancedTable";
+import ErrorText from "../../components/ErrorText/ErrorText";
 
 const Dealers = () => {
   const { userId } = useSelector((state) => state.loginDMS);
@@ -177,7 +178,8 @@ const Dealers = () => {
         >
           <Box>
             <Typography sx={{ my: 1 }} fontWeight="bold">
-              Dealer Name
+              Dealer Name{" "}
+              {errors.name && <ErrorText message={errors.name.message} />}
             </Typography>
             <TextField
               size="small"
@@ -185,19 +187,19 @@ const Dealers = () => {
               {...register("name", {
                 required: {
                   value: true,
-                  message: "Gas tank name is required",
+                  message: "dealer name is required",
                 },
               })}
               {...(errors.name && {
                 error: true,
-                helperText: errors.name.message,
               })}
             />
           </Box>
 
           <Box>
             <Typography sx={{ my: 1 }} fontWeight="bold">
-              Email Address
+              Email Address{" "}
+              {errors.email && <ErrorText message={errors.email.message} />}
             </Typography>
             <TextField
               size="small"
@@ -205,19 +207,21 @@ const Dealers = () => {
               {...register("email", {
                 required: {
                   value: true,
-                  message: "Gas tank name is required",
+                  message: "email is required",
                 },
               })}
               {...(errors.email && {
                 error: true,
-                helperText: errors.email.message,
               })}
             />
           </Box>
 
           <Box>
             <Typography sx={{ my: 1 }} fontWeight="bold">
-              Phone Number
+              Phone Number{" "}
+              {errors.phoneNumber && (
+                <ErrorText message={errors.phoneNumber.message} />
+              )}
             </Typography>
             <TextField
               size="small"
@@ -225,18 +229,18 @@ const Dealers = () => {
               {...register("phoneNumber", {
                 required: {
                   value: true,
-                  message: "Phone number is required",
+                  message: "phone number is required",
                 },
               })}
               {...(errors.phoneNumber && {
                 error: true,
-                helperText: errors.phoneNumber.message,
               })}
             />
           </Box>
           <Box>
             <Typography sx={{ my: 1 }} fontWeight="bold">
-              Address
+              Address{" "}
+              {errors.address && <ErrorText message={errors.address.message} />}
             </Typography>
             <TextField
               size="small"
@@ -244,18 +248,20 @@ const Dealers = () => {
               {...register("address", {
                 required: {
                   value: true,
-                  message: "Address is required",
+                  message: "address is required",
                 },
               })}
               {...(errors.address && {
                 error: true,
-                helperText: errors.address.message,
               })}
             />
           </Box>
           <Box>
             <Typography sx={{ my: 1 }} fontWeight="bold">
-              Store Address
+              Store Address{" "}
+              {errors.storeAddress && (
+                <ErrorText message={errors.storeAddress.message} />
+              )}
             </Typography>
             <TextField
               size="small"
@@ -263,18 +269,20 @@ const Dealers = () => {
               {...register("storeAddress", {
                 required: {
                   value: true,
-                  message: "Store address is required",
+                  message: "store address is required",
                 },
               })}
               {...(errors.storeAddress && {
                 error: true,
-                helperText: errors.storeAddress.message,
               })}
             />
           </Box>
           <Box>
             <Typography sx={{ my: 1 }} fontWeight="bold">
-              Outstanding Amount
+              Outstanding Amount{" "}
+              {errors.outstandingAmount && (
+                <ErrorText message={errors.outstandingAmount.message} />
+              )}
             </Typography>
             <TextField
               size="small"
@@ -282,12 +290,11 @@ const Dealers = () => {
               {...register("outstandingAmount", {
                 required: {
                   value: true,
-                  message: " Outstanding amount is required",
+                  message: "outstanding amount is required",
                 },
               })}
               {...(errors.outstandingAmount && {
                 error: true,
-                helperText: errors.outstandingAmount.message,
               })}
             />
           </Box>

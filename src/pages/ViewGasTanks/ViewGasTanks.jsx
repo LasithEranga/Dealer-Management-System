@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { showSystemAlert } from "../../app/alertServices";
 import { getAllTanks, updateTank } from "../../app/api/gasTankServices";
 import CustomModal from "../../components/CustomModal/CustomModal";
+import ErrorText from "../../components/ErrorText/ErrorText";
 import GasTankCard from "./GasTankCard";
 
 const ViewGasTanks = () => {
@@ -89,7 +90,8 @@ const ViewGasTanks = () => {
         <Box sx={{ maxHeight: "30rem", overflow: "auto" }} pr={2}>
           <Box>
             <Typography sx={{ my: 1 }} fontWeight="bold">
-              Tank Name
+              Tank Name{" "}
+              {errors.name && <ErrorText message={errors.name.message} />}
             </Typography>
             <TextField
               size="small"
@@ -97,19 +99,19 @@ const ViewGasTanks = () => {
               {...register("name", {
                 required: {
                   value: true,
-                  message: "Gas tank name is required",
+                  message: "gas tank name is required",
                 },
               })}
               {...(errors.name && {
                 error: true,
-                helperText: errors.name.message,
               })}
             />
           </Box>
 
           <Box>
             <Typography sx={{ my: 1 }} fontWeight="bold">
-              Tank Type
+              Tank Type{" "}
+              {errors.type && <ErrorText message={errors.type.message} />}
             </Typography>
             <TextField
               size="small"
@@ -117,19 +119,21 @@ const ViewGasTanks = () => {
               {...register("type", {
                 required: {
                   value: true,
-                  message: "Gas tank type is required",
+                  message: "gas tank type is required",
                 },
               })}
               {...(errors.type && {
                 error: true,
-                helperText: errors.type.message,
               })}
             />
           </Box>
 
           <Box>
             <Typography sx={{ my: 1 }} fontWeight="bold">
-              Ordered Price - Distributor
+              Ordered Price - Distributor{" "}
+              {errors.orderedPriceDistributor && (
+                <ErrorText message={errors.orderedPriceDistributor.message} />
+              )}
             </Typography>
             <TextField
               size="small"
@@ -137,7 +141,7 @@ const ViewGasTanks = () => {
               {...register("orderedPriceDistributor", {
                 required: {
                   value: true,
-                  message: "Gas tank type is required",
+                  message: "ordered price is required",
                 },
                 pattern: {
                   value: /^\d+(\.\d{1,2})?$/,
@@ -146,13 +150,15 @@ const ViewGasTanks = () => {
               })}
               {...(errors.orderedPriceDistributor && {
                 error: true,
-                helperText: errors.orderedPriceDistributor.message,
               })}
             />
           </Box>
           <Box>
             <Typography sx={{ my: 1 }} fontWeight="bold">
-              Selling Price - Distributor
+              Selling Price - Distributor{" "}
+              {errors.sellingPriceDistributor && (
+                <ErrorText message={errors.sellingPriceDistributor.message} />
+              )}
             </Typography>
             <TextField
               size="small"
@@ -160,7 +166,7 @@ const ViewGasTanks = () => {
               {...register("sellingPriceDistributor", {
                 required: {
                   value: true,
-                  message: "Selling price is required",
+                  message: "selling price is required",
                 },
                 pattern: {
                   value: /^\d+(\.\d{1,2})?$/,
@@ -169,13 +175,15 @@ const ViewGasTanks = () => {
               })}
               {...(errors.sellingPriceDistributor && {
                 error: true,
-                helperText: errors.sellingPriceDistributor.message,
               })}
             />
           </Box>
           <Box>
             <Typography sx={{ my: 1 }} fontWeight="bold">
-              Ordered Price - Dealer
+              Ordered Price - Dealer{" "}
+              {errors.orderedPriceDealer && (
+                <ErrorText message={errors.orderedPriceDealer.message} />
+              )}
             </Typography>
             <TextField
               size="small"
@@ -183,7 +191,7 @@ const ViewGasTanks = () => {
               {...register("orderedPriceDealer", {
                 required: {
                   value: true,
-                  message: "Ordered price is required",
+                  message: "ordered price is required",
                 },
                 pattern: {
                   value: /^\d+(\.\d{1,2})?$/,
@@ -192,13 +200,15 @@ const ViewGasTanks = () => {
               })}
               {...(errors.orderedPriceDealer && {
                 error: true,
-                helperText: errors.orderedPriceDealer.message,
               })}
             />
           </Box>
           <Box>
             <Typography sx={{ my: 1 }} fontWeight="bold">
-              Selling Price - Dealer
+              Selling Price - Dealer{" "}
+              {errors.sellingPriceDealer && (
+                <ErrorText message={errors.sellingPriceDealer.message} />
+              )}
             </Typography>
             <TextField
               size="small"
@@ -206,7 +216,7 @@ const ViewGasTanks = () => {
               {...register("sellingPriceDealer", {
                 required: {
                   value: true,
-                  message: "Selling price is required",
+                  message: "selling price is required",
                 },
                 pattern: {
                   value: /^\d+(\.\d{1,2})?$/,
@@ -215,7 +225,6 @@ const ViewGasTanks = () => {
               })}
               {...(errors.sellingPriceDealer && {
                 error: true,
-                helperText: errors.sellingPriceDealer.message,
               })}
             />
           </Box>

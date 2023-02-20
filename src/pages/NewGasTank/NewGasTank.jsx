@@ -104,7 +104,7 @@ const NewGasTank = () => {
                 {...register("orderedPriceDistributor", {
                   required: {
                     value: true,
-                    message: "Gas tank type is required",
+                    message: "Ordered price is required",
                   },
                   pattern: {
                     value: /^\d+(\.\d{1,2})?$/,

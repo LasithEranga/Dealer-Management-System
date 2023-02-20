@@ -185,6 +185,11 @@ const NewStock = () => {
                     value: true,
                     message: "Quantity is required",
                   },
+                  validate: (value) => {
+                    if (value <= 0) {
+                      return "Quantity must be greater than 0";
+                    }
+                  },
                 })}
                 {...(errors.quantity && {
                   error: true,
