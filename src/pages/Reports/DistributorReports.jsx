@@ -10,11 +10,14 @@ import {
 } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import ReportCard from "../../components/ReportCard/ReportCard";
 
 export const ICON_SIZE = "3rem";
 const DistributorReports = () => {
+  const navigate = useNavigate();
+
   return (
     <Box mt={1}>
       <Box
@@ -35,15 +38,18 @@ const DistributorReports = () => {
       >
         <ReportCard
           icon={
-            <Description
+            <TrendingUp
               sx={{
                 fontSize: ICON_SIZE,
               }}
             />
           }
-          title="Purchase Orders"
-          onClick={() => {}}
+          title="Sales Report"
+          onClick={() => {
+            navigate("sales-report");
+          }}
         />
+
         <ReportCard
           icon={
             <ArrowCircleDown
@@ -66,16 +72,6 @@ const DistributorReports = () => {
           title="Tank Returns"
         />
 
-        <ReportCard
-          icon={
-            <TrendingUp
-              sx={{
-                fontSize: ICON_SIZE,
-              }}
-            />
-          }
-          title="Sales Report"
-        />
         <ReportCard
           icon={
             <Inventory
@@ -105,6 +101,17 @@ const DistributorReports = () => {
             />
           }
           title="Fast Moving Stocks"
+        />
+        <ReportCard
+          icon={
+            <Description
+              sx={{
+                fontSize: ICON_SIZE,
+              }}
+            />
+          }
+          title="Purchase Orders"
+          onClick={() => {}}
         />
       </Box>
     </Box>

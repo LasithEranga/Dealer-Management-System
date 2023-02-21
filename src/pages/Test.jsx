@@ -1,6 +1,5 @@
 import { Box } from "@mui/material";
-import React, { Component } from "react";
-import Chart from "react-apexcharts";
+import React from "react";
 
 const Test = () => {
   const options = {
@@ -41,13 +40,13 @@ const Test = () => {
 
   return (
     <Box>
-      <Chart
+      {/* <Chart
         options={options}
         series={series}
         type="area"
         height="350"
         width="50%"
-      />
+      /> */}
     </Box>
   );
 };
