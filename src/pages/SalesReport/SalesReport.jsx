@@ -5,12 +5,18 @@ import {
   Print,
 } from "@mui/icons-material";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { getAllDealers } from "../../app/api/userServices";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import ReportLayout from "../../components/ReportLayout/ReportLayout";
 import ReportTable from "../../components/ReportTable/ReportTable";
+import Autocomplete from "@mui/material/Autocomplete";
+import { getAllTanks } from "../../app/api/gasTankServices";
 
 const SalesReport = () => {
+  const { userId } = useSelector((state) => state.loginDMS);
+
   const data = [
     {
       date: "2021-09-01",
@@ -174,6 +180,35 @@ const SalesReport = () => {
     },
   ];
   const [currentPage, setCurrentPage] = useState(1);
+  const [dealers, setDealers] = useState([]);
+  const [gasTanks, setGasTanks] = useState([]);
+
+  useEffect(() => {
+    //get dealers from api
+    getAllDealers(
+      {
+        distributorId: userId,
+      },
+      (response) => {
+        if (response.status === 0) {
+          setDealers(response.data);
+        }
+      },
+      () => {}
+    );
+    //get gas tanks from api
+    getAllTanks(
+      (response) => {
+        if (response.status === 0) {
+          setGasTanks(response.data);
+        }
+      },
+      (error) => {
+        console.log(error);
+      },
+      () => {}
+    );
+  }, []);
   return (
     <>
       <Box
@@ -218,6 +253,7 @@ const SalesReport = () => {
               sx={{
                 mt: 1,
               }}
+              onChange={(e) => console.log(e.target.value)}
             />
             <Typography mt={1}>To</Typography>
             <TextField
@@ -229,22 +265,44 @@ const SalesReport = () => {
               }}
             />
             <Typography mt={1}>Dealer</Typography>
-            <TextField
-              placeholder="Search Dealer"
-              fullWidth
-              size="small"
-              sx={{
-                mt: 1,
-              }}
+            <Autocomplete
+              options={dealers}
+              getOptionLabel={(option) => option.name}
+              getOptionSelected={(option, value) => option.id === value.id}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="Search dealer"
+                  fullWidth
+                  size="small"
+                  sx={{
+                    mt: 1,
+                  }}
+                />
+              )}
+              onChange={(e, value) => console.log(value)}
             />
+
             <Typography mt={1}>Tank Type</Typography>
-            <TextField
-              placeholder="Search gas tank"
-              fullWidth
-              size="small"
-              sx={{
-                mt: 1,
-              }}
+
+            <Autocomplete
+              options={gasTanks}
+              getOptionLabel={(option) => option.name}
+              getOptionSelected={(option, value) =>
+                option.indexedName === value.indexedName
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="Search gas tank"
+                  fullWidth
+                  size="small"
+                  sx={{
+                    mt: 1,
+                  }}
+                />
+              )}
+              onChange={(e, value) => console.log(value)}
             />
             <Box mt={2} display={"flex"} justifyContent="end" gap={1}>
               <Button variant="outlined">Clear</Button>

@@ -126,10 +126,10 @@ const Dealers = () => {
   };
 
   useEffect(() => {
-    getAllDealers((response) => {
+    getAllDealers({ distributorId: userId }, (response) => {
       console.log(response);
       setDealers(
-        response.users.map((oneEl) =>
+        response.data.map((oneEl) =>
           createData(
             oneEl.name,
             oneEl.outstandingAmount,
