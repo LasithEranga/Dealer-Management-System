@@ -1,4 +1,5 @@
-import { DownhillSkiing, Download } from "@mui/icons-material";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import {
   Button,
   Divider,
@@ -7,19 +8,13 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
-import NameAvatar from "../NameAvatar/NameAvatar";
-import "./index.css";
-import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import PlainTable from "../PlainTable/PlainTable";
 import { Box } from "@mui/system";
+import React, { useState } from "react";
 import { convertToRupees } from "../../utils/convertToRupees";
-import { getColorFromName } from "../../utils/getColorFromName";
 import CustomButton from "../CustomButton/CustomButton";
-import SaveAltIcon from "@mui/icons-material/SaveAlt";
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import SwipeRightIcon from "@mui/icons-material/SwipeRight";
+import NameAvatar from "../NameAvatar/NameAvatar";
+import PlainTable from "../PlainTable/PlainTable";
+import "./index.css";
 
 const ExpandableTable = ({
   headCells = [],
@@ -35,6 +30,11 @@ const ExpandableTable = ({
   const [page, setPage] = useState(0);
   const [expanded, setExpanded] = useState(-1);
 
+  const dispayingRows = data.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+
   return (
     <div>
       <table style={{ width: "100%" }} className="ep-table">
@@ -48,87 +48,84 @@ const ExpandableTable = ({
           </tr>
         </thead>
         <tbody>
-          {data
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((element, index) => {
-              return (
-                <>
-                  <tr key={index} className="ep-tr">
-                    {Object.values(element)
-                      .slice(ignoreTill)
-                      .map((oneEl, index) => {
+          {dispayingRows.map((element, index) => {
+            return (
+              <>
+                <tr key={index} className="ep-tr">
+                  {Object.values(element)
+                    .slice(ignoreTill)
+                    .map((oneEl, index) => {
+                      return (
+                        <td className="ep-td " key={index}>
+                          {enableAvatar.isVisible &&
+                          enableAvatar.madeBy.includes(index) ? (
+                            <NameAvatar name={oneEl} />
+                          ) : (
+                            oneEl
+                          )}
+                        </td>
+                      );
+                    })}
+
+                  <td className="ep-td">
+                    <Box
+                      display={"flex"}
+                      justifyContent={"center"}
+                      flexWrap="nowrap"
+                    >
+                      {actionButtons.map((oneEl, index) => {
                         return (
-                          <td className="ep-td " key={index}>
-                            {enableAvatar.isVisible &&
-                            enableAvatar.madeBy.includes(index) ? (
-                              <NameAvatar name={oneEl} />
-                            ) : (
-                              oneEl
-                            )}
-                          </td>
+                          <CustomButton
+                            onClick={() => {
+                              oneEl.onClick(Object.values(element)[0]);
+                            }}
+                            sx={{ ml: 1 }}
+                          >
+                            <Tooltip title={oneEl.tooltip}>
+                              <span>{oneEl.icon}</span>
+                            </Tooltip>
+                          </CustomButton>
                         );
                       })}
 
-                    <td className="ep-td">
-                      <Box
-                        display={"flex"}
-                        justifyContent={"center"}
-                        flexWrap="nowrap"
+                      <CustomButton
+                        onClick={() => {
+                          setExpanded(expanded === index ? -1 : index);
+                        }}
+                        sx={{ p: 0.1, ml: 1 }}
                       >
-                        {actionButtons.map((oneEl, index) => {
-                          return (
-                            <CustomButton
-                              onClick={() => {
-                                oneEl.onClick(Object.values(element)[0]);
-                              }}
-                              sx={{ ml: 1 }}
-                            >
-                              <Tooltip title={oneEl.tooltip}>
-                                <span>{oneEl.icon}</span>
-                              </Tooltip>
-                            </CustomButton>
-                          );
-                        })}
-
-                        <CustomButton
-                          onClick={() => {
-                            setExpanded(expanded === index ? -1 : index);
-                          }}
-                          sx={{ p: 0.1, ml: 1 }}
-                        >
-                          {expanded === index ? (
-                            <ArrowDropUpIcon
-                              sx={{
-                                fontSize: "1.7rem",
-                              }}
-                            />
-                          ) : (
-                            <ArrowDropDownIcon
-                              sx={{
-                                fontSize: "1.7rem",
-                              }}
-                            />
-                          )}
-                        </CustomButton>
-                      </Box>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colSpan={headCells.length}>
-                      <div
-                        className={`
+                        {expanded === index ? (
+                          <ArrowDropUpIcon
+                            sx={{
+                              fontSize: "1.7rem",
+                            }}
+                          />
+                        ) : (
+                          <ArrowDropDownIcon
+                            sx={{
+                              fontSize: "1.7rem",
+                            }}
+                          />
+                        )}
+                      </CustomButton>
+                    </Box>
+                  </td>
+                </tr>
+                <tr>
+                  <td colSpan={headCells.length}>
+                    <div
+                      className={`
                       ep-td-more 
                       ${expanded === index ? "ep-td-expanded" : ""}
                     `}
-                      >
-                        <Divider sx={{ mt: 1 }} />
-                        <Grid container spacing={2}>
-                          <Grid item xs={8}>
-                            <PlainTable
-                              height={"7rem"}
-                              dataList={Object.values(
-                                element
-                              )[0]?.gasTanks?.map((oneEl) => {
+                    >
+                      <Divider sx={{ mt: 1 }} />
+                      <Grid container spacing={2}>
+                        <Grid item xs={8}>
+                          <PlainTable
+                            height={"7rem"}
+                            dataList={Object.values(element)[0]?.gasTanks?.map(
+                              (oneEl) => {
                                 return {
                                   gasTank: oneEl.gasTank.name,
                                   gasType: oneEl.gasTank.type,
@@ -157,99 +154,113 @@ const ExpandableTable = ({
                                     </Box>
                                   ),
                                 };
-                              })}
-                              headCells={[
-                                "Gas Tank",
-                                "Type",
-                                "Qty",
-                                <Tooltip title="Current Quantity @ Dealer Stock">
-                                  <span>CQ @ Dealer</span>
-                                </Tooltip>,
-                                <Tooltip title="Current Quantity @ In-House Stock">
-                                  <span>CQ @ In-House</span>
-                                </Tooltip>,
-                                <Box display={"flex"} justifyContent={"center"}>
-                                  Price
-                                </Box>,
-                                <Box display={"flex"} justifyContent={"center"}>
-                                  Total
-                                </Box>,
-                              ]}
-                            />
-                          </Grid>
-                          <Divider
-                            orientation="vertical"
-                            flexItem
-                            sx={{ ml: 2, mt: 4, mb: 2 }}
+                              }
+                            )}
+                            headCells={[
+                              "Gas Tank",
+                              "Type",
+                              "Qty",
+                              <Tooltip title="Current Quantity @ Dealer Stock">
+                                <span>CQ @ Dealer</span>
+                              </Tooltip>,
+                              <Tooltip title="Current Quantity @ In-House Stock">
+                                <span>CQ @ In-House</span>
+                              </Tooltip>,
+                              <Box display={"flex"} justifyContent={"center"}>
+                                Price
+                              </Box>,
+                              <Box display={"flex"} justifyContent={"center"}>
+                                Total
+                              </Box>,
+                            ]}
                           />
+                        </Grid>
+                        <Divider
+                          orientation="vertical"
+                          flexItem
+                          sx={{ ml: 2, mt: 4, mb: 2 }}
+                        />
 
-                          <Grid item xs>
-                            <Grid container spacing={2}>
-                              <Grid item xs={6}>
-                                <Paper elevation={1} sx={{ p: 1, mt: 2 }}>
-                                  <Box>
+                        <Grid item xs>
+                          <Grid container spacing={2}>
+                            <Grid item xs={6}>
+                              <Paper elevation={1} sx={{ p: 1, mt: 2 }}>
+                                <Box>
+                                  <Typography
+                                    fontWeight={"bold"}
+                                    fontSize="0.8rem"
+                                  >
+                                    Order Total
+                                  </Typography>
+                                  <Typography
+                                    textAlign={"right"}
+                                    fontSize="1.2rem"
+                                    sx={{ mt: 4 }}
+                                  >
+                                    {convertToRupees(
+                                      Object.values(element)[0]?.total
+                                    )}
+                                  </Typography>
+                                </Box>
+                              </Paper>
+                            </Grid>
+                            <Grid item xs={6}>
+                              <Paper elevation={1} sx={{ p: 1, mt: 2 }}>
+                                <Box>
+                                  <Tooltip title="Outstanding balance after accepting">
                                     <Typography
                                       fontWeight={"bold"}
                                       fontSize="0.8rem"
                                     >
-                                      Order Total
+                                      OB After Accepting
                                     </Typography>
-                                    <Typography
-                                      textAlign={"right"}
-                                      fontSize="1.2rem"
-                                      sx={{ mt: 4 }}
-                                    >
-                                      {convertToRupees(
+                                  </Tooltip>
+                                  <Typography
+                                    textAlign={"right"}
+                                    fontSize="1.2rem"
+                                    sx={{ mt: 4 }}
+                                  >
+                                    {convertToRupees(
+                                      Object.values(element)[0]?.dealer
+                                        ?.outstandingAmount +
                                         Object.values(element)[0]?.total
-                                      )}
-                                    </Typography>
-                                  </Box>
-                                </Paper>
-                              </Grid>
-                              <Grid item xs={6}>
-                                <Paper elevation={1} sx={{ p: 1, mt: 2 }}>
-                                  <Box>
-                                    <Tooltip title="Outstanding balance after accepting">
-                                      <Typography
-                                        fontWeight={"bold"}
-                                        fontSize="0.8rem"
-                                      >
-                                        OB After Accepting
-                                      </Typography>
-                                    </Tooltip>
-                                    <Typography
-                                      textAlign={"right"}
-                                      fontSize="1.2rem"
-                                      sx={{ mt: 4 }}
-                                    >
-                                      {convertToRupees(
-                                        Object.values(element)[0]?.dealer
-                                          ?.outstandingAmount +
-                                          Object.values(element)[0]?.total
-                                      )}
-                                    </Typography>
-                                  </Box>
-                                </Paper>
-                              </Grid>
+                                    )}
+                                  </Typography>
+                                </Box>
+                              </Paper>
                             </Grid>
-                            <Box mt={2}>
-                              <Typography fontSize="0.75rem" textAlign={"end"}>
-                                Order Placed By{" "}
-                                {Object.values(element)[0]?.placedBy}{" "}
-                                {new Date(
-                                  Object.values(element)[0]?.createdAt
-                                ).toLocaleString()}
-                              </Typography>
-                            </Box>
                           </Grid>
+                          <Box mt={2}>
+                            <Typography fontSize="0.75rem" textAlign={"end"}>
+                              Order Placed By{" "}
+                              {Object.values(element)[0]?.placedBy}{" "}
+                              {new Date(
+                                Object.values(element)[0]?.createdAt
+                              ).toLocaleString()}
+                            </Typography>
+                          </Box>
                         </Grid>
-                        <Divider />
-                      </div>
-                    </td>
+                      </Grid>
+                      <Divider />
+                    </div>
+                  </td>
+                </tr>
+              </>
+            );
+          })}
+
+          {dispayingRows.length < rowsPerPage &&
+            dispayingRows.length !== 0 &&
+            [...Array(rowsPerPage - dispayingRows.length)].map(
+              (oneEl, index) => {
+                return (
+                  <tr className="ep-tr-blank" key={index}>
+                    <td colSpan={headCells.length}></td>
                   </tr>
-                </>
-              );
-            })}
+                );
+              }
+            )}
+
           {data.length === 0 && (
             <tr>
               <td colSpan={headCells.length}>
@@ -285,6 +296,7 @@ const ExpandableTable = ({
             value={`${rowsPerPage}`}
             onChange={(e) => {
               setRowsPerPage(Number(e.target.value));
+              setPage(0);
             }}
             style={{
               padding: "0px 5px 0px 10px",

@@ -1,10 +1,18 @@
 import {
   ArrowBack,
   ArrowForward,
+  CheckBox,
   FileUpload,
   Print,
 } from "@mui/icons-material";
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Checkbox,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getAllDealers } from "../../app/api/userServices";
@@ -13,175 +21,58 @@ import ReportLayout from "../../components/ReportLayout/ReportLayout";
 import ReportTable from "../../components/ReportTable/ReportTable";
 import Autocomplete from "@mui/material/Autocomplete";
 import { getAllTanks } from "../../app/api/gasTankServices";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import { salesReport } from "../../app/api/salesReceiptServices";
+import _ from "lodash";
+import { convertToRupees } from "../../utils/convertToRupees";
 
 const SalesReport = () => {
   const { userId } = useSelector((state) => state.loginDMS);
-
-  const data = [
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 1",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 2",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 3",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 4",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 5",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 6",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 7",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 8",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 9",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 10",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 11",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 12",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 13",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 14",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 15",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 16",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 17",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 18",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 19",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 20",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-  ];
+  const checkedIcon = <CheckBoxIcon fontSize="small" />;
+  const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const [currentPage, setCurrentPage] = useState(1);
   const [dealers, setDealers] = useState([]);
   const [gasTanks, setGasTanks] = useState([]);
+  const [data, setData] = useState([]);
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
+  const [selectedDealers, setSelectedDealers] = useState([]);
+  const [selectedDanks, setSelectedTanks] = useState([]);
+
+  const pagesPerPage = 10;
+  const noOfPages = Math.ceil(data.length / pagesPerPage);
+
+  const generate = () => {
+    salesReport(
+      {
+        from: from,
+        to: to,
+        dealers: selectedDealers.map((dealer) => dealer._id),
+        gasTanks: selectedDanks.map((tank) => tank._id),
+      },
+      (response) => {
+        if (response.status === 0) {
+          setCurrentPage(1);
+          setData(
+            response.data.map((oneEl) => ({
+              date: new Date(oneEl.date).toLocaleDateString(),
+              dealer: oneEl.dealer,
+              gasTank:
+                oneEl.gasTank.name + " " + _.capitalize(oneEl.gasTank.type),
+              unitPrice: convertToRupees(oneEl.gasTank.sellingPriceDealer),
+              quantity: oneEl.quantity,
+              total: convertToRupees(oneEl.total),
+            }))
+          );
+        }
+      },
+      (error) => {
+        console.log(error);
+      },
+      () => {}
+    );
+  };
 
   useEffect(() => {
     //get dealers from api
@@ -253,7 +144,7 @@ const SalesReport = () => {
               sx={{
                 mt: 1,
               }}
-              onChange={(e) => console.log(e.target.value)}
+              onChange={(e) => setFrom(e.target.value)}
             />
             <Typography mt={1}>To</Typography>
             <TextField
@@ -263,16 +154,29 @@ const SalesReport = () => {
               sx={{
                 mt: 1,
               }}
+              onChange={(e) => setTo(e.target.value)}
             />
             <Typography mt={1}>Dealer</Typography>
             <Autocomplete
+              multiple
               options={dealers}
               getOptionLabel={(option) => option.name}
               getOptionSelected={(option, value) => option.id === value.id}
+              renderOption={(props, option, { selected }) => (
+                <li {...props}>
+                  <Checkbox
+                    icon={icon}
+                    checkedIcon={checkedIcon}
+                    style={{ marginRight: 8 }}
+                    checked={selected}
+                  />
+                  {option.name}
+                </li>
+              )}
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  placeholder="Search dealer"
+                  placeholder="Select dealer"
                   fullWidth
                   size="small"
                   sx={{
@@ -280,21 +184,33 @@ const SalesReport = () => {
                   }}
                 />
               )}
-              onChange={(e, value) => console.log(value)}
+              onChange={(e, value) => setSelectedDealers(value)}
             />
 
             <Typography mt={1}>Tank Type</Typography>
 
             <Autocomplete
+              multiple
               options={gasTanks}
-              getOptionLabel={(option) => option.name}
+              getOptionLabel={(option) => option.name + " " + option.type}
               getOptionSelected={(option, value) =>
                 option.indexedName === value.indexedName
               }
+              renderOption={(props, option, { selected }) => (
+                <li {...props}>
+                  <Checkbox
+                    icon={icon}
+                    checkedIcon={checkedIcon}
+                    style={{ marginRight: 8 }}
+                    checked={selected}
+                  />
+                  {option.name + " " + option.type}
+                </li>
+              )}
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  placeholder="Search gas tank"
+                  placeholder="Select gas tanks"
                   fullWidth
                   size="small"
                   sx={{
@@ -302,11 +218,14 @@ const SalesReport = () => {
                   }}
                 />
               )}
-              onChange={(e, value) => console.log(value)}
+              onChange={(e, value) => setSelectedTanks(value)}
             />
+
             <Box mt={2} display={"flex"} justifyContent="end" gap={1}>
               <Button variant="outlined">Clear</Button>
-              <Button variant="contained">Go</Button>
+              <Button variant="contained" onClick={generate}>
+                Go
+              </Button>
             </Box>
           </ContentCard>
         </Grid>
@@ -322,8 +241,8 @@ const SalesReport = () => {
                 "Total",
               ]}
               tableContent={data.slice(
-                (currentPage - 1) * 10,
-                currentPage * 10
+                (currentPage - 1) * pagesPerPage,
+                currentPage * pagesPerPage
               )}
             />
 
@@ -344,13 +263,13 @@ const SalesReport = () => {
                 <ArrowBack />
               </Button>
               <Typography>
-                {currentPage} of {data.length / 10} pages
+                {currentPage} of {noOfPages} pages
               </Typography>
               <Button
                 onClick={() => {
                   setCurrentPage(currentPage + 1);
                 }}
-                {...{ disabled: currentPage === data.length / 10 }}
+                {...{ disabled: currentPage === noOfPages }}
               >
                 <ArrowForward />
               </Button>

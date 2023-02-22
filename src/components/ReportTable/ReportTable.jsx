@@ -3,88 +3,7 @@ import "./index.css";
 
 const ReportTable = ({
   headingCells = ["Gas Tank", "Type", "Quantity", "Unit Price", "Total"],
-  tableContent = [
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 1",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 1",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 1",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 1",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 1",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 1",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 1",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 1",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 1",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-    {
-      date: "2021-09-01",
-      dealer: "Dealer 1",
-      gasTank: "Gas Tank 1",
-      unitPrice: 100,
-      quantity: 10,
-      total: 1000,
-    },
-  ],
+  tableContent = [],
   columns = ["date", "dealer", "gasTank", "unitPrice", "quantity", "total"],
 }) => {
   return (
@@ -112,6 +31,17 @@ const ReportTable = ({
             </tr>
           );
         })}
+
+        {/* if tableContent consists less than 10 rows, fill rest with empty data */}
+        {tableContent.length < 10 &&
+          tableContent.length !== 0 &&
+          [...Array(10 - tableContent.length)].map((oneEl, index) => {
+            return (
+              <tr className="report-tr" key={index}>
+                <td colSpan={columns.length}></td>
+              </tr>
+            );
+          })}
       </tbody>
     </table>
   );

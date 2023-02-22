@@ -25,21 +25,10 @@ import { useNavigate } from "react-router-dom";
 const SavedPurchaseOrders = () => {
   const navigate = useNavigate();
   const { userId } = useSelector((state) => state.loginDMS);
-
-  const [showEditModal, setShowEditModal] = useState(false);
   const [orders, setOrders] = useState([]);
   const [refreshTable, setRefreshTable] = useState(false);
-  const [update, setUpdate] = useState({
-    isUpdating: true,
-    _id: "",
-  });
-
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("pleaseSelect");
-  const [outstandingBalance, setOutstandingamount] = useState({
-    min: "",
-    max: "",
-  });
 
   const actionButtons = [
     {
@@ -137,6 +126,7 @@ const SavedPurchaseOrders = () => {
         );
       }
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshTable]);
 
   return (
