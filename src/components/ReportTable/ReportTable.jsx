@@ -1,3 +1,4 @@
+import { Box, Typography } from "@mui/material";
 import React from "react";
 import "./index.css";
 
@@ -42,6 +43,23 @@ const ReportTable = ({
               </tr>
             );
           })}
+
+        {/* show no records if table content is empty array */}
+        {tableContent.length === 0 && (
+          <tr className="report-tr">
+            <td colSpan={columns.length}>
+              <Box
+                display={"flex"}
+                justifyContent={"center"}
+                alignItems={"center"}
+                height={"100%"}
+                my={4}
+              >
+                <Typography fontSize={"1.2rem"}>No records to show!</Typography>
+              </Box>
+            </td>
+          </tr>
+        )}
       </tbody>
     </table>
   );

@@ -39,6 +39,7 @@ const SalesReport = () => {
   const [to, setTo] = useState("");
   const [selectedDealers, setSelectedDealers] = useState([]);
   const [selectedDanks, setSelectedTanks] = useState([]);
+  const [totalSales, setTotalSales] = useState(0);
 
   const pagesPerPage = 10;
   const noOfPages = Math.ceil(data.length / pagesPerPage);
@@ -54,9 +55,13 @@ const SalesReport = () => {
       (response) => {
         if (response.status === 0) {
           setCurrentPage(1);
+          const totalSales = response.data.reduce((acc, oneEl) => {
+            return acc + oneEl.total;
+          }, 0);
+          setTotalSales(totalSales);
           setData(
             response.data.map((oneEl) => ({
-              date: new Date(oneEl.date).toLocaleDateString(),
+              date: new Date(oneEl.date).toLocaleDateString("en-uk"),
               dealer: oneEl.dealer,
               gasTank:
                 oneEl.gasTank.name + " " + _.capitalize(oneEl.gasTank.type),
@@ -230,7 +235,11 @@ const SalesReport = () => {
           </ContentCard>
         </Grid>
         <Grid item lg>
-          <ReportLayout>
+          <ReportLayout
+            from={from}
+            to={to}
+            subHeading={`Total Sales: ${convertToRupees(totalSales)}`}
+          >
             <ReportTable
               headingCells={[
                 "Date",
@@ -263,13 +272,15 @@ const SalesReport = () => {
                 <ArrowBack />
               </Button>
               <Typography>
-                {currentPage} of {noOfPages} pages
+                {noOfPages === 0
+                  ? `0 of 0 pages`
+                  : `${currentPage} of ${noOfPages} pages`}
               </Typography>
               <Button
                 onClick={() => {
                   setCurrentPage(currentPage + 1);
                 }}
-                {...{ disabled: currentPage === noOfPages }}
+                {...{ disabled: currentPage === noOfPages || noOfPages === 0 }}
               >
                 <ArrowForward />
               </Button>
