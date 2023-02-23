@@ -59,6 +59,9 @@ const DistributorReports = () => {
             />
           }
           title="Receivables"
+          onClick={() => {
+            navigate("receivables-report");
+          }}
         />
 
         <ReportCard

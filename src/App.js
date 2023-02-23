@@ -27,6 +27,7 @@ import ReturnStockToDistributor from "./pages/ReturnStockToDistributor/ReturnSto
 import DealerSales from "./pages/DealerSales/DealerSales";
 import Test from "./pages/Test";
 import SalesReport from "./pages/SalesReport/SalesReport";
+import Receivables from "./pages/Receivables/Receivables";
 
 function App() {
   const user = useSelector((state) =>
@@ -50,10 +51,7 @@ function App() {
           <Route path="new-order" element={<NewPurchaseOrder />} />
           <Route path="new-orders" element={<NewPurchaseOrders />} />
           <Route path="dealer-sales" element={<DealerSales />} />
-          <Route
-            path="distributor-reports/sales-report"
-            element={<SalesReport />}
-          />
+
           <Route
             path="return-to-distributor"
             element={<ReturnStockToDistributor />}
@@ -77,6 +75,14 @@ function App() {
           <Route path="test" element={<Test />} />
           <Route path="new-gastank" element={<NewGasTank />} />
           <Route path="view-gastanks" element={<ViewGasTanks />} />
+          <Route
+            path="distributor-reports/sales-report"
+            element={<SalesReport />}
+          />
+          <Route
+            path="distributor-reports/receivables-report"
+            element={<Receivables />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>
