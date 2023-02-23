@@ -73,6 +73,9 @@ const DistributorReports = () => {
             />
           }
           title="Tank Returns"
+          onClick={() => {
+            navigate("tank-returns-report");
+          }}
         />
 
         <ReportCard

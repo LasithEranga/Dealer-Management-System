@@ -2,7 +2,13 @@ import { Box, Grid, Typography } from "@mui/material";
 import logo from "../../asessts/logo.png";
 
 // Create Document Component
-function ReportLayout({ children, from, to, subHeading }) {
+function ReportLayout({
+  children,
+  title = "Sales Report",
+  from,
+  to,
+  subHeading,
+}) {
   return (
     <Box p={2} px={6} pt={6} sx={{ backgroundColor: "white" }}>
       <Box display={"flex"} justifyContent="space-between">
@@ -17,7 +23,7 @@ function ReportLayout({ children, from, to, subHeading }) {
               mt: 1,
             }}
           >
-            Sales Report
+            {title}
           </Typography>
           <Typography
             sx={{

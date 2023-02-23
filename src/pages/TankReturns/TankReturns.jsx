@@ -25,7 +25,7 @@ import ReportLayout from "../../components/ReportLayout/ReportLayout";
 import ReportTable from "../../components/ReportTable/ReportTable";
 import { convertToRupees } from "../../utils/convertToRupees";
 
-const Receivables = () => {
+const TankReturns = () => {
   const { userId } = useSelector((state) => state.loginDMS);
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -97,7 +97,7 @@ const Receivables = () => {
         mb={2}
       >
         <Typography fontSize="1.5rem" fontWeight="bold">
-          Receivables Report
+          Sales Report
         </Typography>
         <Box>
           <Button
@@ -118,6 +118,7 @@ const Receivables = () => {
       <Grid container columnSpacing={1} rowSpacing={1}>
         <Grid item lg={3.5}>
           <ContentCard
+            title="Accounts receivable"
             sx={{
               borderRadius: 0,
             }}
@@ -206,17 +207,16 @@ const Receivables = () => {
         </Grid>
         <Grid item lg>
           <ReportLayout
-            title={"Receivables Report"}
             from={""}
             to={""}
             subHeading={
               <>
                 {/* FIXME: */}
                 <span>
-                  Total receivables : {convertToRupees(totalReceivables)}
+                  Total receivables: {convertToRupees(totalReceivables)}
                 </span>
                 <br></br>
-                <span>AR turover ratio : - </span>
+                <span>AR turover ratio: {convertToRupees(50)}</span>
               </>
             }
           >
@@ -278,4 +278,4 @@ const Receivables = () => {
   );
 };
 
-export default Receivables;
+export default TankReturns;

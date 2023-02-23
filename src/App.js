@@ -28,6 +28,7 @@ import DealerSales from "./pages/DealerSales/DealerSales";
 import Test from "./pages/Test";
 import SalesReport from "./pages/SalesReport/SalesReport";
 import Receivables from "./pages/Receivables/Receivables";
+import TankReturns from "./pages/TankReturns/TankReturns";
 
 function App() {
   const user = useSelector((state) =>
@@ -82,6 +83,10 @@ function App() {
           <Route
             path="distributor-reports/receivables-report"
             element={<Receivables />}
+          />
+          <Route
+            path="distributor-reports/tank-returns-report"
+            element={<TankReturns />}
           />
         </Route>
       </Routes>
