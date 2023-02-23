@@ -97,7 +97,7 @@ const TankReturns = () => {
         mb={2}
       >
         <Typography fontSize="1.5rem" fontWeight="bold">
-          Sales Report
+          Gas tank returns
         </Typography>
         <Box>
           <Button
@@ -118,12 +118,11 @@ const TankReturns = () => {
       <Grid container columnSpacing={1} rowSpacing={1}>
         <Grid item lg={3.5}>
           <ContentCard
-            title="Accounts receivable"
             sx={{
               borderRadius: 0,
             }}
           >
-            {/* <Typography>From</Typography>
+            <Typography>From</Typography>
             <TextField
               type="date"
               fullWidth
@@ -131,7 +130,7 @@ const TankReturns = () => {
               sx={{
                 mt: 1,
               }}
-              onChange={(e) => setFrom(e.target.value)}
+              //   onChange={(e) => setFrom(e.target.value)}
             />
             <Typography mt={1}>To</Typography>
             <TextField
@@ -141,8 +140,8 @@ const TankReturns = () => {
               sx={{
                 mt: 1,
               }}
-              onChange={(e) => setTo(e.target.value)}
-            /> */}
+              //   onChange={(e) => setTo(e.target.value)}
+            />
             <Typography mt={1}>Dealer</Typography>
             <Autocomplete
               multiple
@@ -172,7 +171,7 @@ const TankReturns = () => {
               )}
               onChange={(e, value) => setSelectedDealers(value)}
             />
-            <Typography mt={1}>Amount between</Typography>
+            <Typography mt={1}>No of tanks</Typography>
             <Box
               mt={1}
               display={"flex"}
@@ -207,16 +206,17 @@ const TankReturns = () => {
         </Grid>
         <Grid item lg>
           <ReportLayout
+            title="Gas tank returns"
             from={""}
             to={""}
             subHeading={
               <>
                 {/* FIXME: */}
-                <span>
-                  Total receivables: {convertToRupees(totalReceivables)}
-                </span>
+                <span>No of tanks returned : 50 tanks</span>
                 <br></br>
-                <span>AR turover ratio: {convertToRupees(50)}</span>
+                <span>Total returns : {convertToRupees(totalReceivables)}</span>
+                <br></br>
+                <span>Return rate : 5.30</span>
               </>
             }
           >

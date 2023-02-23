@@ -206,7 +206,7 @@ const Receivables = () => {
         </Grid>
         <Grid item lg>
           <ReportLayout
-            title={"Receivables Report"}
+            title="Accounts receivable"
             from={""}
             to={""}
             subHeading={
