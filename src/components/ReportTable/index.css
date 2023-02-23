@@ -5,7 +5,7 @@
 }
 
 .report-th {
-  text-align: left;
+  text-align: center;
   padding-left: 10px;
   background-color: rgb(247, 247, 247);
   height: 40px;
@@ -28,6 +28,7 @@
 }
 .report-td {
   padding-left: 10px;
+  text-align: center;
 }
 .py-5 {
   padding-top: 15px;

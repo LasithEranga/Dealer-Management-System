@@ -38,7 +38,7 @@ const SalesReport = () => {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [selectedDealers, setSelectedDealers] = useState([]);
-  const [selectedDanks, setSelectedTanks] = useState([]);
+  const [selectedTanks, setSelectedTanks] = useState([]);
   const [totalSales, setTotalSales] = useState(0);
 
   const pagesPerPage = 10;
@@ -50,7 +50,7 @@ const SalesReport = () => {
         from: from,
         to: to,
         dealers: selectedDealers.map((dealer) => dealer._id),
-        gasTanks: selectedDanks.map((tank) => tank._id),
+        gasTanks: selectedTanks.map((tank) => tank._id),
       },
       (response) => {
         if (response.status === 0) {

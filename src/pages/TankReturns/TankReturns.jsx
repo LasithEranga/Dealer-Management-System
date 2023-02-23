@@ -18,7 +18,8 @@ import Autocomplete from "@mui/material/Autocomplete";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { receivables } from "../../app/api/reportsService";
+import { getAllTanks } from "../../app/api/gasTankServices";
+import { returns } from "../../app/api/reportsService";
 import { getAllDealers } from "../../app/api/userServices";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import ReportLayout from "../../components/ReportLayout/ReportLayout";
@@ -31,37 +32,44 @@ const TankReturns = () => {
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const [currentPage, setCurrentPage] = useState(1);
   const [dealers, setDealers] = useState([]);
+  const [gasTanks, setGasTanks] = useState([]);
   const [data, setData] = useState([]);
   const [selectedDealers, setSelectedDealers] = useState([]);
-  const [totalReceivables, setTotalReceivables] = useState(0);
+  const [totalReturns, setTotalReturns] = useState(0);
+  const [selectedTanks, setSelectedTanks] = useState([]);
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(0);
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
 
   const pagesPerPage = 10;
   const noOfPages = Math.ceil(data.length / pagesPerPage);
 
   const generate = () => {
     console.log(min, max);
-    receivables(
+    returns(
       {
+        from: from,
+        to: to,
         dealers: selectedDealers.map((dealer) => dealer._id),
-        minAmount: Number(min),
-        maxAmount: Number(max),
+        gasTanks: selectedTanks.map((tank) => tank._id),
+        minAmountLeft: min,
+        maxAmountLeft: max,
       },
       (response) => {
         if (response.status === 0) {
           setCurrentPage(1);
-          const totalReceivables = response.data.reduce((acc, oneEl) => {
-            return acc + oneEl.outstandingAmount;
+          const totalReturns = response.data.reduce((acc, oneEl) => {
+            return acc + oneEl.returnPrice;
           }, 0);
-          setTotalReceivables(totalReceivables);
+          setTotalReturns(totalReturns);
           setData(
             response.data.map((oneEl) => ({
-              name: oneEl.name,
-              storeAddress: oneEl.storeAddress,
-              phoneNumber: oneEl.phoneNumber,
-              email: oneEl.email,
-              outstandingAmount: convertToRupees(oneEl.outstandingAmount),
+              date: new Date(oneEl.date).toLocaleDateString("en-uk"),
+              dealer: oneEl.dealer,
+              gasTank: oneEl.gasTank + " " + _.capitalize(oneEl.type),
+              amountLeft: oneEl.amountLeft,
+              returnPrice: convertToRupees(oneEl.returnPrice),
             }))
           );
         }
@@ -83,6 +91,18 @@ const TankReturns = () => {
         if (response.status === 0) {
           setDealers(response.data);
         }
+      },
+      () => {}
+    );
+
+    getAllTanks(
+      (response) => {
+        if (response.status === 0) {
+          setGasTanks(response.data);
+        }
+      },
+      (error) => {
+        console.log(error);
       },
       () => {}
     );
@@ -130,7 +150,7 @@ const TankReturns = () => {
               sx={{
                 mt: 1,
               }}
-              //   onChange={(e) => setFrom(e.target.value)}
+              onChange={(e) => setFrom(e.target.value)}
             />
             <Typography mt={1}>To</Typography>
             <TextField
@@ -140,9 +160,9 @@ const TankReturns = () => {
               sx={{
                 mt: 1,
               }}
-              //   onChange={(e) => setTo(e.target.value)}
+              onChange={(e) => setTo(e.target.value)}
             />
-            <Typography mt={1}>Dealer</Typography>
+            <Typography mt={1}>Dealers</Typography>
             <Autocomplete
               multiple
               options={dealers}
@@ -171,7 +191,40 @@ const TankReturns = () => {
               )}
               onChange={(e, value) => setSelectedDealers(value)}
             />
-            <Typography mt={1}>No of tanks</Typography>
+            <Typography mt={1}>Gas tanks</Typography>
+            <Autocomplete
+              multiple
+              options={gasTanks}
+              getOptionLabel={(option) => option.name + " " + option.type}
+              // getOptionSelected={(option, value) =>
+              //   option.indexedName === value.indexedName
+              // }
+              renderOption={(props, option, { selected }) => (
+                <li {...props}>
+                  <Checkbox
+                    icon={icon}
+                    checkedIcon={checkedIcon}
+                    style={{ marginRight: 8 }}
+                    checked={selected}
+                  />
+                  {option.name + " " + option.type}
+                </li>
+              )}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="Select gas tanks"
+                  fullWidth
+                  size="small"
+                  sx={{
+                    mt: 1,
+                  }}
+                />
+              )}
+              onChange={(e, value) => setSelectedTanks(value)}
+            />
+
+            <Typography mt={1}>Amount left</Typography>
             <Box
               mt={1}
               display={"flex"}
@@ -207,14 +260,14 @@ const TankReturns = () => {
         <Grid item lg>
           <ReportLayout
             title="Gas tank returns"
-            from={""}
-            to={""}
+            from={from}
+            to={to}
             subHeading={
               <>
                 {/* FIXME: */}
                 <span>No of tanks returned : 50 tanks</span>
                 <br></br>
-                <span>Total returns : {convertToRupees(totalReceivables)}</span>
+                <span>Total returns : {convertToRupees(totalReturns)}</span>
                 <br></br>
                 <span>Return rate : 5.30</span>
               </>
@@ -222,22 +275,22 @@ const TankReturns = () => {
           >
             <ReportTable
               headingCells={[
-                "Name",
-                "Store Address",
-                "Phone Number",
-                "Email",
-                "Outstanding Amount",
+                "Date",
+                "Dealer",
+                "Gas Tank",
+                "Amount Left",
+                "Return Price",
               ]}
               tableContent={data.slice(
                 (currentPage - 1) * pagesPerPage,
                 currentPage * pagesPerPage
               )}
               columns={[
-                "name",
-                "storeAddress",
-                "phoneNumber",
-                "email",
-                "outstandingAmount",
+                "date",
+                "dealer",
+                "gasTank",
+                "amountLeft",
+                "returnPrice",
               ]}
             />
 
