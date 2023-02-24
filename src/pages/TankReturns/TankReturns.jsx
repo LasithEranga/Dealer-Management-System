@@ -53,8 +53,8 @@ const TankReturns = () => {
         to: to,
         dealers: selectedDealers.map((dealer) => dealer._id),
         gasTanks: selectedTanks.map((tank) => tank._id),
-        minAmountLeft: min,
-        maxAmountLeft: max,
+        minAmountLeft: Number(min),
+        maxAmountLeft: Number(max),
       },
       (response) => {
         if (response.status === 0) {
