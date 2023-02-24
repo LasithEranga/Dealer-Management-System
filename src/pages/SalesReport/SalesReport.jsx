@@ -23,10 +23,9 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { getAllTanks } from "../../app/api/gasTankServices";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import { salesReport } from "../../app/api/salesReceiptServices";
 import _ from "lodash";
 import { convertToRupees } from "../../utils/convertToRupees";
-import { sales } from "../../app/api/reportsService";
+import { salesReport } from "../../app/api/reportsService";
 
 const SalesReport = () => {
   const { userId } = useSelector((state) => state.loginDMS);
@@ -46,7 +45,7 @@ const SalesReport = () => {
   const noOfPages = Math.ceil(data.length / pagesPerPage);
 
   const generate = () => {
-    sales(
+    salesReport(
       {
         from: from,
         to: to,
