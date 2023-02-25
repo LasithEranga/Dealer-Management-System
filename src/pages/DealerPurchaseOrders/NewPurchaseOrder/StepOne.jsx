@@ -66,23 +66,31 @@ const StepOne = ({ orderList, setOrderList, setActiveStep }) => {
   return (
     <Box>
       <Grid container mt={2} gap={2}>
-        <OrderSummeryTable
-          height="16rem"
-          title="Purchase Order"
-          orderList={orderList}
-        />
+        <Grid item xs>
+          <ContentCard
+            sx={{
+              pb: 4,
+            }}
+          >
+            <OrderSummeryTable
+              height="16rem"
+              title="Purchase Order"
+              orderList={orderList}
+            />
+          </ContentCard>
+        </Grid>
         <ContentCard sx={{ pl: 3 }}>
           <Typography fontSize={"1.3rem"} fontWeight="bold">
             Tank Details
           </Typography>
           <Box
             sx={{
-              height: "15.5rem",
+              height: "auto",
               display: "flex",
               flexDirection: "column",
             }}
           >
-            <Box my={2}>
+            <Box my={1}>
               <StyledAutoComplete
                 title={"Gas Tank Name"}
                 suggestedList={suggestedList}
@@ -103,7 +111,7 @@ const StepOne = ({ orderList, setOrderList, setActiveStep }) => {
                     ? selected.name + " " + _.capitalize(selected.type)
                     : "Please select a tank"
                 }
-                sx={{ mr: 2, gap: 4.5, pt: 2 }}
+                sx={{ mr: 2, gap: 4.5, pt: 1 }}
               />
             </Box>
             <Box>

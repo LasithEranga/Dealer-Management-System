@@ -1,25 +1,25 @@
+import { NextPlan } from "@mui/icons-material";
 import {
   Autocomplete,
   Box,
   Button,
   Grid,
+  IconButton,
+  Input,
+  InputAdornment,
   TextField,
   Typography,
 } from "@mui/material";
-import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { showSystemAlert } from "../../app/alertServices";
 import { stockInfoChartData } from "../../app/api/gasStockServices";
-import { searchGasTank } from "../../app/api/gasTankServices";
 import { newReturnRecipt } from "../../app/api/returnReceiptServices";
-import { newRecipt } from "../../app/api/salesReceiptServices";
-import ButtonCard from "../../components/ButtonCard/ButtonCard";
+import { searchSalesReceiptsByRef } from "../../app/api/salesReceiptServices";
 import ContentCard from "../../components/ContentCard/ContentCard";
-import DoughnutChartWithText from "../../components/DoughnutChartWithText/DoughnutChartWithText";
 import OrderSummeryTable from "../../components/OrderSummeryTable/OrderSummeryTable";
-import StyledAutoComplete from "../../components/StyledAutoComplete/StyledAutoComplete";
 import TitleAndContent from "../../components/TitleAndContent/TitleAndContent";
+import { convertToRupees } from "../../utils/convertToRupees";
 import "./index.css";
 const AcceptReturns = () => {
   const { userId, name } = useSelector((state) => state.loginDMS);
@@ -34,8 +34,13 @@ const AcceptReturns = () => {
   });
 
   const [orderList, setOrderList] = useState([]);
+  const [salesReceiptTankList, setSalesReceiptTankList] = useState([]);
+  const [selectedSalesReceipt, setSelectedSalesReceipt] = useState({});
   const [chartData, setChartData] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const [salesReceipts, setSalesReceipts] = useState([]);
+  const [salesReceiptKeyword, setSalesReceiptKeyword] = useState("");
+  const [insertRecordAt, setInsertRecordAt] = useState(-1);
 
   useEffect(() => {
     stockInfoChartData(
@@ -51,20 +56,37 @@ const AcceptReturns = () => {
     );
   }, [refresh]);
 
-  useEffect(() => {
-    if (keyword !== "") {
-      searchGasTank({ keyword }, (response) => {
-        setSuggestedList(response.data);
-      });
-    }
-  }, [keyword]);
+  // useEffect(() => {
+  //   if (keyword !== "") {
+  //     searchGasTank({ keyword }, (response) => {
+  //       setSuggestedList(response.data);
+  //     });
+  //   }
+  // }, [keyword]);
+
+  // useEffect(() => {
+  //   console.log(orderList);
+  //   if (selected.name) {
+  //     setKeyword(selected.name + " " + _.capitalize(selected.type));
+  //   }
+  // }, [selected]);
 
   useEffect(() => {
-    console.log(orderList);
-    if (selected.name) {
-      setKeyword(selected.name + " " + _.capitalize(selected.type));
+    if (salesReceiptKeyword !== "") {
+      searchSalesReceiptsByRef(
+        {
+          dealer: userId,
+          refIdKeyword: salesReceiptKeyword,
+        },
+        (response) => {
+          setSalesReceipts(response.data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
     }
-  }, [selected]);
+  }, [salesReceiptKeyword]);
 
   const onAddClick = () => {
     if (selected.name) {
@@ -116,9 +138,39 @@ const AcceptReturns = () => {
         showSystemAlert("Recipt printed", "success");
         setOrderList([]);
         setRefresh((prev) => !prev);
+        setSalesReceiptTankList([]);
+        setSalesReceiptKeyword("");
+        setSalesReceipts([]);
       }
     );
   };
+
+  useEffect(() => {
+    console.log(salesReceiptTankList);
+  }, [salesReceiptTankList]);
+
+  useEffect(() => {
+    if (insertRecordAt !== -1) {
+      setOrderList((prev) => {
+        console.log(salesReceiptTankList[insertRecordAt]);
+        return [...prev, salesReceiptTankList[insertRecordAt]];
+      });
+      //reduce 1 from quantity in tank  list
+      let temp = [...salesReceiptTankList];
+      temp[insertRecordAt].quantity -= 1;
+      if (temp[insertRecordAt].quantity === 0) {
+        temp.splice(insertRecordAt, 1);
+      } else {
+        //reset fields
+        temp[insertRecordAt].amountLeft = "";
+        temp[insertRecordAt].returnPrice = "";
+      }
+      setSalesReceiptTankList(temp);
+
+      setInsertRecordAt(-1);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [insertRecordAt]);
 
   return (
     <Box my={1} mb={2}>
@@ -127,101 +179,125 @@ const AcceptReturns = () => {
       </Typography>
 
       <Grid container gap={2} mt={2}>
-        <OrderSummeryTable
-          orderList={orderList}
-          title="Return Receipt"
-          receiptInfo={{
-            leftSideContent: [
-              <TitleAndContent
-                title={"Sales receipt:"}
-                content={"#455556156"}
-              />,
-              <TitleAndContent
-                title={"Issued on:"}
-                content={new Date().toISOString().substring(0, 10)}
-              />,
-              <TitleAndContent title={"Issued by:"} content={name} />,
-            ],
-            rightSideContent: [
-              <TitleAndContent
-                title={"Date:"}
-                content={new Date().toISOString().substring(0, 10)}
-              />,
-            ],
-          }}
-          headingCells={[
-            "Gas Tank",
-            "Type",
-            "Amount Left",
-            "Selling Price",
-            "Return Price",
-          ]}
-          cols={[
-            "name",
-            "type",
-            "amountLeft",
-            "sellingPriceDealer",
-            "returnPrice",
-          ]}
-        />
-        <Grid item xs={5}>
-          <ContentCard sx={{ pl: 3 }}>
+        <Grid item xs={5.5}>
+          <ContentCard sx={{ pl: 2 }}>
             <Typography fontSize={"1.3rem"} fontWeight="bold">
               Sales Receipt
             </Typography>
             <Box
               sx={{
-                height: "15.5rem",
                 display: "flex",
                 flexDirection: "column",
               }}
             >
               <Box my={2} display="flex" alignItems={"center"}>
-                {/* <StyledAutoComplete
-                  title={"Gas Tank Name"}
-                  suggestedList={suggestedList}
-                  keyword={keyword}
-                  setKeyword={setKeyword}
-                  setSuggestedList={setSuggestedList}
-                  setSelected={setSelected}
-                  suggessionName={"Suggested Gas Tanks"}
-                  mt={0}
-                /> */}
                 <Typography>Sales receipt id :</Typography>
                 <Autocomplete
-                  options={[]}
+                  options={salesReceipts}
                   sx={{
                     ml: 1,
                     flexGrow: 1,
                   }}
-                  getOptionLabel={(option) => option.name}
+                  getOptionLabel={(option) => option.refId}
                   renderInput={(params) => (
                     <TextField
                       {...params}
                       placeholder="Search receipt id"
                       fullWidth
                       size="small"
+                      onChange={(e) => {
+                        setSalesReceiptKeyword(e.target.value);
+                      }}
                     />
                   )}
-                  onChange={(e, value) => console.log(value)}
+                  onChange={(e, value) => {
+                    //set selling price copy to show in table
+                    value.gasTanks.forEach((oneEl, index) => {
+                      oneEl["sellingPrice"] = convertToRupees(
+                        oneEl.sellingPriceDealer
+                      );
+                      oneEl["action"] = (
+                        <>
+                          <Box
+                            display={"flex"}
+                            alignItems={"center"}
+                            justifyContent={"space-evenly"}
+                          >
+                            <Input
+                              placeholder="A. left"
+                              title="Amount left in tank"
+                              variant="standard"
+                              size="small"
+                              type="number"
+                              id={`${index}`}
+                              sx={{
+                                minWidth: "20px",
+                                maxWidth: "75px",
+                                "& input": {
+                                  minWidth: "20px",
+                                  maxWidth: "75px",
+                                },
+                              }}
+                              endAdornment={
+                                <InputAdornment position="start">
+                                  Kg
+                                </InputAdornment>
+                              }
+                              value={salesReceiptTankList[index]?.amountLeft}
+                              onChange={(e) => {
+                                const index = Number(e.target.id);
+                                setSalesReceiptTankList((prev) => {
+                                  prev[index]["amountLeft"] = e.target.value;
+                                  let tankWeight =
+                                    prev[index].name.split("KG")[0];
+                                  prev[index]["returnPrice"] = (
+                                    (e.target.value / tankWeight) *
+                                    prev[index].sellingPriceDealer
+                                  ).toFixed(2);
+                                  return [...prev];
+                                });
+                              }}
+                            />
+                            <IconButton
+                              color="primary"
+                              title="Add tank to return receipt"
+                              id={`${index}`}
+                              onClick={(e) => {
+                                const index = Number(e.target.id);
+                                console.log(index);
+                                setInsertRecordAt(index);
+                              }}
+                            >
+                              <NextPlan />
+                            </IconButton>
+                          </Box>
+                        </>
+                      );
+                    });
+                    setSalesReceiptTankList(value.gasTanks);
+                    setSelectedSalesReceipt(value);
+                  }}
                 />
               </Box>
 
               <Box>
-                {/* <TitleAndContent
-                  title={"Amount Left"}
-                  titleSx={{ color: "black" }}
-                  content={
-                    <input
-                      type={"text"}
-                      value={amountLeft}
-                      onChange={(e) => {
-                        setAmountLeft(e.target.value);
-                      }}
-                    />
-                  }
-                  sx={{ mr: 2, gap: 4, pt: 2 }}
-                /> */}
+                <OrderSummeryTable
+                  orderList={salesReceiptTankList}
+                  hideTitles={true}
+                  cols={["name", "type", "quantity", "sellingPrice", "action"]}
+                  headingCells={[
+                    "Gas Tank",
+                    "Type",
+                    "Quantity",
+                    "Unit Price",
+                    "Action",
+                  ]}
+                  receiptInfo={{
+                    leftSideContent: [],
+                    rightSideContent: [],
+                  }}
+                  totalCalculatedBy={"sellingPriceDealer"}
+                />
               </Box>
               <Box
                 flexGrow={1}
@@ -232,25 +308,68 @@ const AcceptReturns = () => {
                 gap={2}
               >
                 <Button
+                  color="primary"
+                  onClick={onAddClick}
+                  sx={{ borderRadius: 0.5, boxShadow: 0 }}
+                  variant="contained"
+                >
+                  Clear
+                </Button>
+                <Button
                   color="secondary"
-                  sx={{ borderRadius: 0 }}
+                  variant="contained"
+                  sx={{ borderRadius: 0.5, boxShadow: 0 }}
                   onClick={onPrintClick}
                 >
                   Print
-                </Button>
-                <Button
-                  color="primary"
-                  sx={{ borderRadius: 0 }}
-                  onClick={onAddClick}
-                >
-                  Add
                 </Button>
               </Box>
             </Box>
           </ContentCard>
         </Grid>
+        <Grid item xs>
+          <ContentCard sx={{ height: "100%" }}>
+            <OrderSummeryTable
+              orderList={orderList}
+              title="Return Receipt"
+              receiptInfo={{
+                leftSideContent: [
+                  <TitleAndContent
+                    title={"Sales receipt:"}
+                    content={"#455556156"}
+                  />,
+                  <TitleAndContent
+                    title={"Issued on:"}
+                    content={new Date().toISOString().substring(0, 10)}
+                  />,
+                  <TitleAndContent title={"Issued by:"} content={name} />,
+                ],
+                rightSideContent: [
+                  <TitleAndContent
+                    title={"Date:"}
+                    content={new Date().toISOString().substring(0, 10)}
+                  />,
+                ],
+              }}
+              headingCells={[
+                "Gas Tank",
+                "Type",
+                "Amount Left",
+                "Selling Price",
+                "Return Price",
+              ]}
+              cols={[
+                "name",
+                "type",
+                "amountLeft",
+                "sellingPriceDealer",
+                "returnPrice",
+              ]}
+            />
+          </ContentCard>
+        </Grid>
       </Grid>
-      <Grid container gap={2} mt={2}>
+      {/* <Grid container gap={2} mt={2}>
         <Grid item xs>
           <ContentCard sx={{ height: "12rem" }}>
             <Typography fontSize={"1.3rem"} fontWeight="bold">
@@ -291,7 +410,7 @@ const AcceptReturns = () => {
             </Grid>
           </ContentCard>
         </Grid>
-      </Grid>
+      </Grid> */}
     </Box>
   );
 };

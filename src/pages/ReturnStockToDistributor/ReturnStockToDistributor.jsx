@@ -111,7 +111,15 @@ const ReturnStockToDistributor = () => {
       </Typography>
 
       <Grid container gap={2} mt={2}>
-        <OrderSummeryTable orderList={orderList} title={"Return Receipt"} />
+        <Grid item xs>
+          <ContentCard
+            sx={{
+              pb: 4,
+            }}
+          >
+            <OrderSummeryTable orderList={orderList} title={"Return Receipt"} />
+          </ContentCard>
+        </Grid>
         <Grid item xs={5}>
           <ContentCard sx={{ pl: 3 }}>
             <Typography fontSize={"1.3rem"} fontWeight="bold">

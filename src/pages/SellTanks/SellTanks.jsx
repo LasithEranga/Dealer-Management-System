@@ -85,7 +85,12 @@ const SellTanks = () => {
 
         //set a function to delete the item from the list
         tempSelected["name"] = (
-          <Box display={"flex"} alignItems="center">
+          <Box
+            display={"flex"}
+            alignItems="center"
+            justifyContent={"space-between"}
+            pr={2}
+          >
             <Typography>{tempSelected["name"]}</Typography>
             <IconButton
               title="Delete"
@@ -143,23 +148,35 @@ const SellTanks = () => {
       </Typography>
 
       <Grid container gap={2} mt={2}>
-        <OrderSummeryTable
-          orderList={orderList}
-          cols={["name", "type", "quantity", "sellingPrice", "total"]}
-          receiptInfo={{
-            leftSideContent: [
-              <TitleAndContent title={"Issue by:"} content={name} key={1} />,
-            ],
-            rightSideContent: [
-              <TitleAndContent
-                title={"Date:"}
-                content={new Date().toISOString().substring(0, 10)}
-                key={2}
-              />,
-            ],
-          }}
-          totalCalculatedBy={"sellingPriceDealer"}
-        />
+        <Grid item xs>
+          <ContentCard
+            sx={{
+              pb: 3,
+            }}
+          >
+            <OrderSummeryTable
+              orderList={orderList}
+              cols={["name", "type", "quantity", "sellingPrice", "total"]}
+              receiptInfo={{
+                leftSideContent: [
+                  <TitleAndContent
+                    title={"Issue by:"}
+                    content={name}
+                    key={1}
+                  />,
+                ],
+                rightSideContent: [
+                  <TitleAndContent
+                    title={"Date:"}
+                    content={new Date().toISOString().substring(0, 10)}
+                    key={2}
+                  />,
+                ],
+              }}
+              totalCalculatedBy={"sellingPriceDealer"}
+            />
+          </ContentCard>
+        </Grid>
         <Grid item xs={5}>
           <ContentCard sx={{ pl: 3 }}>
             <Typography fontSize={"1.3rem"} fontWeight="bold">
