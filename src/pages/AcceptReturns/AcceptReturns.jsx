@@ -1,4 +1,11 @@
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -15,7 +22,7 @@ import StyledAutoComplete from "../../components/StyledAutoComplete/StyledAutoCo
 import TitleAndContent from "../../components/TitleAndContent/TitleAndContent";
 import "./index.css";
 const AcceptReturns = () => {
-  const { userId } = useSelector((state) => state.loginDMS);
+  const { userId, name } = useSelector((state) => state.loginDMS);
 
   const [suggestedList, setSuggestedList] = useState([]);
   const [keyword, setKeyword] = useState("");
@@ -123,6 +130,25 @@ const AcceptReturns = () => {
         <OrderSummeryTable
           orderList={orderList}
           title="Return Receipt"
+          receiptInfo={{
+            leftSideContent: [
+              <TitleAndContent
+                title={"Sales receipt:"}
+                content={"#455556156"}
+              />,
+              <TitleAndContent
+                title={"Issued on:"}
+                content={new Date().toISOString().substring(0, 10)}
+              />,
+              <TitleAndContent title={"Issued by:"} content={name} />,
+            ],
+            rightSideContent: [
+              <TitleAndContent
+                title={"Date:"}
+                content={new Date().toISOString().substring(0, 10)}
+              />,
+            ],
+          }}
           headingCells={[
             "Gas Tank",
             "Type",
@@ -141,7 +167,7 @@ const AcceptReturns = () => {
         <Grid item xs={5}>
           <ContentCard sx={{ pl: 3 }}>
             <Typography fontSize={"1.3rem"} fontWeight="bold">
-              Tank Details
+              Sales Receipt
             </Typography>
             <Box
               sx={{
@@ -150,8 +176,8 @@ const AcceptReturns = () => {
                 flexDirection: "column",
               }}
             >
-              <Box my={2}>
-                <StyledAutoComplete
+              <Box my={2} display="flex" alignItems={"center"}>
+                {/* <StyledAutoComplete
                   title={"Gas Tank Name"}
                   suggestedList={suggestedList}
                   keyword={keyword}
@@ -160,26 +186,29 @@ const AcceptReturns = () => {
                   setSelected={setSelected}
                   suggessionName={"Suggested Gas Tanks"}
                   mt={0}
+                /> */}
+                <Typography>Sales receipt id :</Typography>
+                <Autocomplete
+                  options={[]}
+                  sx={{
+                    ml: 1,
+                    flexGrow: 1,
+                  }}
+                  getOptionLabel={(option) => option.name}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      placeholder="Search receipt id"
+                      fullWidth
+                      size="small"
+                    />
+                  )}
+                  onChange={(e, value) => console.log(value)}
                 />
               </Box>
+
               <Box>
-                <TitleAndContent
-                  title={"Tank Name:"}
-                  titleSx={{ color: "black" }}
-                  content="5KG Refilled"
-                  sx={{ mr: 2, gap: 4.5, pt: 2 }}
-                />
-              </Box>
-              <Box>
-                <TitleAndContent
-                  title={"Selling Price:"}
-                  titleSx={{ color: "black" }}
-                  content="Rs. 5000.00"
-                  sx={{ mr: 2, gap: 3, pt: 2 }}
-                />
-              </Box>
-              <Box>
-                <TitleAndContent
+                {/* <TitleAndContent
                   title={"Amount Left"}
                   titleSx={{ color: "black" }}
                   content={
@@ -192,7 +221,7 @@ const AcceptReturns = () => {
                     />
                   }
                   sx={{ mr: 2, gap: 4, pt: 2 }}
-                />
+                /> */}
               </Box>
               <Box
                 flexGrow={1}
@@ -203,15 +232,13 @@ const AcceptReturns = () => {
                 gap={2}
               >
                 <Button
-                  variant="contained"
                   color="secondary"
                   sx={{ borderRadius: 0 }}
                   onClick={onPrintClick}
                 >
-                  Print Bill
+                  Print
                 </Button>
                 <Button
-                  variant="contained"
                   color="primary"
                   sx={{ borderRadius: 0 }}
                   onClick={onAddClick}

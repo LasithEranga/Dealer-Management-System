@@ -1,4 +1,12 @@
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import { Delete } from "@mui/icons-material";
+import {
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  TextField,
+  Typography,
+} from "@mui/material";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -12,9 +20,10 @@ import DoughnutChartWithText from "../../components/DoughnutChartWithText/Doughn
 import OrderSummeryTable from "../../components/OrderSummeryTable/OrderSummeryTable";
 import StyledAutoComplete from "../../components/StyledAutoComplete/StyledAutoComplete";
 import TitleAndContent from "../../components/TitleAndContent/TitleAndContent";
+import { convertToRupees } from "../../utils/convertToRupees";
 import "./index.css";
 const SellTanks = () => {
-  const { userId } = useSelector((state) => state.loginDMS);
+  const { userId, name } = useSelector((state) => state.loginDMS);
 
   const [suggestedList, setSuggestedList] = useState([]);
   const [keyword, setKeyword] = useState("");
@@ -67,6 +76,30 @@ const SellTanks = () => {
         });
         const tempSelected = { ...selected };
         tempSelected["quantity"] = Number(quantity);
+        tempSelected["total"] = convertToRupees(
+          Number(quantity) * selected.sellingPriceDealer
+        );
+        tempSelected["sellingPrice"] = convertToRupees(
+          selected.sellingPriceDealer
+        );
+
+        //set a function to delete the item from the list
+        tempSelected["name"] = (
+          <Box display={"flex"} alignItems="center">
+            <Typography>{tempSelected["name"]}</Typography>
+            <IconButton
+              title="Delete"
+              onClick={() => {
+                setOrderList((prev) => {
+                  return prev.filter((oneEl) => oneEl._id !== tempSelected._id);
+                });
+              }}
+            >
+              <Delete />
+            </IconButton>
+          </Box>
+        );
+
         setOrderList((prev) => [...prev, tempSelected]);
         setKeyword("");
         setSelected({});
@@ -110,7 +143,23 @@ const SellTanks = () => {
       </Typography>
 
       <Grid container gap={2} mt={2}>
-        <OrderSummeryTable orderList={orderList} />
+        <OrderSummeryTable
+          orderList={orderList}
+          cols={["name", "type", "quantity", "sellingPrice", "total"]}
+          receiptInfo={{
+            leftSideContent: [
+              <TitleAndContent title={"Issue by:"} content={name} key={1} />,
+            ],
+            rightSideContent: [
+              <TitleAndContent
+                title={"Date:"}
+                content={new Date().toISOString().substring(0, 10)}
+                key={2}
+              />,
+            ],
+          }}
+          totalCalculatedBy={"sellingPriceDealer"}
+        />
         <Grid item xs={5}>
           <ContentCard sx={{ pl: 3 }}>
             <Typography fontSize={"1.3rem"} fontWeight="bold">
@@ -123,7 +172,7 @@ const SellTanks = () => {
                 flexDirection: "column",
               }}
             >
-              <Box my={2}>
+              <Box my={2} display="flex" gap={2}>
                 <StyledAutoComplete
                   title={"Gas Tank Name"}
                   suggestedList={suggestedList}
@@ -134,20 +183,42 @@ const SellTanks = () => {
                   suggessionName={"Suggested Gas Tanks"}
                   mt={0}
                 />
+                <Box
+                  sx={{
+                    width: "5rem",
+                  }}
+                >
+                  <Typography>Qty</Typography>
+                  <TextField
+                    sx={{
+                      mt: 1,
+                    }}
+                    size="small"
+                    type={"text"}
+                    value={quantity}
+                    onChange={(e) => {
+                      setQuantity(e.target.value);
+                    }}
+                  />
+                </Box>
               </Box>
               <Box>
                 <TitleAndContent
-                  title={"Tank Name:"}
+                  title={"Tank Name"}
                   titleSx={{ color: "black" }}
-                  content="5KG Refilled"
+                  content={`: ${selected.name ? selected.name : ""}`}
                   sx={{ mr: 2, gap: 4.5, pt: 2 }}
                 />
               </Box>
               <Box>
                 <TitleAndContent
-                  title={"Selling Price:"}
+                  title={"Selling Price"}
                   titleSx={{ color: "black" }}
-                  content="Rs. 5000.00"
+                  content={`: ${
+                    selected.sellingPriceDealer
+                      ? convertToRupees(selected.sellingPriceDealer)
+                      : ""
+                  }`}
                   sx={{ mr: 2, gap: 3, pt: 2 }}
                 />
               </Box>
@@ -155,15 +226,7 @@ const SellTanks = () => {
                 <TitleAndContent
                   title={"Quantity"}
                   titleSx={{ color: "black" }}
-                  content={
-                    <input
-                      type={"text"}
-                      value={quantity}
-                      onChange={(e) => {
-                        setQuantity(e.target.value);
-                      }}
-                    />
-                  }
+                  content={`: ${quantity}`}
                   sx={{ mr: 2, gap: 7, pt: 2 }}
                 />
               </Box>
@@ -203,8 +266,9 @@ const SellTanks = () => {
               Stock Info
             </Typography>
             <Box display={"flex"} gap={3}>
-              {chartData.map((oneEl) => (
+              {chartData.map((oneEl, index) => (
                 <DoughnutChartWithText
+                  key={index}
                   chartTitle={_.capitalize(oneEl._id) + " Tank"}
                   dataSet={[
                     oneEl.quantity,

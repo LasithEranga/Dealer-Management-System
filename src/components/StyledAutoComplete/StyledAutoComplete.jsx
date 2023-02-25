@@ -23,7 +23,11 @@ const StyledAutoComplete = ({
   madeOf = ["name", "type"],
 }) => {
   return (
-    <Box>
+    <Box
+      sx={{
+        flexGrow: 1,
+      }}
+    >
       <Typography sx={{ mb: 1, mt }}>{title}</Typography>
       <Box sx={{ position: "relative" }}>
         <TextField

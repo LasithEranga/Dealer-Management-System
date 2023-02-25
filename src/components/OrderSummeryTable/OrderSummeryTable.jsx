@@ -13,20 +13,16 @@ const OrderSummeryTable = ({
   title = " Sales Receipt",
   height = "10rem",
   orderList = [],
+  receiptInfo = {},
   headingCells = ["Gas Tank", "Type", "Quantity", "Unit Price", "Total"],
   cols = ["name", "type", "quantity", "orderedPriceDealer", "total"],
+  totalCalculatedBy = "orderedPriceDealer",
 }) => {
-  const { name, outstandingAmount } = useSelector((state) => state.loginDMS);
-
-  const [total, setTotal] = useState(0);
-
-  useEffect(() => {
-    let total = 0;
-    orderList.forEach((oneEl) => {
-      total = total + oneEl.quantity * oneEl.orderedPriceDealer;
-    });
-    setTotal(total);
-  }, [orderList]);
+  let total = 0;
+  orderList.forEach((oneEl) => {
+    total = total + oneEl.quantity * oneEl[totalCalculatedBy];
+  });
+  console.log(total);
 
   return (
     <Grid item xs>
@@ -37,11 +33,18 @@ const OrderSummeryTable = ({
 
         <Box>
           <Box display={"flex"} justifyContent="space-between" py={2}>
-            <TitleAndContent title={"Dealer:"} content={name} />
-            <TitleAndContent
-              title={"Date:"}
-              content={new Date().toISOString().substring(0, 10)}
-            />
+            <Box>
+              {receiptInfo.leftSideContent &&
+                receiptInfo.leftSideContent.map((oneEl) => {
+                  return oneEl;
+                })}
+            </Box>
+            <Box>
+              {receiptInfo.rightSideContent &&
+                receiptInfo.rightSideContent.map((oneEl) => {
+                  return oneEl;
+                })}
+            </Box>
           </Box>
         </Box>
 
@@ -57,9 +60,12 @@ const OrderSummeryTable = ({
         >
           <table className="sales-table">
             <thead style={{ position: "sticky", top: 0 }}>
-              <tr className="sales-tr">
+              <tr className="sales-tr ">
                 {headingCells.map((oneEl, index) => (
-                  <th className="sales-th" key={index}>
+                  <th
+                    className={`sales-th ${index > 1 ? "text-center" : ""}`}
+                    key={`th${index}`}
+                  >
                     {oneEl}
                   </th>
                 ))}
@@ -68,10 +74,15 @@ const OrderSummeryTable = ({
             <tbody className="sales-body">
               {orderList.map((oneEl, index) => {
                 return (
-                  <tr className="sales-tr " key={index}>
+                  <tr className="sales-tr " key={`tr${index}`}>
                     {cols.map((oneCol, index) => {
                       return (
-                        <td className="sales-td" key={index}>
+                        <td
+                          className={`sales-td ${
+                            index > 1 ? "text-center" : ""
+                          }`}
+                          key={index}
+                        >
                           {oneEl[oneCol]}
                         </td>
                       );
