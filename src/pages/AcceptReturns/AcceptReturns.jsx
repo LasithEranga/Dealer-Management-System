@@ -61,42 +61,6 @@ const AcceptReturns = () => {
     }
   }, [salesReceiptKeyword]);
 
-  const onAddClick = () => {
-    if (selected.name) {
-      if (Number(amountLeft) > 0) {
-        setValidationError({
-          isVisible: false,
-          message: "",
-        });
-        const tempSelected = { ...selected };
-        let tankWeight = selected.name.split(" ")[0];
-
-        tankWeight = parseFloat(tankWeight.substring(0, tankWeight.length - 2));
-
-        tempSelected["amountLeft"] = Number(amountLeft);
-        tempSelected["returnPrice"] = (
-          (Number(amountLeft) / tankWeight) *
-          selected.sellingPriceDealer
-        ).toFixed(2);
-        console.log(tempSelected);
-        setOrderList((prev) => [...prev, tempSelected]);
-        setKeyword("");
-        setSelected({});
-        setAmountLeft("");
-      } else {
-        setValidationError({
-          isVisible: true,
-          message: "Please type the amount left",
-        });
-      }
-    } else {
-      setValidationError({
-        isVisible: true,
-        message: "Please select a gas tank",
-      });
-    }
-  };
-
   const onPrintClick = () => {
     newReturnRecipt(
       {
@@ -115,6 +79,7 @@ const AcceptReturns = () => {
           setSalesReceiptTankList([]);
           setSalesReceiptKeyword("");
           setSalesReceipts([]);
+          setUpdateTable(true);
         } else {
           showSystemAlert(
             response?.error ? response.error : "Something went wrong",
@@ -142,7 +107,11 @@ const AcceptReturns = () => {
             >
               <Input
                 placeholder="A. left"
-                title="Amount left in tank"
+                title={
+                  oneEl.returnableQuantity <= 0
+                    ? "No more returns possible"
+                    : "Amount left in tank"
+                }
                 variant="standard"
                 size="small"
                 sx={{
@@ -153,6 +122,7 @@ const AcceptReturns = () => {
                     maxWidth: "75px",
                   },
                 }}
+                disabled={oneEl.returnableQuantity <= 0}
                 endAdornment={
                   <InputAdornment position="start">Kg</InputAdornment>
                 }
@@ -163,7 +133,12 @@ const AcceptReturns = () => {
               />
               <IconButton
                 color="primary"
-                title="Add tank to return receipt"
+                disabled={oneEl.returnableQuantity <= 0}
+                title={
+                  oneEl.returnableQuantity <= 0
+                    ? "No more returns possible"
+                    : "Add tank to return receipt"
+                }
                 onClick={(e) => {
                   setInsertRecordAt(oneEl._id);
                 }}
@@ -188,8 +163,16 @@ const AcceptReturns = () => {
       );
       if (gasTank) {
         // set amount left and return price
-        gasTank.amountLeft = quantities[insertRecordAt].amountLeft;
-        gasTank.returnPrice = quantities[insertRecordAt].returnPrice;
+        gasTank.amountLeft = quantities[insertRecordAt]?.amountLeft;
+        gasTank.returnPrice = quantities[insertRecordAt]?.returnPrice;
+
+        // show error if amount left is not set
+        if (!gasTank.amountLeft) {
+          showSystemAlert("Please set amount left", "error");
+          setInsertRecordAt(-1);
+          return;
+        }
+
         // add to order list
         setOrderList((prev) => [...prev, gasTank]);
 
@@ -262,6 +245,7 @@ const AcceptReturns = () => {
                     ml: 1,
                     flexGrow: 1,
                   }}
+                  clearOnBlur={true}
                   getOptionLabel={(option) => option.refId}
                   renderInput={(params) => (
                     <TextField
@@ -319,7 +303,6 @@ const AcceptReturns = () => {
               >
                 <Button
                   color="primary"
-                  onClick={onAddClick}
                   sx={{ borderRadius: 0.5, boxShadow: 0 }}
                   variant="contained"
                 >
