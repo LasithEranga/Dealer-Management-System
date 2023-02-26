@@ -21,10 +21,12 @@ import OrderSummeryTable from "../../components/OrderSummeryTable/OrderSummeryTa
 import TitleAndContent from "../../components/TitleAndContent/TitleAndContent";
 import { convertToRupees } from "../../utils/convertToRupees";
 import "./index.css";
+
+// FIXME: when completing the return, edit sales receipt so that same tank can be returned again
+//record the left quantity to return.
 const AcceptReturns = () => {
   const { userId, name } = useSelector((state) => state.loginDMS);
 
-  const [suggestedList, setSuggestedList] = useState([]);
   const [keyword, setKeyword] = useState("");
   const [selected, setSelected] = useState({});
   const [amountLeft, setAmountLeft] = useState("");
@@ -36,40 +38,11 @@ const AcceptReturns = () => {
   const [orderList, setOrderList] = useState([]);
   const [salesReceiptTankList, setSalesReceiptTankList] = useState([]);
   const [selectedSalesReceipt, setSelectedSalesReceipt] = useState({});
-  const [chartData, setChartData] = useState([]);
-  const [refresh, setRefresh] = useState(false);
   const [salesReceipts, setSalesReceipts] = useState([]);
   const [salesReceiptKeyword, setSalesReceiptKeyword] = useState("");
   const [insertRecordAt, setInsertRecordAt] = useState(-1);
-
-  useEffect(() => {
-    stockInfoChartData(
-      {
-        userId,
-      },
-      (response) => {
-        setChartData(response.data);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-  }, [refresh]);
-
-  // useEffect(() => {
-  //   if (keyword !== "") {
-  //     searchGasTank({ keyword }, (response) => {
-  //       setSuggestedList(response.data);
-  //     });
-  //   }
-  // }, [keyword]);
-
-  // useEffect(() => {
-  //   console.log(orderList);
-  //   if (selected.name) {
-  //     setKeyword(selected.name + " " + _.capitalize(selected.type));
-  //   }
-  // }, [selected]);
+  const [updateTable, setUpdateTable] = useState(false);
+  const [quantities, setQuantities] = useState({});
 
   useEffect(() => {
     if (salesReceiptKeyword !== "") {
@@ -128,6 +101,7 @@ const AcceptReturns = () => {
     newReturnRecipt(
       {
         dealerId: userId,
+        salesReceiptId: selectedSalesReceipt._id,
         gasTanks: orderList.map((oneEl) => ({
           _id: oneEl._id,
           amountLeft: oneEl.amountLeft,
@@ -135,42 +109,132 @@ const AcceptReturns = () => {
         })),
       },
       (response) => {
-        showSystemAlert("Recipt printed", "success");
-        setOrderList([]);
-        setRefresh((prev) => !prev);
-        setSalesReceiptTankList([]);
-        setSalesReceiptKeyword("");
-        setSalesReceipts([]);
+        if (response.status === 0) {
+          showSystemAlert("Gas tank returned", "success");
+          setOrderList([]);
+          setSalesReceiptTankList([]);
+          setSalesReceiptKeyword("");
+          setSalesReceipts([]);
+        } else {
+          showSystemAlert(
+            response?.error ? response.error : "Something went wrong",
+            "error"
+          );
+        }
+      },
+      (error) => {
+        console.log(error);
       }
     );
   };
 
   useEffect(() => {
     console.log(salesReceiptTankList);
-  }, [salesReceiptTankList]);
+    if (updateTable) {
+      salesReceiptTankList.forEach((oneEl, index) => {
+        oneEl["sellingPrice"] = convertToRupees(oneEl.sellingPriceDealer);
+        oneEl["action"] = (
+          <>
+            <Box
+              display={"flex"}
+              alignItems={"center"}
+              justifyContent={"space-evenly"}
+            >
+              <Input
+                placeholder="A. left"
+                title="Amount left in tank"
+                variant="standard"
+                size="small"
+                sx={{
+                  minWidth: "20px",
+                  maxWidth: "75px",
+                  "& input": {
+                    minWidth: "20px",
+                    maxWidth: "75px",
+                  },
+                }}
+                endAdornment={
+                  <InputAdornment position="start">Kg</InputAdornment>
+                }
+                value={quantities[oneEl._id]?.amountLeft || ""}
+                onChange={(e) => {
+                  onChangeAmountLeft(e, oneEl);
+                }}
+              />
+              <IconButton
+                color="primary"
+                title="Add tank to return receipt"
+                onClick={(e) => {
+                  setInsertRecordAt(oneEl._id);
+                }}
+              >
+                <NextPlan />
+              </IconButton>
+            </Box>
+          </>
+        );
+      });
+      setSalesReceiptTankList(
+        salesReceiptTankList.map((oneEl) => ({ ...oneEl }))
+      );
+      setUpdateTable(false);
+    }
+  }, [salesReceiptTankList, updateTable]);
 
   useEffect(() => {
     if (insertRecordAt !== -1) {
-      setOrderList((prev) => {
-        console.log(salesReceiptTankList[insertRecordAt]);
-        return [...prev, salesReceiptTankList[insertRecordAt]];
-      });
-      //reduce 1 from quantity in tank  list
-      let temp = [...salesReceiptTankList];
-      temp[insertRecordAt].quantity -= 1;
-      if (temp[insertRecordAt].quantity === 0) {
-        temp.splice(insertRecordAt, 1);
-      } else {
-        //reset fields
-        temp[insertRecordAt].amountLeft = "";
-        temp[insertRecordAt].returnPrice = "";
+      const gasTank = salesReceiptTankList.find(
+        (oneEl) => oneEl._id === insertRecordAt
+      );
+      if (gasTank) {
+        // set amount left and return price
+        gasTank.amountLeft = quantities[insertRecordAt].amountLeft;
+        gasTank.returnPrice = quantities[insertRecordAt].returnPrice;
+        // add to order list
+        setOrderList((prev) => [...prev, gasTank]);
+
+        // reset quantities
+        setQuantities((prev) => {
+          let temp = { ...prev };
+          delete temp[insertRecordAt];
+          return temp;
+        });
+        let temp = salesReceiptTankList.map((oneEl) => ({ ...oneEl }));
+        const updatedGasTank = temp.find(
+          (oneEl) => oneEl._id === insertRecordAt
+        );
+        if (updatedGasTank) {
+          updatedGasTank.returnableQuantity -= 1;
+          if (updatedGasTank.returnableQuantity === 0) {
+            temp.splice(temp.indexOf(updatedGasTank), 1);
+          }
+        }
+        setSalesReceiptTankList(temp);
+        setUpdateTable(true);
       }
-      setSalesReceiptTankList(temp);
 
       setInsertRecordAt(-1);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [insertRecordAt]);
+  }, [insertRecordAt, salesReceiptTankList]);
+
+  const onChangeAmountLeft = (e, oneEl) => {
+    let tankWeight = oneEl.name.split("KG")[0];
+    setQuantities((prev) => {
+      return {
+        ...prev,
+        [oneEl._id]: {
+          amountLeft: e.target.value,
+          returnPrice: (
+            (e.target.value / tankWeight) *
+            oneEl.sellingPriceDealer
+          ).toFixed(2),
+        },
+      };
+    });
+    setUpdateTable(true);
+  };
 
   return (
     <Box my={1} mb={2}>
@@ -211,71 +275,11 @@ const AcceptReturns = () => {
                     />
                   )}
                   onChange={(e, value) => {
-                    //set selling price copy to show in table
-                    value.gasTanks.forEach((oneEl, index) => {
-                      oneEl["sellingPrice"] = convertToRupees(
-                        oneEl.sellingPriceDealer
-                      );
-                      oneEl["action"] = (
-                        <>
-                          <Box
-                            display={"flex"}
-                            alignItems={"center"}
-                            justifyContent={"space-evenly"}
-                          >
-                            <Input
-                              placeholder="A. left"
-                              title="Amount left in tank"
-                              variant="standard"
-                              size="small"
-                              type="number"
-                              id={`${index}`}
-                              sx={{
-                                minWidth: "20px",
-                                maxWidth: "75px",
-                                "& input": {
-                                  minWidth: "20px",
-                                  maxWidth: "75px",
-                                },
-                              }}
-                              endAdornment={
-                                <InputAdornment position="start">
-                                  Kg
-                                </InputAdornment>
-                              }
-                              value={salesReceiptTankList[index]?.amountLeft}
-                              onChange={(e) => {
-                                const index = Number(e.target.id);
-                                setSalesReceiptTankList((prev) => {
-                                  prev[index]["amountLeft"] = e.target.value;
-                                  let tankWeight =
-                                    prev[index].name.split("KG")[0];
-                                  prev[index]["returnPrice"] = (
-                                    (e.target.value / tankWeight) *
-                                    prev[index].sellingPriceDealer
-                                  ).toFixed(2);
-                                  return [...prev];
-                                });
-                              }}
-                            />
-                            <IconButton
-                              color="primary"
-                              title="Add tank to return receipt"
-                              id={`${index}`}
-                              onClick={(e) => {
-                                const index = Number(e.target.id);
-                                console.log(index);
-                                setInsertRecordAt(index);
-                              }}
-                            >
-                              <NextPlan />
-                            </IconButton>
-                          </Box>
-                        </>
-                      );
-                    });
-                    setSalesReceiptTankList(value.gasTanks);
+                    setSalesReceiptTankList(
+                      value.gasTanks.map((oneEl) => ({ ...oneEl }))
+                    );
                     setSelectedSalesReceipt(value);
+                    setUpdateTable(true);
                   }}
                 />
               </Box>
@@ -284,7 +288,13 @@ const AcceptReturns = () => {
                 <OrderSummeryTable
                   orderList={salesReceiptTankList}
                   hideTitles={true}
-                  cols={["name", "type", "quantity", "sellingPrice", "action"]}
+                  cols={[
+                    "name",
+                    "type",
+                    "returnableQuantity",
+                    "sellingPrice",
+                    "action",
+                  ]}
                   headingCells={[
                     "Gas Tank",
                     "Type",
@@ -369,48 +379,6 @@ const AcceptReturns = () => {
           </ContentCard>
         </Grid>
       </Grid>
-      {/* <Grid container gap={2} mt={2}>
-        <Grid item xs>
-          <ContentCard sx={{ height: "12rem" }}>
-            <Typography fontSize={"1.3rem"} fontWeight="bold">
-              Stock Info
-            </Typography>
-            <Box display={"flex"} gap={3}>
-              {chartData.map((oneEl) => (
-                <DoughnutChartWithText
-                  chartTitle={_.capitalize(oneEl._id) + " Tank"}
-                  dataSet={[
-                    oneEl.quantity,
-                    oneEl.fullStockValue - oneEl.quantity,
-                  ]}
-                  count={oneEl.quantity}
-                />
-              ))}
-            </Box>
-          </ContentCard>
-        </Grid>
-        <Grid item xs={5}>
-          <ContentCard>
-            <Typography fontSize={"1.3rem"} fontWeight="bold">
-              Recently Selected
-            </Typography>
-            <Grid container columnSpacing={1} rowSpacing={1}>
-              <Grid item xs={6}>
-                <ButtonCard btnText={"12.5Kg New Tank"} />
-              </Grid>
-              <Grid item xs={6}>
-                <ButtonCard btnText={"12.5Kg New Tank"} />
-              </Grid>
-              <Grid item xs={6}>
-                <ButtonCard btnText={"12.5Kg New Tank"} />
-              </Grid>
-              <Grid item xs={6}>
-                <ButtonCard btnText={"12.5Kg New Tank"} />
-              </Grid>
-            </Grid>
-          </ContentCard>
-        </Grid>
-      </Grid> */}
     </Box>
   );
 };
