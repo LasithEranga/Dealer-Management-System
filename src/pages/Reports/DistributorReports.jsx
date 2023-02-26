@@ -87,6 +87,9 @@ const DistributorReports = () => {
             />
           }
           title="Stocks"
+          onClick={() => {
+            navigate("stocks-report");
+          }}
         />
         <ReportCard
           icon={
@@ -97,6 +100,9 @@ const DistributorReports = () => {
             />
           }
           title="Dealer Stocks"
+          onClick={() => {
+            navigate("dealer-stocks-report");
+          }}
         />
         <ReportCard
           icon={
@@ -107,6 +113,9 @@ const DistributorReports = () => {
             />
           }
           title="Fast Moving Stocks"
+          onClick={() => {
+            navigate("fast-moving-stocks-report");
+          }}
         />
         <ReportCard
           icon={
@@ -117,7 +126,9 @@ const DistributorReports = () => {
             />
           }
           title="Purchase Orders"
-          onClick={() => {}}
+          onClick={() => {
+            navigate("purchase-orders-report");
+          }}
         />
       </Box>
     </Box>

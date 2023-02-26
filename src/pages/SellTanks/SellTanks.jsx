@@ -151,7 +151,7 @@ const SellTanks = () => {
         <Grid item xs>
           <ContentCard
             sx={{
-              pb: 3,
+              pb: 3.5,
             }}
           >
             <OrderSummeryTable
@@ -173,12 +173,13 @@ const SellTanks = () => {
                   />,
                 ],
               }}
+              height={"10rem"}
               totalCalculatedBy={"sellingPriceDealer"}
             />
           </ContentCard>
         </Grid>
         <Grid item xs={5}>
-          <ContentCard sx={{ pl: 3 }}>
+          <ContentCard sx={{ pl: 3, pb: 3 }}>
             <Typography fontSize={"1.3rem"} fontWeight="bold">
               Tank Details
             </Typography>
@@ -258,7 +259,7 @@ const SellTanks = () => {
                 <Button
                   variant="contained"
                   color="secondary"
-                  sx={{ borderRadius: 0 }}
+                  sx={{ borderRadius: 0, boxShadow: 0 }}
                   onClick={onPrintClick}
                 >
                   Print Bill
@@ -266,7 +267,7 @@ const SellTanks = () => {
                 <Button
                   variant="contained"
                   color="primary"
-                  sx={{ borderRadius: 0 }}
+                  sx={{ borderRadius: 0, boxShadow: 0 }}
                   onClick={onAddClick}
                 >
                   Add

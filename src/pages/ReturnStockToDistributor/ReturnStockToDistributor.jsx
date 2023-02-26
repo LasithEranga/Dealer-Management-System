@@ -68,6 +68,7 @@ const ReturnStockToDistributor = () => {
         });
         const tempSelected = { ...selected };
         tempSelected["quantity"] = Number(quantity);
+
         setOrderList((prev) => [...prev, tempSelected]);
         setKeyword("");
         setSelected({});
@@ -114,10 +115,24 @@ const ReturnStockToDistributor = () => {
         <Grid item xs>
           <ContentCard
             sx={{
-              pb: 4,
+              pb: 5,
             }}
           >
-            <OrderSummeryTable orderList={orderList} title={"Return Receipt"} />
+            <Typography
+              fontSize={"1.3rem"}
+              fontWeight="bold"
+              textAlign={"center"}
+            >
+              Return receipt
+            </Typography>
+            <OrderSummeryTable
+              orderList={orderList}
+              title={"Return Receipt"}
+              headingCells={["Gas Tank", "Type", "Quantity", "Ordered Price"]}
+              cols={["name", "type", "quantity", "orderedPriceDealer"]}
+              height={"13.5rem"}
+              hideTitles={true}
+            />
           </ContentCard>
         </Grid>
         <Grid item xs={5}>
@@ -146,25 +161,25 @@ const ReturnStockToDistributor = () => {
               </Box>
               <Box>
                 <TitleAndContent
-                  title={"Tank Name:"}
+                  title={"Tank Name"}
                   titleSx={{ color: "black" }}
-                  content={
+                  content={`: ${
                     selected.name
                       ? selected.name + " " + _.capitalize(selected.type)
                       : "Search Tank"
-                  }
+                  }`}
                   sx={{ mr: 2, gap: 4.5, pt: 2 }}
                 />
               </Box>
               <Box>
                 <TitleAndContent
-                  title={"Ordered Price:"}
+                  title={"Ordered Price"}
                   titleSx={{ color: "black" }}
-                  content={
+                  content={`: ${
                     selected.orderedPriceDealer
                       ? convertToRupees(selected.orderedPriceDealer)
                       : "-"
-                  }
+                  }`}
                   sx={{ mr: 2, gap: 2, pt: 2 }}
                 />
               </Box>
@@ -179,29 +194,25 @@ const ReturnStockToDistributor = () => {
                   title={"Quantity"}
                   titleSx={{ color: "black" }}
                   content={
-                    <TextField
-                      value={quantity}
-                      sx={{
-                        "& .MuiInputBase-input": {
-                          p: 0.5,
-                          pl: 1.3,
-                        },
-                      }}
-                      onChange={(e) => {
-                        setQuantity(e.target.value);
-                      }}
-                    />
+                    <>
+                      :{" "}
+                      <TextField
+                        value={quantity}
+                        sx={{
+                          "& .MuiInputBase-input": {
+                            p: 0.5,
+                            pl: 1.3,
+                            maxWidth: "4rem",
+                          },
+                        }}
+                        onChange={(e) => {
+                          setQuantity(e.target.value);
+                        }}
+                      />
+                    </>
                   }
                   sx={{ mr: 2, gap: 7 }}
                 />
-                <Button
-                  color="primary"
-                  variant="contained"
-                  sx={{ borderRadius: 0, height: "1.8rem", boxShadow: "none" }}
-                  onClick={onAddClick}
-                >
-                  Add
-                </Button>
               </Box>
               <Box
                 flexGrow={1}
@@ -218,6 +229,14 @@ const ReturnStockToDistributor = () => {
                   onClick={onPrintClick}
                 >
                   Print Reciept
+                </Button>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  sx={{ borderRadius: 0, boxShadow: "none" }}
+                  onClick={onAddClick}
+                >
+                  Add
                 </Button>
               </Box>
             </Box>

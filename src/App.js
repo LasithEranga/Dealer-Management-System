@@ -29,6 +29,10 @@ import Test from "./pages/Test";
 import SalesReport from "./pages/SalesReport/SalesReport";
 import Receivables from "./pages/Receivables/Receivables";
 import TankReturns from "./pages/TankReturns/TankReturns";
+import StockReport from "./pages/StockReport/StockReport";
+import DealerStockReport from "./pages/DealerStockReport/DealerStockReport";
+import PurchaseOrdersReport from "./pages/PurchaseOrdersReport/PurchaseOrdersReport";
+import FastMovingStocks from "./pages/FastMovingStocks/FastMovingStocks";
 
 function App() {
   const user = useSelector((state) =>
@@ -87,6 +91,22 @@ function App() {
           <Route
             path="distributor-reports/tank-returns-report"
             element={<TankReturns />}
+          />
+          <Route
+            path="distributor-reports/stocks-report"
+            element={<StockReport />}
+          />
+          <Route
+            path="distributor-reports/dealer-stocks-report"
+            element={<DealerStockReport />}
+          />
+          <Route
+            path="distributor-reports/fast-moving-stocks-report"
+            element={<FastMovingStocks />}
+          />
+          <Route
+            path="distributor-reports/purchase-orders-report"
+            element={<PurchaseOrdersReport />}
           />
         </Route>
       </Routes>

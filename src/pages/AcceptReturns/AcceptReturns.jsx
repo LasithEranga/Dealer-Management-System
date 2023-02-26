@@ -22,19 +22,8 @@ import TitleAndContent from "../../components/TitleAndContent/TitleAndContent";
 import { convertToRupees } from "../../utils/convertToRupees";
 import "./index.css";
 
-// FIXME: when completing the return, edit sales receipt so that same tank can be returned again
-//record the left quantity to return.
 const AcceptReturns = () => {
   const { userId, name } = useSelector((state) => state.loginDMS);
-
-  const [keyword, setKeyword] = useState("");
-  const [selected, setSelected] = useState({});
-  const [amountLeft, setAmountLeft] = useState("");
-  const [validationError, setValidationError] = useState({
-    isVisible: false,
-    message: "",
-  });
-
   const [orderList, setOrderList] = useState([]);
   const [salesReceiptTankList, setSalesReceiptTankList] = useState([]);
   const [selectedSalesReceipt, setSelectedSalesReceipt] = useState({});
@@ -295,31 +284,8 @@ const AcceptReturns = () => {
                     rightSideContent: [],
                   }}
                   totalCalculatedBy={"sellingPriceDealer"}
+                  height="17rem"
                 />
-              </Box>
-              <Box
-                flexGrow={1}
-                mt={1}
-                display="flex"
-                justifyContent={"end"}
-                alignItems="end"
-                gap={2}
-              >
-                <Button
-                  color="primary"
-                  sx={{ borderRadius: 0.5, boxShadow: 0 }}
-                  variant="contained"
-                >
-                  Clear
-                </Button>
-                <Button
-                  color="secondary"
-                  variant="contained"
-                  sx={{ borderRadius: 0.5, boxShadow: 0 }}
-                  onClick={onPrintClick}
-                >
-                  Print
-                </Button>
               </Box>
             </Box>
           </ContentCard>
@@ -333,11 +299,21 @@ const AcceptReturns = () => {
                 leftSideContent: [
                   <TitleAndContent
                     title={"Sales receipt:"}
-                    content={"#455556156"}
+                    content={
+                      selectedSalesReceipt.refId
+                        ? `#${selectedSalesReceipt.refId}`
+                        : ""
+                    }
                   />,
                   <TitleAndContent
                     title={"Issued on:"}
-                    content={new Date().toISOString().substring(0, 10)}
+                    content={
+                      selectedSalesReceipt.updatedAt
+                        ? new Date(selectedSalesReceipt.updatedAt)
+                            .toISOString()
+                            .substring(0, 10)
+                        : ""
+                    }
                   />,
                   <TitleAndContent title={"Issued by:"} content={name} />,
                 ],
@@ -363,6 +339,30 @@ const AcceptReturns = () => {
                 "returnPrice",
               ]}
             />
+            <Box
+              flexGrow={1}
+              mt={2}
+              display="flex"
+              justifyContent={"end"}
+              alignItems="end"
+              gap={2}
+            >
+              <Button
+                color="primary"
+                sx={{ borderRadius: 0.5, boxShadow: 0 }}
+                variant="contained"
+              >
+                Clear
+              </Button>
+              <Button
+                color="secondary"
+                variant="contained"
+                sx={{ borderRadius: 0.5, boxShadow: 0 }}
+                onClick={onPrintClick}
+              >
+                Print
+              </Button>
+            </Box>
           </ContentCard>
         </Grid>
       </Grid>
