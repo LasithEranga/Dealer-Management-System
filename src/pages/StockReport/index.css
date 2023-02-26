@@ -1,0 +1,36 @@
+.stock-tb-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.stock-tb-th {
+  text-align: center;
+  padding-left: 10px;
+  background-color: rgb(247, 247, 247);
+  height: 40px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: black;
+}
+.stock-tb-tr {
+  height: 40px;
+}
+.stock-tb-tr:nth-child(odd) {
+  background-color: #e9e9e9;
+}
+.stock-tb-tr:nth-child(even) {
+  background-color: #ffffff;
+}
+.stock-tb-body {
+  max-height: 2rem;
+  overflow-y: auto;
+}
+.stock-tb-td {
+  padding-left: 10px;
+  text-align: center;
+}
+.py-5 {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}

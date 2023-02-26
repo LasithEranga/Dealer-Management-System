@@ -9,6 +9,7 @@ import {
   Box,
   Button,
   Checkbox,
+  Divider,
   Grid,
   TextField,
   Typography,
@@ -19,6 +20,8 @@ import ReportLayout from "../../components/ReportLayout/ReportLayout";
 import ReportTable from "../../components/ReportTable/ReportTable";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import "./index.css";
+import StockReportTable from "../../components/StockReportTable/StockReportTable";
 
 const StockReport = () => {
   const [from, setFrom] = useState("");
@@ -40,7 +43,7 @@ const StockReport = () => {
         mb={2}
       >
         <Typography fontSize="1.5rem" fontWeight="bold">
-          Sales Report
+          In-House Stock Report
         </Typography>
         <Box>
           <Button
@@ -66,7 +69,7 @@ const StockReport = () => {
               borderRadius: 0,
             }}
           >
-            <Typography>From</Typography>
+            <Typography>Distribution - From</Typography>
             <TextField
               type="date"
               fullWidth
@@ -76,7 +79,7 @@ const StockReport = () => {
               }}
               onChange={(e) => setFrom(e.target.value)}
             />
-            <Typography mt={1}>To</Typography>
+            <Typography mt={1}>Distribution - To</Typography>
             <TextField
               type="date"
               fullWidth
@@ -86,7 +89,7 @@ const StockReport = () => {
               }}
               onChange={(e) => setTo(e.target.value)}
             />
-            <Typography mt={1}>Dealer</Typography>
+            <Typography mt={1}>Tank Name</Typography>
             <Autocomplete
               multiple
               options={[]}
@@ -160,23 +163,33 @@ const StockReport = () => {
           </ContentCard>
         </Grid>
         <Grid item lg>
-          <ReportLayout from={from} to={to} subHeading={`Total Sales:`}>
-            <ReportTable
-              headingCells={[
-                "Date",
-                "Dealer",
-                "Gas tank",
-                "Unit Price",
-                "Qty",
-                "Total",
-              ]}
-              tableContent={data.slice(
-                (currentPage - 1) * pagesPerPage,
-                currentPage * pagesPerPage
-              )}
+          <ReportLayout
+            from={from}
+            to={to}
+            subHeading={``}
+            title="In-House Stock Report"
+          >
+            <StockReportTable />
+            <Divider
+              sx={{
+                my: 2,
+              }}
             />
+            <StockReportTable />
+            <Divider
+              sx={{
+                my: 2,
+              }}
+            />
+            <StockReportTable />
+            <Divider
+              sx={{
+                my: 2,
+              }}
+            />
+            <StockReportTable />
 
-            <Box
+            {/* <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -205,7 +218,7 @@ const StockReport = () => {
               >
                 <ArrowForward />
               </Button>
-            </Box>
+            </Box> */}
           </ReportLayout>
         </Grid>
       </Grid>
