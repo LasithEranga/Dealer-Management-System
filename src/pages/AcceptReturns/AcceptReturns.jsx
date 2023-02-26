@@ -62,6 +62,10 @@ const AcceptReturns = () => {
   }, [salesReceiptKeyword]);
 
   const onPrintClick = () => {
+    if (orderList.length === 0) {
+      showSystemAlert("Please add tanks to return receipt", "error");
+      return;
+    }
     newReturnRecipt(
       {
         dealerId: userId,
