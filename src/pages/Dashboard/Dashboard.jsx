@@ -35,10 +35,13 @@ const Dashboard = () => {
         Hi {userName.split(" ")[0]}, Welcome back
       </Typography>
       <Grid container gap={2}>
-        <DashboardCard title={"Today Total Sales"} />
-        <DashboardCard title={"This month Total Sales"} />
-        <DashboardCard title={"Sales from New Tanks"} />
-        <DashboardCard title={"This month Sales"} />
+        <DashboardCard title={"Today total sales"} content="Rs.12,250.00" />
+        <DashboardCard
+          title={"This month total sales"}
+          content="Rs.522,750.00"
+        />
+        <DashboardCard title={"Sales from new tanks"} content="Rs.36,000.00" />
+        <DashboardCard title={"This month returns"} content="Rs.50,300.00" />
       </Grid>
 
       <Grid container mt={2} gap={2}>
@@ -47,13 +50,13 @@ const Dashboard = () => {
             <Box display={"flex"} justifyContent={"space-between"}>
               <Box>
                 <Box className="fw-bold text-secondary">Average Sales</Box>
-                <Box className="fw-bold ">Rs. 12,3434.00</Box>
+                <Box className="fw-bold ">Rs. 502,041.00</Box>
               </Box>
               <Box>
-                <Select value={10} defaultValue={10} size={"small"}>
+                <Select value={30} defaultValue={10} size={"small"}>
                   <MenuItem value={10}>Today</MenuItem>
                   <MenuItem value={20}>Last Week</MenuItem>
-                  <MenuItem value={30}>Lasth Month</MenuItem>
+                  <MenuItem value={30}>Lasth Year</MenuItem>
                 </Select>
               </Box>
             </Box>
@@ -63,7 +66,11 @@ const Dashboard = () => {
           </ContentCard>
         </Grid>
         <Grid item xs>
-          <ContentCard>
+          <ContentCard
+            sx={{
+              pb: 4,
+            }}
+          >
             <Box
               className={`ps-2 fs-5 fw-bold`}
               sx={{ pl: 2, fontSize: "1.5rem", fontWeight: "bold" }}
@@ -90,19 +97,19 @@ const Dashboard = () => {
                 lg
                 display={"flex"}
                 flexDirection="column"
-                alignItems={"center"}
+                alignItems={"start"}
                 justifyContent={"center"}
               >
                 <DoughnutChartLegends
-                  label="Lasith's Store"
+                  label="Joseph Roberts"
                   indicatorColor="rgba(255, 99, 132, 1)"
                 />
                 <DoughnutChartLegends
-                  label="Lahiru's Store"
+                  label="Ronald Ewing"
                   indicatorColor="rgba(54, 162, 235, 1)"
                 />
                 <DoughnutChartLegends
-                  label="Wasana Store"
+                  label="Jhon doe"
                   indicatorColor="rgba(255, 206, 86, 1)"
                 />
                 <DoughnutChartLegends
@@ -113,9 +120,22 @@ const Dashboard = () => {
             </Grid>
 
             <Box>
-              <StockSummery />
-              <StockSummery />
-              <StockSummery />
+              <StockSummery
+                storeName="Joseph Roberts"
+                noOfTamks="12 tanks"
+                comparisonToLastMonth="10%"
+              />
+              <StockSummery
+                storeName="Ronald Ewing"
+                noOfTamks="12 tanks"
+                comparisonToLastMonth="5%"
+              />
+              <StockSummery
+                storeName="Jhon doe"
+                noOfTamks="12 tanks"
+                comparisonToLastMonth="10%"
+                increased={false}
+              />
             </Box>
           </ContentCard>
         </Grid>

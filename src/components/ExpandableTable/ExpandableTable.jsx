@@ -25,6 +25,7 @@ const ExpandableTable = ({
   },
   data = [],
   ignoreTill = 0,
+  dealerView = false,
 }) => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
@@ -34,6 +35,40 @@ const ExpandableTable = ({
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
+
+  const headCell = dealerView
+    ? [
+        "Gas Tank",
+        "Type",
+        "Qty",
+        <Tooltip title="Current Quantity @ Dealer Stock">
+          <span>CQ @ Dealer</span>
+        </Tooltip>,
+        <Box display={"flex"} justifyContent={"center"}>
+          Price
+        </Box>,
+        <Box display={"flex"} justifyContent={"center"}>
+          Total
+        </Box>,
+      ]
+    : [
+        "Gas Tank",
+        "Type",
+        "Qty",
+        <Tooltip title="Current Quantity @ Dealer Stock">
+          <span>CQ @ Dealer</span>
+        </Tooltip>,
+        <Tooltip title="Current Quantity @ In-House Stock">
+          <span>CQ @ In-House</span>
+        </Tooltip>,
+
+        <Box display={"flex"} justifyContent={"center"}>
+          Price
+        </Box>,
+        <Box display={"flex"} justifyContent={"center"}>
+          Total
+        </Box>,
+      ];
 
   return (
     <div>
@@ -131,7 +166,9 @@ const ExpandableTable = ({
                                   gasType: oneEl.gasTank.type,
                                   quantity: oneEl.quantity,
                                   cqDealer: oneEl.dealerStockQty,
-                                  cqInhouse: oneEl.distributorStockQty,
+                                  ...(!dealerView && {
+                                    cqInhouse: oneEl.distributorStockQty,
+                                  }),
                                   price: (
                                     <Box
                                       display={"flex"}
@@ -156,23 +193,7 @@ const ExpandableTable = ({
                                 };
                               }
                             )}
-                            headCells={[
-                              "Gas Tank",
-                              "Type",
-                              "Qty",
-                              <Tooltip title="Current Quantity @ Dealer Stock">
-                                <span>CQ @ Dealer</span>
-                              </Tooltip>,
-                              <Tooltip title="Current Quantity @ In-House Stock">
-                                <span>CQ @ In-House</span>
-                              </Tooltip>,
-                              <Box display={"flex"} justifyContent={"center"}>
-                                Price
-                              </Box>,
-                              <Box display={"flex"} justifyContent={"center"}>
-                                Total
-                              </Box>,
-                            ]}
+                            headCells={headCell}
                           />
                         </Grid>
                         <Divider

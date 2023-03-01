@@ -1,6 +1,8 @@
+import { Search } from "@mui/icons-material";
 import {
   Box,
   Grid,
+  InputAdornment,
   MenuItem,
   Select,
   TextField,
@@ -50,13 +52,20 @@ const ViewDealerStocks = () => {
             placeholder="Search by dealer name"
             size="small"
             sx={{ width: "20rem" }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Search />
+                </InputAdornment>
+              ),
+            }}
           />
           <Select
             label=""
             variant="outlined"
             placeholder="Select status"
             size="small"
-            value={""}
+            value={"all"}
             sx={{ width: "10rem", ml: 2 }}
           >
             <MenuItem value="all">All</MenuItem>

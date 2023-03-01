@@ -218,24 +218,24 @@ const ViewStock = () => {
                 }}
               >
                 <EstimatedLevelCard
-                  tankType="12.5KG Tanks"
-                  newTankEndDate="25th July 2022"
-                  refilledTankEndDate="25th July 2022"
+                  tankType="2.3KG Tanks"
+                  newTankEndDate="25th April 2023"
+                  refilledTankEndDate="30th April 2023"
+                />
+                <EstimatedLevelCard
+                  tankType="5KG Tanks"
+                  newTankEndDate="14th May 2023"
+                  refilledTankEndDate="20th April 2023"
                 />
                 <EstimatedLevelCard
                   tankType="12.5KG Tanks"
-                  newTankEndDate="25th July 2022"
-                  refilledTankEndDate="25th July 2022"
+                  newTankEndDate="10th April 2023"
+                  refilledTankEndDate="26th April 2023"
                 />
                 <EstimatedLevelCard
-                  tankType="12.5KG Tanks"
-                  newTankEndDate="25th July 2022"
-                  refilledTankEndDate="25th July 2022"
-                />
-                <EstimatedLevelCard
-                  tankType="12.5KG Tanks"
-                  newTankEndDate="25th July 2022"
-                  refilledTankEndDate="25th July 2022"
+                  tankType="37.5KG Tanks"
+                  newTankEndDate="10th April 2023"
+                  refilledTankEndDate="26th April 2023"
                 />
               </Box>
             </Box>

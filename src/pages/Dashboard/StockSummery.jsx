@@ -1,8 +1,14 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import { ArrowDropDown } from "@mui/icons-material";
 
-const StockSummery = () => {
+const StockSummery = ({
+  storeName,
+  noOfTamks,
+  comparisonToLastMonth,
+  increased = true,
+}) => {
   return (
     <Box p={1} my={0.5}>
       <Box
@@ -11,14 +17,16 @@ const StockSummery = () => {
         alignItems={"center"}
       >
         <Box>
-          <Box sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
-            Lahiru's Store
-          </Box>
-          <Box className="text-secondary fw-bold">50 Tanks</Box>
+          <Box sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>{storeName}</Box>
+          <Box className="text-secondary fw-bold">{noOfTamks}</Box>
         </Box>
         <Box display={"flex"} alignItems={"center"} sx={{ lineHeight: "0rem" }}>
-          <Typography> 10% </Typography>
-          <ArrowDropUpIcon sx={{ fontSize: "3rem" }} color="success" />
+          <Typography> {comparisonToLastMonth}</Typography>
+          {increased ? (
+            <ArrowDropUpIcon sx={{ fontSize: "3rem" }} color="success" />
+          ) : (
+            <ArrowDropDown sx={{ fontSize: "3rem" }} color="error" />
+          )}
         </Box>
       </Box>
     </Box>

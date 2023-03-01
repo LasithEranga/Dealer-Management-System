@@ -1,7 +1,7 @@
 import { Box, Grid, Typography } from "@mui/material";
 import React from "react";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-const DashboardCard = ({ title }) => {
+const DashboardCard = ({ title, content }) => {
   return (
     <Grid
       item
@@ -13,9 +13,9 @@ const DashboardCard = ({ title }) => {
       <Box sx={{ p: 2, lineHeight: "0rem" }}>
         <LibraryBooksIcon sx={{ fontSize: "3rem" }} />
       </Box>
-      <Box sx={{ flexGrow: 3 }}>
+      <Box sx={{ flexGrow: 3, pl: 2 }}>
         <Box>
-          <Typography fontSize={"1.5rem"}>Rs.12,485.00</Typography>
+          <Typography fontSize={"1.5rem"}>{content}</Typography>
         </Box>
         <Box>{title}</Box>
       </Box>

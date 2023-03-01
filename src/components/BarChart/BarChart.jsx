@@ -39,9 +39,14 @@ export const data = {
 
   datasets: [
     {
-      label: "Dataset 2",
-      data: [10, 20, 30, 45, 50, 20, 10],
-      backgroundColor: "rgba(53, 162, 235, 1)",
+      label: "Sales",
+      data: [520230, 420230, 560890, 620690, 450750, 450750, 490750],
+      backgroundColor: "#6d848e",
+    },
+    {
+      label: "Returns",
+      data: [100000, 80000, 150000, 200000, 80000, 100000, 100000],
+      backgroundColor: "#fd8080",
     },
   ],
 };

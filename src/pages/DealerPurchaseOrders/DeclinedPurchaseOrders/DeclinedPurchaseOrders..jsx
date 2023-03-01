@@ -129,69 +129,11 @@ const DeclinedPurchaseOrders = () => {
             my={1}
           >
             <Typography fontSize={"1.5rem"} fontWeight="bold">
-              Accepted Purchase Orders
+              Declined Purchase Orders
             </Typography>
             <Box>
               <Button variant="outlined">Export to PDF</Button>
             </Box>
-          </Box>
-          <Divider orientation="horizontal" sx={{ my: 2 }} />
-          <Box>
-            <Grid container>
-              <Grid item xs={4}>
-                <TextField
-                  fullWidth
-                  size="small"
-                  placeholder="Search by Dealer name"
-                  onChange={(e) => {
-                    setSearch(e.target.value);
-                  }}
-                  value={search}
-                />
-              </Grid>
-              <Grid item xs></Grid>
-              <Grid item xs={5} display="flex" gap={1}>
-                <FormControl size="small" sx={{ flexGrow: 1 }}>
-                  <Select
-                    onChange={(e) => {
-                      setSortBy(e.target.value);
-                    }}
-                    defaultValue={""}
-                    value="Date"
-                  >
-                    <MenuItem value={"Date"} disabled>
-                      Date
-                    </MenuItem>
-                  </Select>
-                </FormControl>
-                <FormControl size="small" sx={{ flexGrow: 1 }}>
-                  <Select
-                    onChange={(e) => {
-                      setSortBy(e.target.value);
-                    }}
-                    defaultValue={""}
-                    value="Status"
-                  >
-                    <MenuItem value={"Status"} disabled>
-                      Status
-                    </MenuItem>
-                  </Select>
-                </FormControl>
-                <FormControl size="small" sx={{ flexGrow: 1 }}>
-                  <Select
-                    onChange={(e) => {
-                      setSortBy(e.target.value);
-                    }}
-                    defaultValue={""}
-                    value="ob"
-                  >
-                    <MenuItem value={"ob"} disabled>
-                      Outstanding balance
-                    </MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
           </Box>
           <Divider orientation="horizontal" sx={{ my: 2 }} />
 
@@ -200,6 +142,7 @@ const DeclinedPurchaseOrders = () => {
             data={orders}
             ignoreTill={1}
             actionButtons={actionButtons}
+            dealerView={true}
           />
         </ContentCard>
       </Box>

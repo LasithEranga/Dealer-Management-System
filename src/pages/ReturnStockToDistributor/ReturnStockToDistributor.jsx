@@ -34,6 +34,7 @@ const ReturnStockToDistributor = () => {
     stockInfoChartData(
       {
         userId,
+        types: ["EMPTY", "RETURNED"],
       },
       (response) => {
         setChartData(response.data);
@@ -147,7 +148,7 @@ const ReturnStockToDistributor = () => {
                 flexDirection: "column",
               }}
             >
-              <Box my={1}>
+              <Box my={1} display="flex" gap={2}>
                 <StyledAutoComplete
                   title={"Gas Tank Name"}
                   suggestedList={suggestedList}
@@ -158,6 +159,24 @@ const ReturnStockToDistributor = () => {
                   suggessionName={"Suggested Gas Tanks"}
                   mt={0}
                 />
+                <Box
+                  sx={{
+                    width: "5rem",
+                  }}
+                >
+                  <Typography>Qty</Typography>
+                  <TextField
+                    sx={{
+                      mt: 1,
+                    }}
+                    size="small"
+                    type={"text"}
+                    value={quantity}
+                    onChange={(e) => {
+                      setQuantity(e.target.value);
+                    }}
+                  />
+                </Box>
               </Box>
               <Box>
                 <TitleAndContent
@@ -193,24 +212,7 @@ const ReturnStockToDistributor = () => {
                 <TitleAndContent
                   title={"Quantity"}
                   titleSx={{ color: "black" }}
-                  content={
-                    <>
-                      :{" "}
-                      <TextField
-                        value={quantity}
-                        sx={{
-                          "& .MuiInputBase-input": {
-                            p: 0.5,
-                            pl: 1.3,
-                            maxWidth: "4rem",
-                          },
-                        }}
-                        onChange={(e) => {
-                          setQuantity(e.target.value);
-                        }}
-                      />
-                    </>
-                  }
+                  content={<>: {quantity ? quantity : "-"}</>}
                   sx={{ mr: 2, gap: 7 }}
                 />
               </Box>
@@ -250,16 +252,22 @@ const ReturnStockToDistributor = () => {
               Stock Info
             </Typography>
             <Box display={"flex"} gap={3}>
-              {chartData.map((oneEl) => (
-                <DoughnutChartWithText
-                  chartTitle={_.capitalize(oneEl._id) + " Tank"}
-                  dataSet={[
-                    oneEl.quantity,
-                    oneEl.fullStockValue - oneEl.quantity,
-                  ]}
-                  count={oneEl.quantity}
-                />
-              ))}
+              {chartData.map((oneEl) => {
+                const tankName =
+                  oneEl.name.split(" ")[0] +
+                  " " +
+                  _.upperFirst(_.lowerCase(oneEl.type));
+                return (
+                  <DoughnutChartWithText
+                    chartTitle={tankName}
+                    dataSet={[
+                      oneEl.quantity,
+                      oneEl.fullStockValue - oneEl.quantity,
+                    ]}
+                    count={oneEl.quantity}
+                  />
+                );
+              })}
             </Box>
           </ContentCard>
         </Grid>
@@ -270,16 +278,16 @@ const ReturnStockToDistributor = () => {
             </Typography>
             <Grid container columnSpacing={1} rowSpacing={1}>
               <Grid item xs={6}>
-                <ButtonCard btnText={"12.5Kg New Tank"} />
+                <ButtonCard btnText={"12.5Kg Empty Tank"} />
               </Grid>
               <Grid item xs={6}>
-                <ButtonCard btnText={"12.5Kg New Tank"} />
+                <ButtonCard btnText={"37.5Kg Empty Tank"} />
               </Grid>
               <Grid item xs={6}>
-                <ButtonCard btnText={"12.5Kg New Tank"} />
+                <ButtonCard btnText={"2.3Kg Empty Tank"} />
               </Grid>
               <Grid item xs={6}>
-                <ButtonCard btnText={"12.5Kg New Tank"} />
+                <ButtonCard btnText={"5Kg Empty Tank"} />
               </Grid>
             </Grid>
           </ContentCard>

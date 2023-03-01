@@ -24,7 +24,7 @@ const PlainTable = ({
         <thead style={{ position: "sticky", top: 0 }}>
           <tr className="sales-tr">
             {headCells.map((oneEl, index) => (
-              <th key={index} className="sales-th">
+              <th key={index} className="sales-th text-center">
                 {oneEl}
               </th>
             ))}

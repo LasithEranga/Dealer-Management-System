@@ -11,7 +11,10 @@ import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { showSystemAlert } from "../../app/alertServices";
-import { stockInfoChartData } from "../../app/api/gasStockServices";
+import {
+  getStockSummery,
+  stockInfoChartData,
+} from "../../app/api/gasStockServices";
 import { searchGasTank } from "../../app/api/gasTankServices";
 import { newRecipt } from "../../app/api/salesReceiptServices";
 import ButtonCard from "../../components/ButtonCard/ButtonCard";
@@ -42,6 +45,7 @@ const SellTanks = () => {
     stockInfoChartData(
       {
         userId,
+        types: ["NEW", "REFILLED"],
       },
       (response) => {
         setChartData(response.data);
@@ -123,6 +127,8 @@ const SellTanks = () => {
     }
   };
 
+  const printReceipt = (fileName) => {};
+
   const onPrintClick = () => {
     console.log("print");
     newRecipt(
@@ -133,8 +139,17 @@ const SellTanks = () => {
           quantity: oneEl.quantity,
         })),
       },
-      (response) => {
-        showSystemAlert("Recipt printed", "success");
+      (data) => {
+        if (data?.status === 0) {
+          showSystemAlert("Recipt printed", "success");
+        } else {
+          showSystemAlert(data?.error, "error");
+        }
+      },
+      (error) => {
+        showSystemAlert("Something went wrong", "error");
+      },
+      () => {
         setOrderList([]);
         setRefresh((prev) => !prev);
       }
@@ -279,22 +294,28 @@ const SellTanks = () => {
       </Grid>
       <Grid container gap={2} mt={2}>
         <Grid item xs>
-          <ContentCard sx={{ height: "12rem" }}>
+          <ContentCard sx={{ height: "12rem", overflowX: "auto" }}>
             <Typography fontSize={"1.3rem"} fontWeight="bold">
               Stock Info
             </Typography>
             <Box display={"flex"} gap={3}>
-              {chartData.map((oneEl, index) => (
-                <DoughnutChartWithText
-                  key={index}
-                  chartTitle={_.capitalize(oneEl._id) + " Tank"}
-                  dataSet={[
-                    oneEl.quantity,
-                    oneEl.fullStockValue - oneEl.quantity,
-                  ]}
-                  count={oneEl.quantity}
-                />
-              ))}
+              {chartData.slice(0, 4).map((oneEl, index) => {
+                const tankName =
+                  oneEl.name.split(" ")[0] +
+                  " " +
+                  _.upperFirst(_.lowerCase(oneEl.type));
+                return (
+                  <DoughnutChartWithText
+                    key={index}
+                    chartTitle={tankName}
+                    dataSet={[
+                      oneEl.quantity,
+                      oneEl.fullStockValue - oneEl.quantity,
+                    ]}
+                    count={oneEl.quantity}
+                  />
+                );
+              })}
             </Box>
           </ContentCard>
         </Grid>
@@ -305,13 +326,13 @@ const SellTanks = () => {
             </Typography>
             <Grid container columnSpacing={1} rowSpacing={1}>
               <Grid item xs={6}>
-                <ButtonCard btnText={"12.5Kg New Tank"} />
+                <ButtonCard btnText={"2.3Kg New Tank"} />
               </Grid>
               <Grid item xs={6}>
-                <ButtonCard btnText={"12.5Kg New Tank"} />
+                <ButtonCard btnText={"5Kg New Tank"} />
               </Grid>
               <Grid item xs={6}>
-                <ButtonCard btnText={"12.5Kg New Tank"} />
+                <ButtonCard btnText={"37.5Kg New Tank"} />
               </Grid>
               <Grid item xs={6}>
                 <ButtonCard btnText={"12.5Kg New Tank"} />

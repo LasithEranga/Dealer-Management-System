@@ -5,6 +5,7 @@ import {
   Divider,
   FormControl,
   Grid,
+  InputAdornment,
   MenuItem,
   Select,
   TextField,
@@ -21,6 +22,7 @@ import { convertToRupees } from "../../../utils/convertToRupees";
 import SwipeRightIcon from "@mui/icons-material/SwipeRight";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import { useNavigate } from "react-router-dom";
+import { Search } from "@mui/icons-material";
 
 const AcceptedPurchaseOrders = () => {
   const navigate = useNavigate();
@@ -121,7 +123,7 @@ const AcceptedPurchaseOrders = () => {
   return (
     <div>
       {/* --------------------------- table section ------------------------------- */}
-      <Box>
+      <Box mt={2}>
         <ContentCard>
           <Box
             display={"flex"}
@@ -137,70 +139,13 @@ const AcceptedPurchaseOrders = () => {
             </Box>
           </Box>
           <Divider orientation="horizontal" sx={{ my: 2 }} />
-          <Box>
-            <Grid container>
-              <Grid item xs={4}>
-                <TextField
-                  fullWidth
-                  size="small"
-                  placeholder="Search by Dealer name"
-                  onChange={(e) => {
-                    setSearch(e.target.value);
-                  }}
-                  value={search}
-                />
-              </Grid>
-              <Grid item xs></Grid>
-              <Grid item xs={5} display="flex" gap={1}>
-                <FormControl size="small" sx={{ flexGrow: 1 }}>
-                  <Select
-                    onChange={(e) => {
-                      setSortBy(e.target.value);
-                    }}
-                    defaultValue={""}
-                    value="Date"
-                  >
-                    <MenuItem value={"Date"} disabled>
-                      Date
-                    </MenuItem>
-                  </Select>
-                </FormControl>
-                <FormControl size="small" sx={{ flexGrow: 1 }}>
-                  <Select
-                    onChange={(e) => {
-                      setSortBy(e.target.value);
-                    }}
-                    defaultValue={""}
-                    value="Status"
-                  >
-                    <MenuItem value={"Status"} disabled>
-                      Status
-                    </MenuItem>
-                  </Select>
-                </FormControl>
-                <FormControl size="small" sx={{ flexGrow: 1 }}>
-                  <Select
-                    onChange={(e) => {
-                      setSortBy(e.target.value);
-                    }}
-                    defaultValue={""}
-                    value="ob"
-                  >
-                    <MenuItem value={"ob"} disabled>
-                      Outstanding balance
-                    </MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
-          </Box>
-          <Divider orientation="horizontal" sx={{ my: 2 }} />
 
           <ExpandableTable
             headCells={headCells}
             data={orders}
             ignoreTill={1}
             actionButtons={actionButtons}
+            dealerView={true}
           />
         </ContentCard>
       </Box>

@@ -5,6 +5,7 @@ import {
   Divider,
   FormControl,
   Grid,
+  InputAdornment,
   MenuItem,
   Select,
   TextField,
@@ -26,6 +27,7 @@ import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import SwipeRightIcon from "@mui/icons-material/SwipeRight";
 import { useNavigate } from "react-router-dom";
+import { Search } from "@mui/icons-material";
 
 const ViewPurchaseOrders = () => {
   const navigate = useNavigate();
@@ -143,7 +145,7 @@ const ViewPurchaseOrders = () => {
   return (
     <div>
       {/* --------------------------- table section ------------------------------- */}
-      <Box>
+      <Box mt={2}>
         <ContentCard>
           <Box
             display={"flex"}
@@ -170,36 +172,17 @@ const ViewPurchaseOrders = () => {
                     setSearch(e.target.value);
                   }}
                   value={search}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <Search />
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
               <Grid item xs></Grid>
-              <Grid item xs={5} display="flex" gap={1}>
-                <FormControl size="small" sx={{ flexGrow: 1 }}>
-                  <Select
-                    onChange={(e) => {
-                      setSortBy(e.target.value);
-                    }}
-                    defaultValue={""}
-                    value="Date"
-                  >
-                    <MenuItem value={"Date"} disabled>
-                      Date
-                    </MenuItem>
-                  </Select>
-                </FormControl>
-                <FormControl size="small" sx={{ flexGrow: 1 }}>
-                  <Select
-                    onChange={(e) => {
-                      setSortBy(e.target.value);
-                    }}
-                    defaultValue={""}
-                    value="Status"
-                  >
-                    <MenuItem value={"Status"} disabled>
-                      Status
-                    </MenuItem>
-                  </Select>
-                </FormControl>
+              <Grid item xs={6} display="flex" gap={2}>
                 <FormControl size="small" sx={{ flexGrow: 1 }}>
                   <Select
                     onChange={(e) => {
@@ -213,6 +196,28 @@ const ViewPurchaseOrders = () => {
                     </MenuItem>
                   </Select>
                 </FormControl>
+                <Box
+                  display={"flex"}
+                  justifyContent="space-between"
+                  gap={1}
+                  alignItems="center"
+                >
+                  <TextField
+                    type="date"
+                    fullWidth
+                    size="small"
+                    placeholder="min"
+                    onChange={(e) => {}}
+                  />
+                  <Typography>to</Typography>
+                  <TextField
+                    type="date"
+                    fullWidth
+                    size="small"
+                    placeholder="max"
+                    onChange={(e) => {}}
+                  />
+                </Box>
               </Grid>
             </Grid>
           </Box>
