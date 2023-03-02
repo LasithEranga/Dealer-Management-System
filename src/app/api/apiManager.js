@@ -4,11 +4,15 @@ import { store } from "./store";
 export const post = (
   path,
   body,
+  setLoadingStatusFor,
   onSuccess = () => {},
   onFailed = () => {},
   onComplete = () => {}
 ) => {
-  console.log("dsf");
+  store.dispatch({
+    type: "SET_LOADING_FOR",
+    payload: { loadingAction: setLoadingStatusFor },
+  });
   fetch(`${process.env.REACT_APP_BASE_URL}${path}`, {
     method: "POST",
     headers: {
@@ -35,5 +39,9 @@ export const post = (
     })
     .finally(() => {
       onComplete();
+      store.dispatch({
+        type: "CLEAR_LOADING_FOR",
+        payload: { loadingAction: setLoadingStatusFor },
+      }); // removes animation whatever happened
     });
 };

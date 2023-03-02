@@ -2,6 +2,7 @@ import { Delete } from "@mui/icons-material";
 import {
   Box,
   Button,
+  CircularProgress,
   Grid,
   IconButton,
   TextField,
@@ -11,6 +12,7 @@ import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { showSystemAlert } from "../../app/alertServices";
+import { downloadFile } from "../../app/api/fileDownloadService";
 import {
   getStockSummery,
   stockInfoChartData,
@@ -27,7 +29,7 @@ import { convertToRupees } from "../../utils/convertToRupees";
 import "./index.css";
 const SellTanks = () => {
   const { userId, name } = useSelector((state) => state.loginDMS);
-
+  const loadingDMS = useSelector((state) => state.loadingDMS);
   const [suggestedList, setSuggestedList] = useState([]);
   const [keyword, setKeyword] = useState("");
   const [selected, setSelected] = useState({});
@@ -36,10 +38,10 @@ const SellTanks = () => {
     isVisible: false,
     message: "",
   });
-
   const [orderList, setOrderList] = useState([]);
   const [chartData, setChartData] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     stockInfoChartData(
@@ -58,7 +60,7 @@ const SellTanks = () => {
 
   useEffect(() => {
     if (keyword !== "") {
-      searchGasTank({ keyword }, (response) => {
+      searchGasTank({ keyword, types: ["NEW", "REFILLED"] }, (response) => {
         setSuggestedList(response.data);
       });
     }
@@ -127,33 +129,66 @@ const SellTanks = () => {
     }
   };
 
-  const printReceipt = (fileName) => {};
-
-  const onPrintClick = () => {
-    console.log("print");
-    newRecipt(
-      {
-        dealerId: userId,
-        gasTanks: orderList.map((oneEl) => ({
-          _id: oneEl._id,
-          quantity: oneEl.quantity,
-        })),
-      },
+  const printReceipt = (fileName) => {
+    downloadFile(
+      fileName,
       (data) => {
-        if (data?.status === 0) {
-          showSystemAlert("Recipt printed", "success");
-        } else {
-          showSystemAlert(data?.error, "error");
-        }
+        const iframe = document.createElement("iframe"); //load content in an iframe to print later
+        document.body.appendChild(iframe);
+
+        iframe.style.display = "none";
+        iframe.src = data;
+        iframe.onload = function () {
+          setTimeout(function () {
+            iframe.focus();
+            iframe.contentWindow.print();
+          }, 1);
+        };
       },
-      (error) => {
-        showSystemAlert("Something went wrong", "error");
-      },
+      (error) => {},
       () => {
-        setOrderList([]);
-        setRefresh((prev) => !prev);
+        setLoading(false);
       }
     );
+  };
+
+  const onPrintClick = () => {
+    if (orderList.length > 0) {
+      setValidationError({
+        isVisible: false,
+        message: "",
+      });
+      setLoading(true);
+      newRecipt(
+        {
+          dealerId: userId,
+          gasTanks: orderList.map((oneEl) => ({
+            _id: oneEl._id,
+            quantity: oneEl.quantity,
+          })),
+        },
+        (response) => {
+          if (response?.status === 0) {
+            showSystemAlert("sales recipt created!", "success");
+            printReceipt(response?.data?.fileName);
+          } else {
+            showSystemAlert(response?.error, "error");
+          }
+        },
+        (error) => {
+          showSystemAlert("Something went wrong", "error");
+        },
+        () => {
+          setOrderList([]);
+          setRefresh((prev) => !prev);
+        }
+      );
+    } else {
+      setValidationError({
+        isVisible: true,
+        message: "Please add some gas tanks to the list",
+      });
+    }
   };
 
   return (
@@ -196,7 +231,19 @@ const SellTanks = () => {
         <Grid item xs={5}>
           <ContentCard sx={{ pl: 3, pb: 3 }}>
             <Typography fontSize={"1.3rem"} fontWeight="bold">
-              Tank Details
+              Tank Details{" "}
+              {validationError.isVisible ? (
+                <span
+                  style={{
+                    color: "red",
+                    fontSize: "0.8rem",
+                  }}
+                >
+                  * {validationError.message}
+                </span>
+              ) : (
+                ""
+              )}
             </Typography>
             <Box
               sx={{
@@ -235,6 +282,7 @@ const SellTanks = () => {
                   />
                 </Box>
               </Box>
+
               <Box>
                 <TitleAndContent
                   title={"Tank Name"}
@@ -271,14 +319,32 @@ const SellTanks = () => {
                 alignItems="end"
                 gap={2}
               >
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  sx={{ borderRadius: 0, boxShadow: 0 }}
-                  onClick={onPrintClick}
-                >
-                  Print Bill
-                </Button>
+                {loading ? (
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    sx={{ borderRadius: 0, boxShadow: 0 }}
+                    disabled
+                  >
+                    Print Bill{" "}
+                    <CircularProgress
+                      size={15}
+                      color="inherit"
+                      sx={{
+                        ml: 1,
+                      }}
+                    />
+                  </Button>
+                ) : (
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    sx={{ borderRadius: 0, boxShadow: 0 }}
+                    onClick={onPrintClick}
+                  >
+                    Print Bill
+                  </Button>
+                )}
                 <Button
                   variant="contained"
                   color="primary"
@@ -293,13 +359,23 @@ const SellTanks = () => {
         </Grid>
       </Grid>
       <Grid container gap={2} mt={2}>
-        <Grid item xs>
-          <ContentCard sx={{ height: "12rem", overflowX: "auto" }}>
+        <Grid item xs={6.8}>
+          <ContentCard>
             <Typography fontSize={"1.3rem"} fontWeight="bold">
               Stock Info
             </Typography>
-            <Box display={"flex"} gap={3}>
-              {chartData.slice(0, 4).map((oneEl, index) => {
+            <Box
+              display={"flex"}
+              gap={3}
+              sx={{
+                width: "100%",
+                overflowX: "auto",
+                scrollbarWidth: "thin",
+                overflowY: "hidden",
+                pb: 1,
+              }}
+            >
+              {chartData.map((oneEl, index) => {
                 const tankName =
                   oneEl.name.split(" ")[0] +
                   " " +
@@ -320,7 +396,7 @@ const SellTanks = () => {
           </ContentCard>
         </Grid>
         <Grid item xs={5}>
-          <ContentCard>
+          <ContentCard sx={{ pb: 3.8 }}>
             <Typography fontSize={"1.3rem"} fontWeight="bold">
               Recently Selected
             </Typography>

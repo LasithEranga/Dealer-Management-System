@@ -1,7 +1,14 @@
 import { post } from "./apiManager";
 
 export const newRecipt = (body, onSuccess, onFailed, onComplete) => {
-  post("/sales-receipt/newReceipt", body, onSuccess, onFailed, onComplete);
+  post(
+    "/sales-receipt/newReceipt",
+    body,
+    "newReceiptLoading",
+    onSuccess,
+    onFailed,
+    onComplete
+  );
 };
 
 export const searchSalesReceiptsByRef = (
@@ -13,6 +20,7 @@ export const searchSalesReceiptsByRef = (
   post(
     "/sales-receipt/searchSalesReceiptsByRef",
     body,
+    "searchSalesReceiptsByRefLoading",
     onSuccess,
     onFailed,
     onComplete

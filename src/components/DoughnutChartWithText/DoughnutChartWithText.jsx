@@ -4,13 +4,14 @@ import DoughnutChart from "../DoughnutChart/DoughnutChart";
 
 const DoughnutChartWithText = ({ chartTitle, dataSet = [], count = 0 }) => {
   return (
-    <Box display={"flex"} flexDirection={"column"}>
+    <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>
       <Typography
         sx={{
           textAlign: "center",
           fontSize: "0.9rem",
           fontWeight: "bold",
           mb: 1,
+          width: "8rem",
         }}
       >
         {chartTitle}

@@ -4,8 +4,10 @@ export const chartColorsSlice = createSlice({
   name: "chartColors",
   initialState: {
     tankTypeColors: {
-      NEW: "#34cba9",
-      RETURNED: "#ff8000",
+      NEW: "#315aa8",
+      RETURNED: "#3297cd",
+      EMPTY: "#c1335a",
+      REFILLED: "#dce62b",
     },
   },
   reducers: {
