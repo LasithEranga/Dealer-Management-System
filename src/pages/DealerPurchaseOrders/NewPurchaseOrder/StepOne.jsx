@@ -23,7 +23,7 @@ const StepOne = ({ orderList, setOrderList, setActiveStep }) => {
 
   useEffect(() => {
     if (keyword !== "") {
-      searchGasTank({ keyword }, (response) => {
+      searchGasTank({ keyword, types: ["NEW", "REFILLED"] }, (response) => {
         setSuggestedList(response.data);
       });
     }

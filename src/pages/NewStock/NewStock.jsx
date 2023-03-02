@@ -25,7 +25,10 @@ const NewStock = () => {
     selectedTank,
     setSelectedTank,
     setSearchedTank,
-  ] = useAutoComplete(searchGasTank, {});
+  ] = useAutoComplete(searchGasTank, {
+    userId,
+    types: [],
+  });
 
   const {
     register,

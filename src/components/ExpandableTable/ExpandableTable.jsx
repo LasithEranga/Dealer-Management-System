@@ -26,6 +26,7 @@ const ExpandableTable = ({
   data = [],
   ignoreTill = 0,
   dealerView = false,
+  showOutstandingAfterAccept = true,
 }) => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
@@ -238,14 +239,17 @@ const ExpandableTable = ({
                                   </Tooltip>
                                   <Typography
                                     textAlign={"right"}
+                                    pr={showOutstandingAfterAccept ? 0 : 2}
                                     fontSize="1.2rem"
                                     sx={{ mt: 4 }}
                                   >
-                                    {convertToRupees(
-                                      Object.values(element)[0]?.dealer
-                                        ?.outstandingAmount +
-                                        Object.values(element)[0]?.total
-                                    )}
+                                    {showOutstandingAfterAccept
+                                      ? convertToRupees(
+                                          Object.values(element)[0]?.dealer
+                                            ?.outstandingAmount +
+                                            Object.values(element)[0]?.total
+                                        )
+                                      : "N/A"}
                                   </Typography>
                                 </Box>
                               </Paper>
@@ -292,7 +296,9 @@ const ExpandableTable = ({
                   height={"100%"}
                   my={2}
                 >
-                  <Typography fontSize={"1.5rem"}>No Orders Found!</Typography>
+                  <Typography fontSize={"1.5rem"}>
+                    No orders to show!
+                  </Typography>
                 </Box>
               </td>
             </tr>

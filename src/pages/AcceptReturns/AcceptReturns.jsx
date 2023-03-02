@@ -3,6 +3,7 @@ import {
   Autocomplete,
   Box,
   Button,
+  CircularProgress,
   Grid,
   IconButton,
   Input,
@@ -20,6 +21,7 @@ import ContentCard from "../../components/ContentCard/ContentCard";
 import OrderSummeryTable from "../../components/OrderSummeryTable/OrderSummeryTable";
 import TitleAndContent from "../../components/TitleAndContent/TitleAndContent";
 import { convertToRupees } from "../../utils/convertToRupees";
+import { printReceipt } from "../../utils/printReceipt";
 import "./index.css";
 
 const AcceptReturns = () => {
@@ -32,6 +34,7 @@ const AcceptReturns = () => {
   const [insertRecordAt, setInsertRecordAt] = useState(-1);
   const [updateTable, setUpdateTable] = useState(false);
   const [quantities, setQuantities] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (salesReceiptKeyword !== "") {
@@ -55,6 +58,7 @@ const AcceptReturns = () => {
       showSystemAlert("Please add tanks to return receipt", "error");
       return;
     }
+    setLoading(true);
     newReturnRecipt(
       {
         dealerId: userId,
@@ -67,11 +71,13 @@ const AcceptReturns = () => {
       },
       (response) => {
         if (response.status === 0) {
+          printReceipt(response?.data?.fileName, setLoading);
           showSystemAlert("Gas tank returned", "success");
           setOrderList([]);
           setSalesReceiptTankList([]);
           setSalesReceiptKeyword("");
           setSalesReceipts([]);
+          setSelectedSalesReceipt({});
           setUpdateTable(true);
         } else {
           showSystemAlert(
@@ -252,6 +258,7 @@ const AcceptReturns = () => {
                     />
                   )}
                   onChange={(e, value) => {
+                    if (!value) return;
                     setSalesReceiptTankList(
                       value.gasTanks.map((oneEl) => ({ ...oneEl }))
                     );
@@ -354,14 +361,32 @@ const AcceptReturns = () => {
               >
                 Clear
               </Button>
-              <Button
-                color="secondary"
-                variant="contained"
-                sx={{ borderRadius: 0.5, boxShadow: 0 }}
-                onClick={onPrintClick}
-              >
-                Print
-              </Button>
+              {loading ? (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  sx={{ borderRadius: 0, boxShadow: 0 }}
+                  disabled
+                >
+                  Print{" "}
+                  <CircularProgress
+                    size={15}
+                    color="inherit"
+                    sx={{
+                      ml: 1,
+                    }}
+                  />
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  sx={{ borderRadius: 0, boxShadow: 0 }}
+                  onClick={onPrintClick}
+                >
+                  Print
+                </Button>
+              )}
             </Box>
           </ContentCard>
         </Grid>

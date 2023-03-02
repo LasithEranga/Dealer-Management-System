@@ -37,10 +37,7 @@
 .ep-tr:nth-child(4n-1) {
   background-color: white;
 }
-.ep-tr-blank:nth-child(odd) {
-  background-color: rgba(150, 212, 212, 0.247);
-  height: 60px;
-}
+
 .ep-tr-blank:nth-child(even) {
   background-color: white;
   height: 60px;

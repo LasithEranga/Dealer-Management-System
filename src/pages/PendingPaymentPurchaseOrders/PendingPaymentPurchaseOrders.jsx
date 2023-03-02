@@ -210,6 +210,7 @@ const SavedPurchaseOrders = () => {
             data={orders}
             ignoreTill={1}
             actionButtons={actionButtons}
+            showOutstandingAfterAccept={false}
           />
         </ContentCard>
       </Box>

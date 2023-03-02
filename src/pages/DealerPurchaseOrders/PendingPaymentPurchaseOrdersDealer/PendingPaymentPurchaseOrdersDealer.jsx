@@ -146,6 +146,7 @@ const PendingPaymentPurchaseOrdersDealer = () => {
             ignoreTill={1}
             actionButtons={actionButtons}
             dealerView={true}
+            showOutstandingAfterAccept={false}
           />
         </ContentCard>
       </Box>

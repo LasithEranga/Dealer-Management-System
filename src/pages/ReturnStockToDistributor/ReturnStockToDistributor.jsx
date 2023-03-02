@@ -47,7 +47,7 @@ const ReturnStockToDistributor = () => {
 
   useEffect(() => {
     if (keyword !== "") {
-      searchGasTank({ keyword }, (response) => {
+      searchGasTank({ keyword, types: ["EMPTY", "RETURNED"] }, (response) => {
         setSuggestedList(response.data);
       });
     }
@@ -246,12 +246,22 @@ const ReturnStockToDistributor = () => {
         </Grid>
       </Grid>
       <Grid container gap={2} mt={2}>
-        <Grid item xs>
+        <Grid item xs={6.8}>
           <ContentCard sx={{ height: "12rem" }}>
             <Typography fontSize={"1.3rem"} fontWeight="bold">
               Stock Info
             </Typography>
-            <Box display={"flex"} gap={3}>
+            <Box
+              display={"flex"}
+              gap={3}
+              sx={{
+                width: "100%",
+                overflowX: "auto",
+                scrollbarWidth: "thin",
+                overflowY: "hidden",
+                pb: 1,
+              }}
+            >
               {chartData.map((oneEl) => {
                 const tankName =
                   oneEl.name.split(" ")[0] +
