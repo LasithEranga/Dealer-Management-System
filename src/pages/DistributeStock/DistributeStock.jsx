@@ -1,5 +1,6 @@
 import { Search } from "@mui/icons-material";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
@@ -243,7 +244,7 @@ const DistributeStock = () => {
 
             <DealerDetails
               title={"Name:"}
-              content={selectedDealer.name ?? ""}
+              content={_.capitalize(selectedDealer.name) ?? ""}
             />
             <DealerDetails
               title={"Store:"}

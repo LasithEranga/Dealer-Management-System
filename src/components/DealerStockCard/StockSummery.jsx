@@ -57,7 +57,7 @@ const StockSummery = ({ stock = {} }) => {
           if (quantity.lastUpdated !== "N/A") {
             const lastUpdatedDate = new Date(quantity.lastUpdated);
             const notUpdatedSince = new Date(
-              new Date().setDate(new Date().getDate() + 10)
+              new Date().setDate(new Date().getDate() - 10)
             );
             console.log(notUpdatedSince, lastUpdatedDate);
             if (lastUpdatedDate < notUpdatedSince) {

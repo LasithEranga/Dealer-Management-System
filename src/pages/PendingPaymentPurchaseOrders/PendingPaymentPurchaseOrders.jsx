@@ -14,7 +14,10 @@ import {
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getOrderByStateAndDistributor } from "../../app/api/purchaseOrderServices";
+import {
+  getOrderByStateAndDistributor,
+  purchaseOrderMarkAsPaid,
+} from "../../app/api/purchaseOrderServices";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import ExpandableTable from "../../components/ExpandableTable/ExpandableTable";
 import { convertToRupees } from "../../utils/convertToRupees";
@@ -24,6 +27,7 @@ import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import { useNavigate } from "react-router-dom";
 import CreditScoreIcon from "@mui/icons-material/CreditScore";
 import { Search } from "@mui/icons-material";
+import { showSystemAlert } from "../../app/alertServices";
 
 const SavedPurchaseOrders = () => {
   const navigate = useNavigate();
@@ -38,11 +42,20 @@ const SavedPurchaseOrders = () => {
       tooltip: "Payment received",
       icon: <CreditScoreIcon />,
       onClick: (order) => {
-        navigate("/distribute-stock", {
-          state: {
-            order: order,
+        purchaseOrderMarkAsPaid(
+          {
+            purchaseOrderId: order._id,
           },
-        });
+          (response) => {
+            if (response.status === 0) {
+              setRefreshTable(!refreshTable);
+              showSystemAlert("Payment received successfully", "success");
+            }
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
         console.log(order);
       },
     },

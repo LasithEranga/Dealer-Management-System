@@ -56,7 +56,8 @@ const Dashboard = () => {
                 <Select value={30} defaultValue={10} size={"small"}>
                   <MenuItem value={10}>Today</MenuItem>
                   <MenuItem value={20}>Last Week</MenuItem>
-                  <MenuItem value={30}>Lasth Year</MenuItem>
+                  <MenuItem value={20}>Last Month</MenuItem>
+                  <MenuItem value={30}>Last Year</MenuItem>
                 </Select>
               </Box>
             </Box>

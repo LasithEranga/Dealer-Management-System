@@ -32,6 +32,21 @@ export const saveOrder = (body, onSuccess, onFailed, onComplete) => {
     onComplete
   );
 };
+export const purchaseOrderMarkAsPaid = (
+  body,
+  onSuccess,
+  onFailed,
+  onComplete
+) => {
+  post(
+    "/purchase-orders/confirmPayment",
+    body,
+    "markingAsPaid",
+    onSuccess,
+    onFailed,
+    onComplete
+  );
+};
 export const rejectOrder = (body, onSuccess, onFailed, onComplete) => {
   post(
     "/purchase-orders/reject",

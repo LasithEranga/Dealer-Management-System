@@ -163,7 +163,13 @@ const AcceptReturns = () => {
       if (gasTank) {
         // set amount left and return price
         gasTank.amountLeft = quantities[insertRecordAt]?.amountLeft;
+        gasTank.displayAmountLeft = `${quantities[insertRecordAt]?.amountLeft} Kg`;
         gasTank.returnPrice = quantities[insertRecordAt]?.returnPrice;
+        gasTank.dispayReturnPrice = convertToRupees(
+          quantities[insertRecordAt]?.returnPrice
+        );
+
+        gasTank.quantity = 1;
 
         // show error if amount left is not set
         if (!gasTank.amountLeft) {
@@ -341,10 +347,11 @@ const AcceptReturns = () => {
               cols={[
                 "name",
                 "type",
-                "amountLeft",
-                "sellingPriceDealer",
-                "returnPrice",
+                "displayAmountLeft",
+                "sellingPrice",
+                "dispayReturnPrice",
               ]}
+              totalCalculatedBy={"returnPrice"}
             />
             <Box
               flexGrow={1}

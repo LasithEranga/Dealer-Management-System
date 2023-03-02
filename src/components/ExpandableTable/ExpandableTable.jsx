@@ -242,6 +242,10 @@ const ExpandableTable = ({
                                     pr={showOutstandingAfterAccept ? 0 : 2}
                                     fontSize="1.2rem"
                                     sx={{ mt: 4 }}
+                                    {...(!showOutstandingAfterAccept && {
+                                      title:
+                                        "Only Applicable for pending orders",
+                                    })}
                                   >
                                     {showOutstandingAfterAccept
                                       ? convertToRupees(
