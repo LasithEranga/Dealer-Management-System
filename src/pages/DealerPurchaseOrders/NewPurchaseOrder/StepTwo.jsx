@@ -10,6 +10,7 @@ import RowItem from "../../../components/RowItem/RowItem";
 import logo from "../../../asessts/logo.png";
 import { useEffect } from "react";
 import { convertToRupees } from "../../../utils/convertToRupees";
+import { useSelector } from "react-redux";
 
 const style = {
   position: "absolute",
@@ -27,6 +28,7 @@ const style = {
 const StepTwo = ({ orderList, setActiveStep }) => {
   const [open, setOpen] = useState(true);
   const [orderTotal, setOrderTotal] = useState(true);
+  const dealer = useSelector((state) => state.loginDMS);
 
   const onClickNext = () => {
     setActiveStep(4);
@@ -57,17 +59,19 @@ const StepTwo = ({ orderList, setActiveStep }) => {
         <Grid container pt={1}>
           <Grid item xs>
             <RowItem title={"Order No"} content={": #37478"} sx={{ mt: 1 }} />
-            <RowItem title={"Date"} content={": 25/12/2022"} sx={{ mt: 1 }} />
+            <RowItem
+              title={"Date"}
+              content={`: ${new Date().toISOString().substring(0, 10)}`}
+              sx={{ mt: 1 }}
+            />
             <RowItem
               title={"Delivery Address"}
               content={
                 <>
-                  <Typography sx={{ fontWeight: "bold" }}>
-                    : Sampath Store,
-                  </Typography>
                   <Typography sx={{ pl: 1 }}>200D,</Typography>
                   <Typography sx={{ pl: 1 }}>Panadura Rd,</Typography>
                   <Typography sx={{ pl: 1 }}>Horana.</Typography>
+                  {dealer.storeAddress}
                 </>
               }
               sx={{ mt: 1 }}
@@ -76,10 +80,14 @@ const StepTwo = ({ orderList, setActiveStep }) => {
           <Grid item xs={5}>
             <RowItem
               title={"Distributor"}
-              content={": Vajira"}
+              content={`: ${dealer.distributor.name}`}
               sx={{ mt: 1 }}
             />
-            <RowItem title={"Dealer"} content={": Sampath"} sx={{ mt: 1 }} />
+            <RowItem
+              title={"Dealer"}
+              content={`: ${dealer.name}`}
+              sx={{ mt: 1 }}
+            />
             <RowItem
               title={"Status"}
               content={

@@ -45,6 +45,12 @@ const StepOne = ({ orderList, setOrderList, setActiveStep }) => {
         });
         const tempSelected = { ...selected };
         tempSelected["quantity"] = Number(quantity);
+        tempSelected["orderedPrice"] = convertToRupees(
+          tempSelected.orderedPriceDealer
+        );
+        tempSelected["total"] = convertToRupees(
+          tempSelected.orderedPriceDealer * tempSelected.quantity
+        );
         setOrderList((prev) => [...prev, tempSelected]);
         setKeyword("");
         setSelected({});
@@ -76,6 +82,8 @@ const StepOne = ({ orderList, setOrderList, setActiveStep }) => {
               height="16rem"
               title="Purchase Order"
               orderList={orderList}
+              cols={["name", "type", "quantity", "orderedPrice", "total"]}
+              totalCalculatedBy="orderedPriceDealer"
             />
           </ContentCard>
         </Grid>
