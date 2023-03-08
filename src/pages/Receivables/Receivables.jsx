@@ -216,7 +216,7 @@ const Receivables = () => {
                   Total receivables : {convertToRupees(totalReceivables)}
                 </span>
                 <br></br>
-                <span>AR turover ratio : - </span>
+                {/* <span>AR turover ratio : - </span> */}
               </>
             }
           >

@@ -265,11 +265,14 @@ const TankReturns = () => {
             subHeading={
               <>
                 {/* FIXME: */}
-                <span>No of tanks returned : 50 tanks</span>
+                <span>
+                  No of tanks returned : {data.length} tank{" "}
+                  {data.length === 1 ? "" : "s"}
+                </span>
                 <br></br>
                 <span>Total returns : {convertToRupees(totalReturns)}</span>
                 <br></br>
-                <span>Return rate : 5.30</span>
+                {/* <span>Return rate : 5.30</span> */}
               </>
             }
           >

@@ -32,3 +32,14 @@ export const returns = (body, onSuccess, onFailed, onComplete) => {
     onComplete
   );
 };
+
+export const stockReport = (body, onSuccess, onFailed, onComplete) => {
+  post(
+    "/reports/stocks",
+    body,
+    "stockReportLoading",
+    onSuccess,
+    onFailed,
+    onComplete
+  );
+};

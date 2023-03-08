@@ -15,6 +15,28 @@ export const searchGasTank = (body, onSuccess, onFailed, onComplete) => {
   );
 };
 
+export const getTankNames = (onSuccess, onFailed, onComplete) => {
+  post(
+    "/tanks/getNames",
+    {},
+    "tankNamesLoading",
+    onSuccess,
+    onFailed,
+    onComplete
+  );
+};
+
+export const getTankTypes = (onSuccess, onFailed, onComplete) => {
+  post(
+    "/tanks/getTypes",
+    {},
+    "tankTypesLoading",
+    onSuccess,
+    onFailed,
+    onComplete
+  );
+};
+
 export const updateTank = (body, onSuccess, onFailed, onComplete) => {
   post(
     "/tanks/update",

@@ -14,7 +14,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import ReportLayout from "../../components/ReportLayout/ReportLayout";
 import ReportTable from "../../components/ReportTable/ReportTable";
@@ -22,8 +22,16 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import "./index.css";
 import StockReportTable from "../../components/StockReportTable/StockReportTable";
+import { stockReport } from "../../app/api/reportsService";
+import { useSelector } from "react-redux";
+import {
+  getAllTanks,
+  getTankNames,
+  getTankTypes,
+} from "../../app/api/gasTankServices";
 
 const StockReport = () => {
+  const { userId } = useSelector((state) => state.loginDMS);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [data, setData] = useState([]);
@@ -31,8 +39,58 @@ const StockReport = () => {
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const pagesPerPage = 10;
+  const [gasTanks, setGasTanks] = useState([]);
+  const [tankTypes, setTankTypes] = useState([]);
   const noOfPages = Math.ceil(data.length / pagesPerPage);
-  const generate = () => {};
+  const [selectedTankNames, setSelectedTankNames] = useState([]);
+  const [selectedTankTypes, setSelectedTankTypes] = useState([]);
+
+  const generate = () => {
+    stockReport(
+      {
+        userId,
+        tankNames: selectedTankNames,
+        tankTypes: selectedTankTypes,
+        distributionFrom: from,
+        distributionTo: to,
+      },
+      (response) => {
+        if (response.status === 0) {
+          setData(response.data);
+        }
+      },
+      () => {},
+      () => {}
+    );
+  };
+
+  useEffect(() => {
+    generate();
+
+    getTankNames(
+      (response) => {
+        if (response.status === 0) {
+          setGasTanks(response.data);
+        }
+      },
+      (error) => {
+        console.log(error);
+      },
+      () => {}
+    );
+
+    getTankTypes(
+      (response) => {
+        if (response.status === 0) {
+          setTankTypes(response.data);
+        }
+      },
+      (error) => {
+        console.log(error);
+      },
+      () => {}
+    );
+  }, []);
   return (
     <>
       <Box
@@ -92,8 +150,8 @@ const StockReport = () => {
             <Typography mt={1}>Tank Name</Typography>
             <Autocomplete
               multiple
-              options={[]}
-              getOptionLabel={(option) => option.name}
+              options={gasTanks}
+              getOptionLabel={(option) => option}
               // getOptionSelected={(option, value) => option.id === value.id}
               renderOption={(props, option, { selected }) => (
                 <li {...props}>
@@ -103,13 +161,13 @@ const StockReport = () => {
                     style={{ marginRight: 8 }}
                     checked={selected}
                   />
-                  {option.name}
+                  {option}
                 </li>
               )}
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  placeholder="Select dealer"
+                  placeholder="Select tank"
                   fullWidth
                   size="small"
                   sx={{
@@ -117,15 +175,17 @@ const StockReport = () => {
                   }}
                 />
               )}
-              onChange={(e, value) => {}}
+              onChange={(e, value) => {
+                setSelectedTankNames(value);
+              }}
             />
 
             <Typography mt={1}>Tank Type</Typography>
 
             <Autocomplete
               multiple
-              options={[]}
-              getOptionLabel={(option) => option.name + " " + option.type}
+              options={tankTypes}
+              getOptionLabel={(option) => option}
               // getOptionSelected={(option, value) =>
               //   option.indexedName === value.indexedName
               // }
@@ -137,7 +197,7 @@ const StockReport = () => {
                     style={{ marginRight: 8 }}
                     checked={selected}
                   />
-                  {option.name + " " + option.type}
+                  {option}
                 </li>
               )}
               renderInput={(params) => (
@@ -151,7 +211,9 @@ const StockReport = () => {
                   }}
                 />
               )}
-              onChange={(e, value) => {}}
+              onChange={(e, value) => {
+                setSelectedTankTypes(value);
+              }}
             />
 
             <Box mt={2} display={"flex"} justifyContent="end" gap={1}>
@@ -169,25 +231,18 @@ const StockReport = () => {
             subHeading={``}
             title="In-House Stock Report"
           >
-            <StockReportTable />
-            <Divider
-              sx={{
-                my: 2,
-              }}
-            />
-            <StockReportTable />
-            <Divider
-              sx={{
-                my: 2,
-              }}
-            />
-            <StockReportTable />
-            <Divider
-              sx={{
-                my: 2,
-              }}
-            />
-            <StockReportTable />
+            {Object.keys(data).map((oneEl, index) => {
+              return (
+                <div key={index}>
+                  <StockReportTable title={oneEl} data={data[oneEl]} />
+                  <Divider
+                    sx={{
+                      my: 2,
+                    }}
+                  />
+                </div>
+              );
+            })}
 
             {/* <Box
               sx={{
