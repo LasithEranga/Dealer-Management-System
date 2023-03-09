@@ -21,7 +21,6 @@ ChartJS.register(
 
 export const options = {
   responsive: true,
-
   plugins: {
     legend: {
       position: "bottom",
@@ -32,25 +31,28 @@ export const options = {
   },
 };
 
-const labels = ["January", "February", "March", "April", "May", "June", "July"];
+const BarChart = ({
+  height = 200,
+  labels = ["January", "February", "March", "April", "May", "June", "July"],
+  datasetI = [],
+  datasetII = [],
+}) => {
+  const data = {
+    labels,
 
-export const data = {
-  labels,
-
-  datasets: [
-    {
-      label: "Sales",
-      data: [520230, 420230, 560890, 620690, 450750, 450750, 490750],
-      backgroundColor: "#6d848e",
-    },
-    {
-      label: "Returns",
-      data: [100000, 80000, 150000, 200000, 80000, 100000, 100000],
-      backgroundColor: "#fd8080",
-    },
-  ],
-};
-const BarChart = ({ height = 200 }) => {
+    datasets: [
+      {
+        label: "Sales",
+        data: [...datasetI],
+        backgroundColor: "#6d848e",
+      },
+      {
+        label: "Returns",
+        data: [...datasetII],
+        backgroundColor: "#fd8080",
+      },
+    ],
+  };
   return <Bar options={options} data={data} height={height} />;
 };
 
