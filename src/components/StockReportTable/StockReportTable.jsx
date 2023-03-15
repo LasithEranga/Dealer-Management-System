@@ -2,7 +2,12 @@ import { Box, Typography } from "@mui/material";
 import _ from "lodash";
 import React from "react";
 
-const StockReportTable = ({ title, data = {} }) => {
+const StockReportTable = ({
+  title,
+  data = {},
+  lastColumnLabel = "Distribution",
+  lastColumnKey = "tankDistribution",
+}) => {
   return (
     <>
       <Box
@@ -25,7 +30,7 @@ const StockReportTable = ({ title, data = {} }) => {
             <th className="stock-tb-th" title="Dealer selling price">
               Dea. selling price
             </th>
-            <th className="stock-tb-th">Distribution</th>
+            <th className="stock-tb-th">{lastColumnLabel}</th>
           </tr>
         </thead>
 
@@ -41,7 +46,7 @@ const StockReportTable = ({ title, data = {} }) => {
                 <td className="stock-tb-td">
                   {data[oneEl].sellingPriceDealer}
                 </td>
-                <td className="stock-tb-td">{data[oneEl].tankDistribution}</td>
+                <td className="stock-tb-td">{data[oneEl][lastColumnKey]}</td>
               </tr>
             );
           })}

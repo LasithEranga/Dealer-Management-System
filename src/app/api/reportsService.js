@@ -43,3 +43,14 @@ export const stockReport = (body, onSuccess, onFailed, onComplete) => {
     onComplete
   );
 };
+
+export const dealerStockReport = (body, onSuccess, onFailed, onComplete) => {
+  post(
+    "/reports/dealer-stocks",
+    body,
+    "dealerStockReportLoading",
+    onSuccess,
+    onFailed,
+    onComplete
+  );
+};

@@ -9,27 +9,99 @@ import {
   Box,
   Button,
   Checkbox,
+  Divider,
   Grid,
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ContentCard from "../../../../components/ContentCard/ContentCard";
 import ReportLayout from "../../../../components/ReportLayout/ReportLayout";
 import ReportTable from "../../../../components/ReportTable/ReportTable";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import StockReportTable from "../../../../components/StockReportTable/StockReportTable";
+import {
+  getTankNames,
+  getTankTypes,
+} from "../../../../app/api/gasTankServices";
+import { getAllDealers } from "../../../../app/api/userServices";
+import { useSelector } from "react-redux";
+import { dealerStockReport } from "../../../../app/api/reportsService";
 
 const DealerStockReport = () => {
+  const { userId } = useSelector((state) => state.loginDMS);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [data, setData] = useState([]);
+  const [dealers, setDealers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const pagesPerPage = 10;
   const noOfPages = Math.ceil(data.length / pagesPerPage);
-  const generate = () => {};
+  const [gasTanks, setGasTanks] = useState([]);
+  const [tankTypes, setTankTypes] = useState([]);
+  const [selectedTankNames, setSelectedTankNames] = useState([]);
+  const [selectedTankTypes, setSelectedTankTypes] = useState([]);
+  const [selectedDealer, setSelectedDealer] = useState([]);
+
+  const generate = () => {
+    dealerStockReport(
+      {
+        dealer: selectedDealer._id,
+        tankNames: selectedTankNames,
+        tankTypes: selectedTankTypes,
+        salesFrom: from,
+        salesTo: to,
+      },
+      (response) => {
+        if (response.status === 0) {
+          setData(response.data);
+        }
+      },
+      () => {},
+      () => {}
+    );
+  };
+
+  useEffect(() => {
+    getTankNames(
+      (response) => {
+        if (response.status === 0) {
+          setGasTanks(response.data);
+        }
+      },
+      (error) => {
+        console.log(error);
+      },
+      () => {}
+    );
+
+    getTankTypes(
+      (response) => {
+        if (response.status === 0) {
+          setTankTypes(response.data);
+        }
+      },
+      (error) => {
+        console.log(error);
+      },
+      () => {}
+    );
+
+    getAllDealers(
+      {
+        distributorId: userId,
+      },
+      (response) => {
+        if (response.status === 0) {
+          setDealers(response.data);
+        }
+      },
+      () => {}
+    );
+  }, []);
   return (
     <>
       <Box
@@ -40,7 +112,7 @@ const DealerStockReport = () => {
         mb={2}
       >
         <Typography fontSize="1.5rem" fontWeight="bold">
-          Sales Report
+          Dealer Stocks Report
         </Typography>
         <Box>
           <Button
@@ -66,7 +138,7 @@ const DealerStockReport = () => {
               borderRadius: 0,
             }}
           >
-            <Typography>From</Typography>
+            <Typography>From (Sales)</Typography>
             <TextField
               type="date"
               fullWidth
@@ -76,7 +148,7 @@ const DealerStockReport = () => {
               }}
               onChange={(e) => setFrom(e.target.value)}
             />
-            <Typography mt={1}>To</Typography>
+            <Typography mt={1}>To (Sales)</Typography>
             <TextField
               type="date"
               fullWidth
@@ -88,21 +160,20 @@ const DealerStockReport = () => {
             />
             <Typography mt={1}>Dealer</Typography>
             <Autocomplete
-              multiple
-              options={[]}
+              options={dealers}
               getOptionLabel={(option) => option.name}
               // getOptionSelected={(option, value) => option.id === value.id}
-              renderOption={(props, option, { selected }) => (
-                <li {...props}>
-                  <Checkbox
-                    icon={icon}
-                    checkedIcon={checkedIcon}
-                    style={{ marginRight: 8 }}
-                    checked={selected}
-                  />
-                  {option.name}
-                </li>
-              )}
+              // renderOption={(props, option, { selected }) => (
+              //   <li {...props}>
+              //     <Checkbox
+              //       icon={icon}
+              //       checkedIcon={checkedIcon}
+              //       style={{ marginRight: 8 }}
+              //       checked={selected}
+              //     />
+              //     {option.name}
+              //   </li>
+              // )}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -114,15 +185,52 @@ const DealerStockReport = () => {
                   }}
                 />
               )}
-              onChange={(e, value) => {}}
+              onChange={(e, value) => {
+                if (value) {
+                  setSelectedDealer(value);
+                }
+              }}
+            />
+
+            <Typography mt={1}>Tank Name</Typography>
+            <Autocomplete
+              multiple
+              options={gasTanks}
+              getOptionLabel={(option) => option}
+              // getOptionSelected={(option, value) => option.id === value.id}
+              renderOption={(props, option, { selected }) => (
+                <li {...props}>
+                  <Checkbox
+                    icon={icon}
+                    checkedIcon={checkedIcon}
+                    style={{ marginRight: 8 }}
+                    checked={selected}
+                  />
+                  {option}
+                </li>
+              )}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="Select tank"
+                  fullWidth
+                  size="small"
+                  sx={{
+                    mt: 1,
+                  }}
+                />
+              )}
+              onChange={(e, value) => {
+                setSelectedTankNames(value);
+              }}
             />
 
             <Typography mt={1}>Tank Type</Typography>
 
             <Autocomplete
               multiple
-              options={[]}
-              getOptionLabel={(option) => option.name + " " + option.type}
+              options={tankTypes}
+              getOptionLabel={(option) => option}
               // getOptionSelected={(option, value) =>
               //   option.indexedName === value.indexedName
               // }
@@ -134,7 +242,7 @@ const DealerStockReport = () => {
                     style={{ marginRight: 8 }}
                     checked={selected}
                   />
-                  {option.name + " " + option.type}
+                  {option}
                 </li>
               )}
               renderInput={(params) => (
@@ -148,7 +256,9 @@ const DealerStockReport = () => {
                   }}
                 />
               )}
-              onChange={(e, value) => {}}
+              onChange={(e, value) => {
+                setSelectedTankTypes(value);
+              }}
             />
 
             <Box mt={2} display={"flex"} justifyContent="end" gap={1}>
@@ -160,52 +270,31 @@ const DealerStockReport = () => {
           </ContentCard>
         </Grid>
         <Grid item lg>
-          <ReportLayout from={from} to={to} subHeading={`Total Sales:`}>
-            <ReportTable
-              headingCells={[
-                "Date",
-                "Dealer",
-                "Gas tank",
-                "Unit Price",
-                "Qty",
-                "Total",
-              ]}
-              tableContent={data.slice(
-                (currentPage - 1) * pagesPerPage,
-                currentPage * pagesPerPage
-              )}
-            />
-
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                mt: 2,
-              }}
-            >
-              <Button
-                onClick={() => {
-                  setCurrentPage(currentPage - 1);
-                }}
-                {...{ disabled: currentPage === 1 }}
-              >
-                <ArrowBack />
-              </Button>
-              <Typography>
-                {noOfPages === 0
-                  ? `0 of 0 pages`
-                  : `${currentPage} of ${noOfPages} pages`}
-              </Typography>
-              <Button
-                onClick={() => {
-                  setCurrentPage(currentPage + 1);
-                }}
-                {...{ disabled: currentPage === noOfPages || noOfPages === 0 }}
-              >
-                <ArrowForward />
-              </Button>
-            </Box>
+          <ReportLayout
+            from={from}
+            to={to}
+            subHeading={`Dealer: ${
+              selectedDealer.name ? selectedDealer.name : "select dealer"
+            }`}
+            title="Stock Report"
+          >
+            {Object.keys(data).map((oneEl, index) => {
+              return (
+                <div key={index}>
+                  <StockReportTable
+                    title={oneEl}
+                    data={data[oneEl]}
+                    lastColumnKey="tankSales"
+                    lastColumnLabel="Sales(tanks)"
+                  />
+                  <Divider
+                    sx={{
+                      my: 2,
+                    }}
+                  />
+                </div>
+              );
+            })}
           </ReportLayout>
         </Grid>
       </Grid>
