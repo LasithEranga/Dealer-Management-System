@@ -14,17 +14,23 @@ import {
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getOrderByStateAndDistributor } from "../../app/api/purchaseOrderServices";
-import ContentCard from "../../components/ContentCard/ContentCard";
-import ExpandableTable from "../../components/ExpandableTable/ExpandableTable";
-import { convertToRupees } from "../../utils/convertToRupees";
+import {
+  getOrderByStateAndDistributor,
+  rejectOrder,
+  saveOrder,
+} from "../../../app/api/purchaseOrderServices";
+import ContentCard from "../../../components/ContentCard/ContentCard";
+import ExpandableTable from "../../../components/ExpandableTable/ExpandableTable";
+import { convertToRupees } from "../../../utils/convertToRupees";
 
+import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import SwipeRightIcon from "@mui/icons-material/SwipeRight";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import { useNavigate } from "react-router-dom";
+import { showSystemAlert } from "../../../app/alertServices";
 import { Search } from "@mui/icons-material";
 
-const SavedPurchaseOrders = () => {
+const NewPurchaseOrders = () => {
   const navigate = useNavigate();
   const { userId } = useSelector((state) => state.loginDMS);
 
@@ -56,12 +62,42 @@ const SavedPurchaseOrders = () => {
         console.log(order);
       },
     },
-
+    {
+      tooltip: "Save",
+      icon: <SaveAltIcon />,
+      onClick: (order) => {
+        saveOrder(
+          {
+            purchaseOrderId: order._id,
+          },
+          (response) => {
+            if (response.status === 0) {
+              setRefreshTable(!refreshTable);
+              showSystemAlert(response.message, "success");
+            } else {
+              showSystemAlert(response.message, "error");
+            }
+          }
+        );
+      },
+    },
     {
       tooltip: "Reject",
       icon: <ThumbDownIcon />,
       onClick: (order) => {
-        console.log(order);
+        rejectOrder(
+          {
+            purchaseOrderId: order._id,
+          },
+          (response) => {
+            if (response.status === 0) {
+              setRefreshTable(!refreshTable);
+              showSystemAlert(response.message, "success");
+            } else {
+              showSystemAlert(response.message, "error");
+            }
+          }
+        );
       },
     },
   ];
@@ -120,7 +156,7 @@ const SavedPurchaseOrders = () => {
 
   useEffect(() => {
     getOrderByStateAndDistributor(
-      { distributor: userId, state: "SAVED" },
+      { distributor: userId, state: "PENDING" },
       (response) => {
         console.log(response);
 
@@ -153,7 +189,7 @@ const SavedPurchaseOrders = () => {
             my={1}
           >
             <Typography fontSize={"1.5rem"} fontWeight="bold">
-              Saved Purchase Orders
+              New Purchase Orders
             </Typography>
             <Box>
               <Button variant="outlined">Export to PDF</Button>
@@ -235,4 +271,4 @@ const SavedPurchaseOrders = () => {
   );
 };
 
-export default SavedPurchaseOrders;
+export default NewPurchaseOrders;

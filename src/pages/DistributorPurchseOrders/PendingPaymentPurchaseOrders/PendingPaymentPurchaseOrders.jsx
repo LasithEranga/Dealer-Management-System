@@ -16,88 +16,47 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   getOrderByStateAndDistributor,
-  rejectOrder,
-  saveOrder,
-} from "../../app/api/purchaseOrderServices";
-import ContentCard from "../../components/ContentCard/ContentCard";
-import ExpandableTable from "../../components/ExpandableTable/ExpandableTable";
-import { convertToRupees } from "../../utils/convertToRupees";
+  purchaseOrderMarkAsPaid,
+} from "../../../app/api/purchaseOrderServices";
+import ContentCard from "../../../components/ContentCard/ContentCard";
+import ExpandableTable from "../../../components/ExpandableTable/ExpandableTable";
+import { convertToRupees } from "../../../utils/convertToRupees";
 
-import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import SwipeRightIcon from "@mui/icons-material/SwipeRight";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import { useNavigate } from "react-router-dom";
-import { showSystemAlert } from "../../app/alertServices";
+import CreditScoreIcon from "@mui/icons-material/CreditScore";
 import { Search } from "@mui/icons-material";
+import { showSystemAlert } from "../../../app/alertServices";
 
-const NewPurchaseOrders = () => {
+const SavedPurchaseOrders = () => {
   const navigate = useNavigate();
   const { userId } = useSelector((state) => state.loginDMS);
-
-  const [showEditModal, setShowEditModal] = useState(false);
   const [orders, setOrders] = useState([]);
   const [refreshTable, setRefreshTable] = useState(false);
-  const [update, setUpdate] = useState({
-    isUpdating: true,
-    _id: "",
-  });
-
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("pleaseSelect");
-  const [outstandingBalance, setOutstandingamount] = useState({
-    min: "",
-    max: "",
-  });
 
   const actionButtons = [
     {
-      tooltip: "Accept",
-      icon: <SwipeRightIcon />,
+      tooltip: "Payment received",
+      icon: <CreditScoreIcon />,
       onClick: (order) => {
-        navigate("/distribute-stock", {
-          state: {
-            order: order,
+        purchaseOrderMarkAsPaid(
+          {
+            purchaseOrderId: order._id,
           },
-        });
+          (response) => {
+            if (response.status === 0) {
+              setRefreshTable(!refreshTable);
+              showSystemAlert("Payment received successfully", "success");
+            }
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
         console.log(order);
-      },
-    },
-    {
-      tooltip: "Save",
-      icon: <SaveAltIcon />,
-      onClick: (order) => {
-        saveOrder(
-          {
-            purchaseOrderId: order._id,
-          },
-          (response) => {
-            if (response.status === 0) {
-              setRefreshTable(!refreshTable);
-              showSystemAlert(response.message, "success");
-            } else {
-              showSystemAlert(response.message, "error");
-            }
-          }
-        );
-      },
-    },
-    {
-      tooltip: "Reject",
-      icon: <ThumbDownIcon />,
-      onClick: (order) => {
-        rejectOrder(
-          {
-            purchaseOrderId: order._id,
-          },
-          (response) => {
-            if (response.status === 0) {
-              setRefreshTable(!refreshTable);
-              showSystemAlert(response.message, "success");
-            } else {
-              showSystemAlert(response.message, "error");
-            }
-          }
-        );
       },
     },
   ];
@@ -156,7 +115,7 @@ const NewPurchaseOrders = () => {
 
   useEffect(() => {
     getOrderByStateAndDistributor(
-      { distributor: userId, state: "PENDING" },
+      { distributor: userId, state: "PENDING_PAYMENT" },
       (response) => {
         console.log(response);
 
@@ -175,6 +134,7 @@ const NewPurchaseOrders = () => {
         );
       }
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshTable]);
 
   return (
@@ -189,7 +149,7 @@ const NewPurchaseOrders = () => {
             my={1}
           >
             <Typography fontSize={"1.5rem"} fontWeight="bold">
-              New Purchase Orders
+              Pending Payment Orders
             </Typography>
             <Box>
               <Button variant="outlined">Export to PDF</Button>
@@ -263,6 +223,7 @@ const NewPurchaseOrders = () => {
             data={orders}
             ignoreTill={1}
             actionButtons={actionButtons}
+            showOutstandingAfterAccept={false}
           />
         </ContentCard>
       </Box>
@@ -271,4 +232,4 @@ const NewPurchaseOrders = () => {
   );
 };
 
-export default NewPurchaseOrders;
+export default SavedPurchaseOrders;

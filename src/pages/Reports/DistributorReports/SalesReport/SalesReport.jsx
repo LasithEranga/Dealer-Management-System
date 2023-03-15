@@ -15,17 +15,17 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getAllDealers } from "../../app/api/userServices";
-import ContentCard from "../../components/ContentCard/ContentCard";
-import ReportLayout from "../../components/ReportLayout/ReportLayout";
-import ReportTable from "../../components/ReportTable/ReportTable";
+import { getAllDealers } from "../../../../app/api/userServices";
+import ContentCard from "../../../../components/ContentCard/ContentCard";
+import ReportLayout from "../../../../components/ReportLayout/ReportLayout";
+import ReportTable from "../../../../components/ReportTable/ReportTable";
 import Autocomplete from "@mui/material/Autocomplete";
-import { getAllTanks } from "../../app/api/gasTankServices";
+import { getAllTanks } from "../../../../app/api/gasTankServices";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import _ from "lodash";
-import { convertToRupees } from "../../utils/convertToRupees";
-import { salesReport } from "../../app/api/reportsService";
+import { convertToRupees } from "../../../../utils/convertToRupees";
+import { salesReport } from "../../../../app/api/reportsService";
 
 const SalesReport = () => {
   const { userId } = useSelector((state) => state.loginDMS);

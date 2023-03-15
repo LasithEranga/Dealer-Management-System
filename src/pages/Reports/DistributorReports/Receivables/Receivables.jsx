@@ -18,58 +18,50 @@ import Autocomplete from "@mui/material/Autocomplete";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getAllTanks } from "../../app/api/gasTankServices";
-import { returns } from "../../app/api/reportsService";
-import { getAllDealers } from "../../app/api/userServices";
-import ContentCard from "../../components/ContentCard/ContentCard";
-import ReportLayout from "../../components/ReportLayout/ReportLayout";
-import ReportTable from "../../components/ReportTable/ReportTable";
-import { convertToRupees } from "../../utils/convertToRupees";
+import { receivables } from "../../../../app/api/reportsService";
+import { getAllDealers } from "../../../../app/api/userServices";
+import ContentCard from "../../../../components/ContentCard/ContentCard";
+import ReportLayout from "../../../../components/ReportLayout/ReportLayout";
+import ReportTable from "../../../../components/ReportTable/ReportTable";
+import { convertToRupees } from "../../../../utils/convertToRupees";
 
-const TankReturns = () => {
+const Receivables = () => {
   const { userId } = useSelector((state) => state.loginDMS);
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const [currentPage, setCurrentPage] = useState(1);
   const [dealers, setDealers] = useState([]);
-  const [gasTanks, setGasTanks] = useState([]);
   const [data, setData] = useState([]);
   const [selectedDealers, setSelectedDealers] = useState([]);
-  const [totalReturns, setTotalReturns] = useState(0);
-  const [selectedTanks, setSelectedTanks] = useState([]);
+  const [totalReceivables, setTotalReceivables] = useState(0);
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(0);
-  const [from, setFrom] = useState("");
-  const [to, setTo] = useState("");
 
   const pagesPerPage = 10;
   const noOfPages = Math.ceil(data.length / pagesPerPage);
 
   const generate = () => {
     console.log(min, max);
-    returns(
+    receivables(
       {
-        from: from,
-        to: to,
         dealers: selectedDealers.map((dealer) => dealer._id),
-        gasTanks: selectedTanks.map((tank) => tank._id),
-        minAmountLeft: Number(min),
-        maxAmountLeft: Number(max),
+        minAmount: Number(min),
+        maxAmount: Number(max),
       },
       (response) => {
         if (response.status === 0) {
           setCurrentPage(1);
-          const totalReturns = response.data.reduce((acc, oneEl) => {
-            return acc + oneEl.returnPrice;
+          const totalReceivables = response.data.reduce((acc, oneEl) => {
+            return acc + oneEl.outstandingAmount;
           }, 0);
-          setTotalReturns(totalReturns);
+          setTotalReceivables(totalReceivables);
           setData(
             response.data.map((oneEl) => ({
-              date: new Date(oneEl.date).toLocaleDateString("en-uk"),
-              dealer: oneEl.dealer,
-              gasTank: oneEl.gasTank + " " + _.capitalize(oneEl.type),
-              amountLeft: oneEl.amountLeft,
-              returnPrice: convertToRupees(oneEl.returnPrice),
+              name: oneEl.name,
+              storeAddress: oneEl.storeAddress,
+              phoneNumber: oneEl.phoneNumber,
+              email: oneEl.email,
+              outstandingAmount: convertToRupees(oneEl.outstandingAmount),
             }))
           );
         }
@@ -94,18 +86,6 @@ const TankReturns = () => {
       },
       () => {}
     );
-
-    getAllTanks(
-      (response) => {
-        if (response.status === 0) {
-          setGasTanks(response.data);
-        }
-      },
-      (error) => {
-        console.log(error);
-      },
-      () => {}
-    );
   }, []);
   return (
     <>
@@ -117,7 +97,7 @@ const TankReturns = () => {
         mb={2}
       >
         <Typography fontSize="1.5rem" fontWeight="bold">
-          Gas tank returns
+          Receivables Report
         </Typography>
         <Box>
           <Button
@@ -142,7 +122,7 @@ const TankReturns = () => {
               borderRadius: 0,
             }}
           >
-            <Typography>From</Typography>
+            {/* <Typography>From</Typography>
             <TextField
               type="date"
               fullWidth
@@ -161,8 +141,8 @@ const TankReturns = () => {
                 mt: 1,
               }}
               onChange={(e) => setTo(e.target.value)}
-            />
-            <Typography mt={1}>Dealers</Typography>
+            /> */}
+            <Typography mt={1}>Dealer</Typography>
             <Autocomplete
               multiple
               options={dealers}
@@ -191,40 +171,7 @@ const TankReturns = () => {
               )}
               onChange={(e, value) => setSelectedDealers(value)}
             />
-            <Typography mt={1}>Gas tanks</Typography>
-            <Autocomplete
-              multiple
-              options={gasTanks}
-              getOptionLabel={(option) => option.name + " " + option.type}
-              // getOptionSelected={(option, value) =>
-              //   option.indexedName === value.indexedName
-              // }
-              renderOption={(props, option, { selected }) => (
-                <li {...props}>
-                  <Checkbox
-                    icon={icon}
-                    checkedIcon={checkedIcon}
-                    style={{ marginRight: 8 }}
-                    checked={selected}
-                  />
-                  {option.name + " " + option.type}
-                </li>
-              )}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  placeholder="Select gas tanks"
-                  fullWidth
-                  size="small"
-                  sx={{
-                    mt: 1,
-                  }}
-                />
-              )}
-              onChange={(e, value) => setSelectedTanks(value)}
-            />
-
-            <Typography mt={1}>Amount left</Typography>
+            <Typography mt={1}>Amount between</Typography>
             <Box
               mt={1}
               display={"flex"}
@@ -259,41 +206,38 @@ const TankReturns = () => {
         </Grid>
         <Grid item lg>
           <ReportLayout
-            title="Gas tank returns"
-            from={from}
-            to={to}
+            title="Accounts receivable"
+            from={""}
+            to={""}
             subHeading={
               <>
                 {/* FIXME: */}
                 <span>
-                  No of tanks returned : {data.length} tank{" "}
-                  {data.length === 1 ? "" : "s"}
+                  Total receivables : {convertToRupees(totalReceivables)}
                 </span>
                 <br></br>
-                <span>Total returns : {convertToRupees(totalReturns)}</span>
-                <br></br>
-                {/* <span>Return rate : 5.30</span> */}
+                {/* <span>AR turover ratio : - </span> */}
               </>
             }
           >
             <ReportTable
               headingCells={[
-                "Date",
-                "Dealer",
-                "Gas Tank",
-                "Amount Left",
-                "Return Price",
+                "Name",
+                "Store Address",
+                "Phone Number",
+                "Email",
+                "Outstanding Amount",
               ]}
               tableContent={data.slice(
                 (currentPage - 1) * pagesPerPage,
                 currentPage * pagesPerPage
               )}
               columns={[
-                "date",
-                "dealer",
-                "gasTank",
-                "amountLeft",
-                "returnPrice",
+                "name",
+                "storeAddress",
+                "phoneNumber",
+                "email",
+                "outstandingAmount",
               ]}
             />
 
@@ -334,4 +278,4 @@ const TankReturns = () => {
   );
 };
 
-export default TankReturns;
+export default Receivables;

@@ -9,18 +9,29 @@ import {
   Box,
   Button,
   Checkbox,
+  Divider,
   Grid,
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
-import ContentCard from "../../components/ContentCard/ContentCard";
-import ReportLayout from "../../components/ReportLayout/ReportLayout";
-import ReportTable from "../../components/ReportTable/ReportTable";
+import React, { useEffect, useState } from "react";
+import ContentCard from "../../../../components/ContentCard/ContentCard";
+import ReportLayout from "../../../../components/ReportLayout/ReportLayout";
+import ReportTable from "../../../../components/ReportTable/ReportTable";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import "./index.css";
+import StockReportTable from "../../../../components/StockReportTable/StockReportTable";
+import { stockReport } from "../../../../app/api/reportsService";
+import { useSelector } from "react-redux";
+import {
+  getAllTanks,
+  getTankNames,
+  getTankTypes,
+} from "../../../../app/api/gasTankServices";
 
-const FastMovingStocks = () => {
+const StockReport = () => {
+  const { userId } = useSelector((state) => state.loginDMS);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [data, setData] = useState([]);
@@ -28,8 +39,58 @@ const FastMovingStocks = () => {
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const pagesPerPage = 10;
+  const [gasTanks, setGasTanks] = useState([]);
+  const [tankTypes, setTankTypes] = useState([]);
   const noOfPages = Math.ceil(data.length / pagesPerPage);
-  const generate = () => {};
+  const [selectedTankNames, setSelectedTankNames] = useState([]);
+  const [selectedTankTypes, setSelectedTankTypes] = useState([]);
+
+  const generate = () => {
+    stockReport(
+      {
+        userId,
+        tankNames: selectedTankNames,
+        tankTypes: selectedTankTypes,
+        distributionFrom: from,
+        distributionTo: to,
+      },
+      (response) => {
+        if (response.status === 0) {
+          setData(response.data);
+        }
+      },
+      () => {},
+      () => {}
+    );
+  };
+
+  useEffect(() => {
+    generate();
+
+    getTankNames(
+      (response) => {
+        if (response.status === 0) {
+          setGasTanks(response.data);
+        }
+      },
+      (error) => {
+        console.log(error);
+      },
+      () => {}
+    );
+
+    getTankTypes(
+      (response) => {
+        if (response.status === 0) {
+          setTankTypes(response.data);
+        }
+      },
+      (error) => {
+        console.log(error);
+      },
+      () => {}
+    );
+  }, []);
   return (
     <>
       <Box
@@ -40,7 +101,7 @@ const FastMovingStocks = () => {
         mb={2}
       >
         <Typography fontSize="1.5rem" fontWeight="bold">
-          Sales Report
+          In-House Stock Report
         </Typography>
         <Box>
           <Button
@@ -66,7 +127,7 @@ const FastMovingStocks = () => {
               borderRadius: 0,
             }}
           >
-            <Typography>From</Typography>
+            <Typography>Distribution - From</Typography>
             <TextField
               type="date"
               fullWidth
@@ -76,7 +137,7 @@ const FastMovingStocks = () => {
               }}
               onChange={(e) => setFrom(e.target.value)}
             />
-            <Typography mt={1}>To</Typography>
+            <Typography mt={1}>Distribution - To</Typography>
             <TextField
               type="date"
               fullWidth
@@ -86,11 +147,11 @@ const FastMovingStocks = () => {
               }}
               onChange={(e) => setTo(e.target.value)}
             />
-            <Typography mt={1}>Dealer</Typography>
+            <Typography mt={1}>Tank Name</Typography>
             <Autocomplete
               multiple
-              options={[]}
-              getOptionLabel={(option) => option.name}
+              options={gasTanks}
+              getOptionLabel={(option) => option}
               // getOptionSelected={(option, value) => option.id === value.id}
               renderOption={(props, option, { selected }) => (
                 <li {...props}>
@@ -100,13 +161,13 @@ const FastMovingStocks = () => {
                     style={{ marginRight: 8 }}
                     checked={selected}
                   />
-                  {option.name}
+                  {option}
                 </li>
               )}
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  placeholder="Select dealer"
+                  placeholder="Select tank"
                   fullWidth
                   size="small"
                   sx={{
@@ -114,15 +175,17 @@ const FastMovingStocks = () => {
                   }}
                 />
               )}
-              onChange={(e, value) => {}}
+              onChange={(e, value) => {
+                setSelectedTankNames(value);
+              }}
             />
 
             <Typography mt={1}>Tank Type</Typography>
 
             <Autocomplete
               multiple
-              options={[]}
-              getOptionLabel={(option) => option.name + " " + option.type}
+              options={tankTypes}
+              getOptionLabel={(option) => option}
               // getOptionSelected={(option, value) =>
               //   option.indexedName === value.indexedName
               // }
@@ -134,7 +197,7 @@ const FastMovingStocks = () => {
                     style={{ marginRight: 8 }}
                     checked={selected}
                   />
-                  {option.name + " " + option.type}
+                  {option}
                 </li>
               )}
               renderInput={(params) => (
@@ -148,7 +211,9 @@ const FastMovingStocks = () => {
                   }}
                 />
               )}
-              onChange={(e, value) => {}}
+              onChange={(e, value) => {
+                setSelectedTankTypes(value);
+              }}
             />
 
             <Box mt={2} display={"flex"} justifyContent="end" gap={1}>
@@ -160,23 +225,26 @@ const FastMovingStocks = () => {
           </ContentCard>
         </Grid>
         <Grid item lg>
-          <ReportLayout from={from} to={to} subHeading={`Total Sales:`}>
-            <ReportTable
-              headingCells={[
-                "Date",
-                "Dealer",
-                "Gas tank",
-                "Unit Price",
-                "Qty",
-                "Total",
-              ]}
-              tableContent={data.slice(
-                (currentPage - 1) * pagesPerPage,
-                currentPage * pagesPerPage
-              )}
-            />
+          <ReportLayout
+            from={from}
+            to={to}
+            subHeading={``}
+            title="In-House Stock Report"
+          >
+            {Object.keys(data).map((oneEl, index) => {
+              return (
+                <div key={index}>
+                  <StockReportTable title={oneEl} data={data[oneEl]} />
+                  <Divider
+                    sx={{
+                      my: 2,
+                    }}
+                  />
+                </div>
+              );
+            })}
 
-            <Box
+            {/* <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -205,7 +273,7 @@ const FastMovingStocks = () => {
               >
                 <ArrowForward />
               </Button>
-            </Box>
+            </Box> */}
           </ReportLayout>
         </Grid>
       </Grid>
@@ -213,4 +281,4 @@ const FastMovingStocks = () => {
   );
 };
 
-export default FastMovingStocks;
+export default StockReport;

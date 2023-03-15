@@ -14,22 +14,17 @@ import {
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import {
-  getAllOrders,
-  getOrderByState,
-} from "../../app/api/purchaseOrderServices";
-import ContentCard from "../../components/ContentCard/ContentCard";
-import EnhancedTable from "../../components/EnhancedTable/EnhancedTable";
-import ExpandableTable from "../../components/ExpandableTable/ExpandableTable";
-import { convertToRupees } from "../../utils/convertToRupees";
+import { getOrderByStateAndDistributor } from "../../../app/api/purchaseOrderServices";
+import ContentCard from "../../../components/ContentCard/ContentCard";
+import ExpandableTable from "../../../components/ExpandableTable/ExpandableTable";
+import { convertToRupees } from "../../../utils/convertToRupees";
 
-import SaveAltIcon from "@mui/icons-material/SaveAlt";
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import SwipeRightIcon from "@mui/icons-material/SwipeRight";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import { useNavigate } from "react-router-dom";
 import { Search } from "@mui/icons-material";
 
-const ViewPurchaseOrders = () => {
+const SavedPurchaseOrders = () => {
   const navigate = useNavigate();
   const { userId } = useSelector((state) => state.loginDMS);
 
@@ -49,25 +44,26 @@ const ViewPurchaseOrders = () => {
   });
 
   const actionButtons = [
-    // {
-    //   tooltip: "Accept",
-    //   icon: <SwipeRightIcon />,
-    //   onClick: (order) => {
-    //     navigate("/distribute-stock", {
-    //       state: {
-    //         order: order,
-    //       },
-    //     });
-    //     console.log(order);
-    //   },
-    // },
-    // {
-    //   tooltip: "Reject",
-    //   icon: <ThumbDownIcon />,
-    //   onClick: (order) => {
-    //     console.log(order);
-    //   },
-    // },
+    {
+      tooltip: "Accept",
+      icon: <SwipeRightIcon />,
+      onClick: (order) => {
+        navigate("/distribute-stock", {
+          state: {
+            order: order,
+          },
+        });
+        console.log(order);
+      },
+    },
+
+    {
+      tooltip: "Reject",
+      icon: <ThumbDownIcon />,
+      onClick: (order) => {
+        console.log(order);
+      },
+    },
   ];
 
   const headCells = [
@@ -123,29 +119,32 @@ const ViewPurchaseOrders = () => {
   };
 
   useEffect(() => {
-    getAllOrders((response) => {
-      console.log(response);
+    getOrderByStateAndDistributor(
+      { distributor: userId, state: "SAVED" },
+      (response) => {
+        console.log(response);
 
-      setOrders(
-        response.data.map((oneEl) =>
-          createData(
-            oneEl,
-            oneEl.dealer?.name,
-            new Date(oneEl.createdAt).toLocaleDateString(),
-            oneEl.dealer?.storeAddress,
-            oneEl.dealer?.phoneNumber,
-            oneEl.dealer?.outstandingAmount,
-            oneEl.state
+        setOrders(
+          response.data.map((oneEl) =>
+            createData(
+              oneEl,
+              oneEl.dealer?.name,
+              new Date(oneEl.createdAt).toLocaleDateString(),
+              oneEl.dealer?.storeAddress,
+              oneEl.dealer?.phoneNumber,
+              oneEl.dealer?.outstandingAmount,
+              oneEl.state
+            )
           )
-        )
-      );
-    });
+        );
+      }
+    );
   }, [refreshTable]);
 
   return (
     <div>
       {/* --------------------------- table section ------------------------------- */}
-      <Box mt={2}>
+      <Box>
         <ContentCard>
           <Box
             display={"flex"}
@@ -154,7 +153,7 @@ const ViewPurchaseOrders = () => {
             my={1}
           >
             <Typography fontSize={"1.5rem"} fontWeight="bold">
-              All Purchase Orders
+              Saved Purchase Orders
             </Typography>
             <Box>
               <Button variant="outlined">Export to PDF</Button>
@@ -236,4 +235,4 @@ const ViewPurchaseOrders = () => {
   );
 };
 
-export default ViewPurchaseOrders;
+export default SavedPurchaseOrders;

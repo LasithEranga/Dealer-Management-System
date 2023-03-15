@@ -92,7 +92,7 @@ const Dashboard = () => {
         />
       </Grid>
 
-      <Grid container mt={2} gap={2}>
+      <Grid container mt={2} spacing={2}>
         <Grid item xs={7.5}>
           <ContentCard>
             <Box display={"flex"} justifyContent={"space-between"}>
@@ -120,7 +120,7 @@ const Dashboard = () => {
             </Box>
           </ContentCard>
         </Grid>
-        <Grid item xs>
+        <Grid item xs={4.5}>
           <ContentCard
             sx={{
               pb: 2,

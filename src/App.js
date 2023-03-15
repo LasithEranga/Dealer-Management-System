@@ -12,10 +12,10 @@ import NewStock from "./pages/NewStock/NewStock";
 import SellTanks from "./pages/SellTanks/SellTanks";
 import ViewGasTanks from "./pages/ViewGasTanks/ViewGasTanks";
 import ViewStock from "./pages/ViewStock/ViewStock";
-import SavedPurchaseOrders from "./pages/SavedPurchaseOrders/SavedPurchaseOrders";
-import PendingPaymentPurchaseOrders from "./pages/PendingPaymentPurchaseOrders/PendingPaymentPurchaseOrders";
-import NewPurchaseOrders from "./pages/NewPurchaseOrders/NewPurchaseOrders";
-import ViewPurchaseOrders from "./pages/ViewPurchaseOrders/ViewPurchaseOrders";
+import SavedPurchaseOrders from "./pages/DistributorPurchseOrders/SavedPurchaseOrders/SavedPurchaseOrders";
+import PendingPaymentPurchaseOrders from "./pages/DistributorPurchseOrders/PendingPaymentPurchaseOrders/PendingPaymentPurchaseOrders";
+import NewPurchaseOrders from "./pages/DistributorPurchseOrders/NewPurchaseOrders/NewPurchaseOrders";
+import ViewPurchaseOrders from "./pages/DistributorPurchseOrders/ViewPurchaseOrders/ViewPurchaseOrders";
 import ViewDealerStocks from "./pages/ViewDealerStocks/ViewDealerStocks";
 import NewPurchaseOrder from "./pages/DealerPurchaseOrders/NewPurchaseOrder/NewPurchaseOrder";
 import AcceptedPurchaseOrders from "./pages/DealerPurchaseOrders/AcceptedPurchaseOrders/AcceptedPurchaseOrders";
@@ -26,13 +26,13 @@ import DistributorReports from "./pages/Reports/DistributorReports";
 import ReturnStockToDistributor from "./pages/ReturnStockToDistributor/ReturnStockToDistributor";
 import DealerSales from "./pages/DealerSales/DealerSales";
 import Test from "./pages/Test";
-import SalesReport from "./pages/SalesReport/SalesReport";
-import Receivables from "./pages/Receivables/Receivables";
-import TankReturns from "./pages/TankReturns/TankReturns";
-import StockReport from "./pages/StockReport/StockReport";
-import DealerStockReport from "./pages/DealerStockReport/DealerStockReport";
-import PurchaseOrdersReport from "./pages/PurchaseOrdersReport/PurchaseOrdersReport";
-import FastMovingStocks from "./pages/FastMovingStocks/FastMovingStocks";
+import SalesReport from "./pages/Reports/DistributorReports/SalesReport/SalesReport";
+import Receivables from "./pages/Reports/DistributorReports/Receivables/Receivables";
+import TankReturns from "./pages/Reports/DistributorReports/TankReturns/TankReturns";
+import StockReport from "./pages/Reports/DistributorReports/StockReport/StockReport";
+import DealerStockReport from "./pages/Reports/DistributorReports/DealerStockReport/DealerStockReport";
+import PurchaseOrdersReport from "./pages/Reports/DistributorReports/PurchaseOrdersReport/PurchaseOrdersReport";
+import FastMovingStocks from "./pages/Reports/DistributorReports/FastMovingStocks/FastMovingStocks";
 
 function App() {
   const user = useSelector((state) =>

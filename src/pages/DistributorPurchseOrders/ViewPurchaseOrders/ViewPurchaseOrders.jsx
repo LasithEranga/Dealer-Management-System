@@ -15,50 +15,59 @@ import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
-  getOrderByStateAndDistributor,
-  purchaseOrderMarkAsPaid,
-} from "../../app/api/purchaseOrderServices";
-import ContentCard from "../../components/ContentCard/ContentCard";
-import ExpandableTable from "../../components/ExpandableTable/ExpandableTable";
-import { convertToRupees } from "../../utils/convertToRupees";
+  getAllOrders,
+  getOrderByState,
+} from "../../../app/api/purchaseOrderServices";
+import ContentCard from "../../../components/ContentCard/ContentCard";
+import EnhancedTable from "../../../components/EnhancedTable/EnhancedTable";
+import ExpandableTable from "../../../components/ExpandableTable/ExpandableTable";
+import { convertToRupees } from "../../../utils/convertToRupees";
 
-import SwipeRightIcon from "@mui/icons-material/SwipeRight";
+import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import SwipeRightIcon from "@mui/icons-material/SwipeRight";
 import { useNavigate } from "react-router-dom";
-import CreditScoreIcon from "@mui/icons-material/CreditScore";
 import { Search } from "@mui/icons-material";
-import { showSystemAlert } from "../../app/alertServices";
 
-const SavedPurchaseOrders = () => {
+const ViewPurchaseOrders = () => {
   const navigate = useNavigate();
   const { userId } = useSelector((state) => state.loginDMS);
+
+  const [showEditModal, setShowEditModal] = useState(false);
   const [orders, setOrders] = useState([]);
   const [refreshTable, setRefreshTable] = useState(false);
+  const [update, setUpdate] = useState({
+    isUpdating: true,
+    _id: "",
+  });
+
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("pleaseSelect");
+  const [outstandingBalance, setOutstandingamount] = useState({
+    min: "",
+    max: "",
+  });
 
   const actionButtons = [
-    {
-      tooltip: "Payment received",
-      icon: <CreditScoreIcon />,
-      onClick: (order) => {
-        purchaseOrderMarkAsPaid(
-          {
-            purchaseOrderId: order._id,
-          },
-          (response) => {
-            if (response.status === 0) {
-              setRefreshTable(!refreshTable);
-              showSystemAlert("Payment received successfully", "success");
-            }
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-        console.log(order);
-      },
-    },
+    // {
+    //   tooltip: "Accept",
+    //   icon: <SwipeRightIcon />,
+    //   onClick: (order) => {
+    //     navigate("/distribute-stock", {
+    //       state: {
+    //         order: order,
+    //       },
+    //     });
+    //     console.log(order);
+    //   },
+    // },
+    // {
+    //   tooltip: "Reject",
+    //   icon: <ThumbDownIcon />,
+    //   onClick: (order) => {
+    //     console.log(order);
+    //   },
+    // },
   ];
 
   const headCells = [
@@ -114,33 +123,29 @@ const SavedPurchaseOrders = () => {
   };
 
   useEffect(() => {
-    getOrderByStateAndDistributor(
-      { distributor: userId, state: "PENDING_PAYMENT" },
-      (response) => {
-        console.log(response);
+    getAllOrders((response) => {
+      console.log(response);
 
-        setOrders(
-          response.data.map((oneEl) =>
-            createData(
-              oneEl,
-              oneEl.dealer?.name,
-              new Date(oneEl.createdAt).toLocaleDateString(),
-              oneEl.dealer?.storeAddress,
-              oneEl.dealer?.phoneNumber,
-              oneEl.dealer?.outstandingAmount,
-              oneEl.state
-            )
+      setOrders(
+        response.data.map((oneEl) =>
+          createData(
+            oneEl,
+            oneEl.dealer?.name,
+            new Date(oneEl.createdAt).toLocaleDateString(),
+            oneEl.dealer?.storeAddress,
+            oneEl.dealer?.phoneNumber,
+            oneEl.dealer?.outstandingAmount,
+            oneEl.state
           )
-        );
-      }
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        )
+      );
+    });
   }, [refreshTable]);
 
   return (
     <div>
       {/* --------------------------- table section ------------------------------- */}
-      <Box>
+      <Box mt={2}>
         <ContentCard>
           <Box
             display={"flex"}
@@ -149,7 +154,7 @@ const SavedPurchaseOrders = () => {
             my={1}
           >
             <Typography fontSize={"1.5rem"} fontWeight="bold">
-              Pending Payment Orders
+              All Purchase Orders
             </Typography>
             <Box>
               <Button variant="outlined">Export to PDF</Button>
@@ -223,7 +228,6 @@ const SavedPurchaseOrders = () => {
             data={orders}
             ignoreTill={1}
             actionButtons={actionButtons}
-            showOutstandingAfterAccept={false}
           />
         </ContentCard>
       </Box>
@@ -232,4 +236,4 @@ const SavedPurchaseOrders = () => {
   );
 };
 
-export default SavedPurchaseOrders;
+export default ViewPurchaseOrders;

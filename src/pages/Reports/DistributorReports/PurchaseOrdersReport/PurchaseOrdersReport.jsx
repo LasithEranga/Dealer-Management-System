@@ -14,9 +14,9 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import ContentCard from "../../components/ContentCard/ContentCard";
-import ReportLayout from "../../components/ReportLayout/ReportLayout";
-import ReportTable from "../../components/ReportTable/ReportTable";
+import ContentCard from "../../../../components/ContentCard/ContentCard";
+import ReportLayout from "../../../../components/ReportLayout/ReportLayout";
+import ReportTable from "../../../../components/ReportTable/ReportTable";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 
