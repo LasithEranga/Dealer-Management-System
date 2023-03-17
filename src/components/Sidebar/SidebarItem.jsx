@@ -5,7 +5,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const SidebarItem = ({ icon, title, path }) => {
   const location = useLocation();
-  const currentPathname = location.pathname.substring(1);
+  let currentPathname = location.pathname.substring(1);
+  if (currentPathname.includes("/")) {
+    const split = currentPathname.split("/");
+    currentPathname = split[0];
+  }
 
   const navigate = useNavigate();
   return (
