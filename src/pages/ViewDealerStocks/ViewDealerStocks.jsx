@@ -17,7 +17,10 @@ import DealerStockCard from "../../components/DealerStockCard/DealerStockCard";
 
 const ViewDealerStocks = () => {
   const { userId } = useSelector((state) => state.loginDMS);
-  const [dealerDetails, setDealerDetails] = useState([]);
+  const [dealerStocks, setDealerStocks] = useState([]);
+  const [filteredDealerStocks, setFilteredDealerStocks] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const [status, setStatus] = useState("all");
 
   useEffect(() => {
     getDealerStockSummery(
@@ -26,13 +29,34 @@ const ViewDealerStocks = () => {
       },
       (response) => {
         console.log("response", response);
-        setDealerDetails(response.data);
+        setDealerStocks(response.data);
       },
       (error) => {
         console.log("error", error);
       }
     );
   }, []);
+
+  useEffect(() => {
+    if (searchText.length > 0) {
+      setFilteredDealerStocks(
+        dealerStocks.filter((dealer) => {
+          return dealer.name.toLowerCase().includes(searchText.toLowerCase());
+        })
+      );
+    } else {
+      setFilteredDealerStocks(dealerStocks);
+    }
+  }, [dealerStocks, searchText]);
+  useEffect(() => {
+    switch (status) {
+      case "all":
+        setFilteredDealerStocks(dealerStocks);
+        break;
+      default:
+        setFilteredDealerStocks(dealerStocks);
+    }
+  }, [dealerStocks, status]);
 
   return (
     <Box>
@@ -59,24 +83,28 @@ const ViewDealerStocks = () => {
                 </InputAdornment>
               ),
             }}
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
           />
           <Select
             label=""
             variant="outlined"
             placeholder="Select status"
             size="small"
-            value={"all"}
+            value={status}
             sx={{ width: "10rem", ml: 2 }}
+            onChange={(e) => setStatus(e.target.value)}
           >
             <MenuItem value="all">All</MenuItem>
-            <MenuItem value="active">Active</MenuItem>
-            <MenuItem value="inactive">Inactive</MenuItem>
+            <MenuItem value="fastMoving">Fast Moving</MenuItem>
+            <MenuItem value="moderateMoving">Moderate Moving</MenuItem>
+            <MenuItem value="slowMoving">Slow Moving</MenuItem>
           </Select>
         </Box>
       </Box>
       {/* content area */}
       <Grid container columnSpacing={4} rowSpacing={4} mt={2}>
-        {dealerDetails.map((dealer, index) => {
+        {filteredDealerStocks.map((dealer, index) => {
           return <DealerStockCard dealer={dealer} key={index} />;
         })}
       </Grid>
