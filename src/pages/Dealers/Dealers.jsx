@@ -173,6 +173,36 @@ const Dealers = () => {
     );
   }, [search, dealers]);
 
+  useEffect(() => {
+    const outstandingBalanceMin = outstandingBalance.min;
+    const outstandingBalanceMax = outstandingBalance.max;
+    let filteredList = [];
+
+    if (outstandingBalanceMin !== "" && outstandingBalanceMax !== "") {
+      setFilteredDealers(
+        dealers.filter(
+          (oneEl) =>
+            oneEl.outstandingAmount >= outstandingBalanceMin &&
+            oneEl.outstandingAmount <= outstandingBalanceMax
+        )
+      );
+    } else if (outstandingBalanceMin !== "") {
+      setFilteredDealers(
+        dealers.filter(
+          (oneEl) => oneEl.outstandingAmount >= outstandingBalanceMin
+        )
+      );
+    } else if (outstandingBalanceMax !== "") {
+      setFilteredDealers(
+        dealers.filter(
+          (oneEl) => oneEl.outstandingAmount <= outstandingBalanceMax
+        )
+      );
+    } else {
+      setFilteredDealers(dealers);
+    }
+  }, [outstandingBalance]);
+
   return (
     <div>
       <CustomModal open={showEditModal} setOpen={setShowEditModal}>
@@ -415,9 +445,13 @@ const Dealers = () => {
                       size="small"
                       placeholder="min: Rs:2000.00"
                       onChange={(e) => {
+                        const value = e.target.value;
+                        if (isNaN(value)) {
+                          return;
+                        }
                         setOutstandingamount((prev) => ({
                           ...prev,
-                          min: e.target.value,
+                          min: value,
                         }));
                       }}
                       value={outstandingBalance.min}
@@ -434,12 +468,16 @@ const Dealers = () => {
                       size="small"
                       placeholder="Max: Rs:50000.00"
                       onChange={(e) => {
+                        const value = e.target.value;
+                        if (isNaN(value)) {
+                          return;
+                        }
                         setOutstandingamount((prev) => ({
                           ...prev,
-                          min: e.target.value,
+                          max: value,
                         }));
                       }}
-                      value={outstandingBalance.min}
+                      value={outstandingBalance.max}
                     />
                   </FormControl>
                 </Box>

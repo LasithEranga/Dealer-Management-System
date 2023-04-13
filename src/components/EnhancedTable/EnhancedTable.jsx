@@ -83,6 +83,21 @@ const EnhancedTable = ({
               </tr>
             );
           })}
+          {rowsToDisplay.length === 0 && (
+            <tr className="eh-tr">
+              <td colSpan={headCells.length}>
+                <Typography
+                  style={{
+                    textAlign: "center",
+                    padding: "10px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  No records to display
+                </Typography>
+              </td>
+            </tr>
+          )}
 
           {Array(rowsPerPage - rowsToDisplay.length)
             .fill(0)
