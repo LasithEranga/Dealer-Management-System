@@ -99,13 +99,14 @@ const EnhancedTable = ({
             </tr>
           )}
 
-          {Array(rowsPerPage - rowsToDisplay.length)
-            .fill(0)
-            .map((oneEl, index) => (
-              <tr key={`empty${index}`} className="eh-tr">
-                <td colSpan={headCells.length}></td>
-              </tr>
-            ))}
+          {rowsPerPage > rowsToDisplay.length &&
+            Array(rowsPerPage - rowsToDisplay.length)
+              .fill(0)
+              .map((oneEl, index) => (
+                <tr key={`empty${index}`} className="eh-tr">
+                  <td colSpan={headCells.length}></td>
+                </tr>
+              ))}
         </tbody>
       </table>
 

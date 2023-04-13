@@ -203,6 +203,49 @@ const Dealers = () => {
     }
   }, [outstandingBalance]);
 
+  useEffect(() => {
+    switch (sortBy) {
+      case "pleaseSelect":
+        setFilteredDealers(dealers);
+        break;
+      case "name":
+        setFilteredDealers(
+          [...filteredDealers].sort((a, b) => comparator(a, b, "name"))
+        );
+        break;
+      case "address":
+        setFilteredDealers(
+          [...filteredDealers].sort((a, b) => comparator(a, b, "address"))
+        );
+        break;
+      case "email":
+        setFilteredDealers(
+          [...filteredDealers].sort((a, b) => comparator(a, b, "email"))
+        );
+        break;
+      case "outstandingAmount":
+        setFilteredDealers(
+          [...filteredDealers].sort((a, b) =>
+            comparator(a, b, "outstandingAmount")
+          )
+        );
+        break;
+
+      default:
+        setFilteredDealers(dealers);
+    }
+  }, [sortBy]);
+
+  const comparator = (a, b, key) => {
+    if (a[key] < b[key]) {
+      return -1;
+    }
+    if (a[key] > b[key]) {
+      return 1;
+    }
+    return 0;
+  };
+
   return (
     <div>
       <CustomModal open={showEditModal} setOpen={setShowEditModal}>
@@ -426,7 +469,7 @@ const Dealers = () => {
                     <MenuItem value={"name"}>Name</MenuItem>
                     <MenuItem value={"address"}>Address</MenuItem>
                     <MenuItem value={"email"}>Email</MenuItem>
-                    <MenuItem value={"outstandingBalance"}>
+                    <MenuItem value={"outstandingAmount"}>
                       Outstanding Balance
                     </MenuItem>
                   </Select>
