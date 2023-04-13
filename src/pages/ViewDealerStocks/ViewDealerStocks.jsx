@@ -21,6 +21,7 @@ const ViewDealerStocks = () => {
   const [filteredDealerStocks, setFilteredDealerStocks] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [status, setStatus] = useState("all");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getDealerStockSummery(
@@ -33,6 +34,9 @@ const ViewDealerStocks = () => {
       },
       (error) => {
         console.log("error", error);
+      },
+      () => {
+        setLoading(false);
       }
     );
   }, []);
@@ -69,7 +73,7 @@ const ViewDealerStocks = () => {
 
   const checkForStockType = (stockType) => {
     const matchingStocks = [];
-    dealerStocks.forEach((oneStock) => {
+    filteredDealerStocks.forEach((oneStock) => {
       //check whether the stock is fast moving or not
       const stocks = oneStock.stocks;
       stocks.forEach((stock) => {
@@ -134,8 +138,9 @@ const ViewDealerStocks = () => {
           return <DealerStockCard dealer={dealer} key={index} />;
         })}
       </Grid>
+
       {/* if no stocks to show display message box */}
-      {filteredDealerStocks.length === 0 && (
+      {loading ? (
         <Box
           display="flex"
           justifyContent="center"
@@ -143,9 +148,22 @@ const ViewDealerStocks = () => {
           height="50vh"
         >
           <Typography fontSize="1.5rem" fontWeight="bold">
-            No stocks to show
+            Loading Stocks
           </Typography>
         </Box>
+      ) : (
+        filteredDealerStocks.length === 0 && (
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="50vh"
+          >
+            <Typography fontSize="1.5rem" fontWeight="bold">
+              No stocks to show
+            </Typography>
+          </Box>
+        )
       )}
     </Box>
   );
