@@ -53,10 +53,36 @@ const ViewDealerStocks = () => {
       case "all":
         setFilteredDealerStocks(dealerStocks);
         break;
+      case "fastMoving":
+        setFilteredDealerStocks(checkForStockType("FAST_MOVING"));
+        break;
+      case "moderateMoving":
+        setFilteredDealerStocks(checkForStockType("MODERATE_MOVING"));
+        break;
+      case "slowMoving":
+        setFilteredDealerStocks(checkForStockType("SLOW_MOVING"));
+        break;
       default:
         setFilteredDealerStocks(dealerStocks);
     }
   }, [dealerStocks, status]);
+
+  const checkForStockType = (stockType) => {
+    const matchingStocks = [];
+    dealerStocks.forEach((oneStock) => {
+      //check whether the stock is fast moving or not
+      const stocks = oneStock.stocks;
+      stocks.forEach((stock) => {
+        const gasTanks = stock.quantities;
+        gasTanks.forEach((gasTank) => {
+          if (gasTank.stockMovingSpeed === stockType) {
+            matchingStocks.push(oneStock);
+          }
+        });
+      });
+    });
+    return matchingStocks;
+  };
 
   return (
     <Box>
@@ -108,6 +134,19 @@ const ViewDealerStocks = () => {
           return <DealerStockCard dealer={dealer} key={index} />;
         })}
       </Grid>
+      {/* if no stocks to show display message box */}
+      {filteredDealerStocks.length === 0 && (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="50vh"
+        >
+          <Typography fontSize="1.5rem" fontWeight="bold">
+            No stocks to show
+          </Typography>
+        </Box>
+      )}
     </Box>
   );
 };
