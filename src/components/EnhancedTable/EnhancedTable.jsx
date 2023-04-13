@@ -26,6 +26,11 @@ const EnhancedTable = ({
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(0);
 
+  const rowsToDisplay = data.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+
   return (
     <div>
       <table style={{ width: "100%" }} className="eh-table">
@@ -37,49 +42,55 @@ const EnhancedTable = ({
           </tr>
         </thead>
         <tbody>
-          {data
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((element, index) => {
-              return (
-                <tr key={index} className="eh-tr">
-                  {enableAvatar.isVisible && (
-                    <td className="eh-td">
-                      <NameAvatar
-                        priceEnabled={priceEnabled}
-                        {...(priceEnabled && {
-                          amount: Object.values(element)[amountIndex],
-                        })}
-                        name={enableAvatar.madeBy
-                          .map((oneEl) => Object.values(element)[oneEl])
-                          .join("")}
-                      />
-                    </td>
-                  )}
+          {rowsToDisplay.map((element, index) => {
+            return (
+              <tr key={index} className="eh-tr">
+                {enableAvatar.isVisible && (
+                  <td className="eh-td">
+                    <NameAvatar
+                      priceEnabled={priceEnabled}
+                      {...(priceEnabled && {
+                        amount: Object.values(element)[amountIndex],
+                      })}
+                      name={enableAvatar.madeBy
+                        .map((oneEl) => Object.values(element)[oneEl])
+                        .join("")}
+                    />
+                  </td>
+                )}
 
-                  {Object.values(element)
-                    .slice(0, upto)
-                    .map((oneEl, index) => {
-                      return (
-                        <td key={index} className="eh-td">
-                          {oneEl}
-                        </td>
-                      );
-                    })}
+                {Object.values(element)
+                  .slice(0, upto)
+                  .map((oneEl, index) => {
+                    return (
+                      <td key={index} className="eh-td">
+                        {oneEl}
+                      </td>
+                    );
+                  })}
 
-                  {actionButtons.map((oneEl, index) => (
-                    <td className="eh-td" key={index}>
-                      <Button
-                        onClick={() => {
-                          oneEl.action(element);
-                        }}
-                      >
-                        {oneEl.name}
-                      </Button>
-                    </td>
-                  ))}
-                </tr>
-              );
-            })}
+                {actionButtons.map((oneEl, index) => (
+                  <td className="eh-td" key={index}>
+                    <Button
+                      onClick={() => {
+                        oneEl.action(element);
+                      }}
+                    >
+                      {oneEl.name}
+                    </Button>
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
+
+          {Array(rowsPerPage - rowsToDisplay.length)
+            .fill(0)
+            .map((oneEl, index) => (
+              <tr key={`empty${index}`} className="eh-tr">
+                <td colSpan={headCells.length}></td>
+              </tr>
+            ))}
         </tbody>
       </table>
 

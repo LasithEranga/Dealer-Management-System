@@ -33,6 +33,7 @@ const Dealers = () => {
     isUpdating: true,
     _id: "",
   });
+  const [filteredDealers, setFilteredDealers] = useState([]);
 
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("pleaseSelect");
@@ -163,6 +164,14 @@ const Dealers = () => {
     setValues(data);
     setShowEditModal(true);
   };
+
+  useEffect(() => {
+    setFilteredDealers(
+      dealers.filter((oneEl) =>
+        oneEl.name.toLowerCase().includes(search.toLowerCase())
+      )
+    );
+  }, [search, dealers]);
 
   return (
     <div>
@@ -334,11 +343,11 @@ const Dealers = () => {
           Dealers
         </Typography>
         <Box>
-          <Button sx={{ mr: 1, boxShadow: 0 }} variant="contained">
+          <Button sx={{ mr: 1, boxShadow: 0 }} variant="outlined">
             Download PDF
           </Button>
           <Button
-            variant="contained"
+            variant="outlined"
             sx={{ boxShadow: 0 }}
             onClick={() => {
               setShowEditModal(true);
@@ -444,7 +453,7 @@ const Dealers = () => {
       <Box mt={2}>
         <ContentCard>
           <EnhancedTable
-            data={dealers}
+            data={filteredDealers}
             actionButtons={[
               {
                 name: "Edit",

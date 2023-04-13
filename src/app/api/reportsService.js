@@ -54,3 +54,19 @@ export const dealerStockReport = (body, onSuccess, onFailed, onComplete) => {
     onComplete
   );
 };
+
+export const fastMovingStocksReport = (
+  body,
+  onSuccess,
+  onFailed,
+  onComplete
+) => {
+  post(
+    "/reports/fast-moving-stocks",
+    body,
+    "fastMovingStocksReportLoading",
+    onSuccess,
+    onFailed,
+    onComplete
+  );
+};
