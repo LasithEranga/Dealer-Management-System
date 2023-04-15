@@ -22,6 +22,7 @@ const ViewDealerStocks = () => {
   const [searchText, setSearchText] = useState("");
   const [status, setStatus] = useState("all");
   const [loading, setLoading] = useState(true);
+  const [noStockMessage, setNoStockMessage] = useState("");
 
   useEffect(() => {
     getDealerStockSummery(
@@ -42,6 +43,7 @@ const ViewDealerStocks = () => {
   }, []);
 
   useEffect(() => {
+    let timeout = null;
     if (searchText.length > 0) {
       setFilteredDealerStocks(
         dealerStocks.filter((dealer) => {
@@ -50,8 +52,13 @@ const ViewDealerStocks = () => {
       );
     } else {
       setFilteredDealerStocks(dealerStocks);
+      timeout = setTimeout(() => {
+        setNoStockMessage("No stocks to show");
+      }, 500);
     }
+    return () => clearTimeout(timeout);
   }, [dealerStocks, searchText]);
+
   useEffect(() => {
     switch (status) {
       case "all":
@@ -160,7 +167,7 @@ const ViewDealerStocks = () => {
             height="50vh"
           >
             <Typography fontSize="1.5rem" fontWeight="bold">
-              No stocks to show
+              {noStockMessage}
             </Typography>
           </Box>
         )
