@@ -2,7 +2,13 @@ import { ArrowDownward, ArrowUpward } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
 import React from "react";
 
-const AnalyticsCard = ({ title, changedRatio, isIncreased, currentValue }) => {
+const AnalyticsCard = ({
+  title,
+
+  changedRatio,
+  isIncreased,
+  currentValue,
+}) => {
   return (
     <Box p={1}>
       <Box
@@ -27,7 +33,7 @@ const AnalyticsCard = ({ title, changedRatio, isIncreased, currentValue }) => {
             >
               {title}
             </Typography>
-            <Typography
+            {/* <Typography
               sx={{
                 color: isIncreased ? "#61e3a2" : "red",
               }}
@@ -48,17 +54,17 @@ const AnalyticsCard = ({ title, changedRatio, isIncreased, currentValue }) => {
                   color: "red",
                 }}
               />
-            )}
+            )} */}
           </Box>
           <Box>
-            <Box
+            {/* <Box
               sx={{
                 width: "10px",
                 height: "10px",
                 borderRadius: "50%",
                 backgroundColor: isIncreased ? "#61e3a2" : "red",
               }}
-            ></Box>
+            ></Box> */}
           </Box>
         </Box>
         <Box>

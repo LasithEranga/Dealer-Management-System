@@ -1,21 +1,19 @@
 import {
   ArrowCircleDown,
   Description,
-  Forward30,
-  Groups,
   Inventory,
   KeyboardReturn,
-  Report,
+  LocalShipping,
   TrendingUp,
 } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import ContentCard from "../../components/ContentCard/ContentCard";
 import ReportCard from "../../components/ReportCard/ReportCard";
 
 export const ICON_SIZE = "3rem";
-const DistributorReports = () => {
+
+const DealerReports = () => {
   const navigate = useNavigate();
 
   return (
@@ -58,9 +56,9 @@ const DistributorReports = () => {
               }}
             />
           }
-          title="Receivables"
+          title="Paybales"
           onClick={() => {
-            navigate("receivables-report");
+            navigate("payables-report");
           }}
         />
 
@@ -74,7 +72,7 @@ const DistributorReports = () => {
           }
           title="Tank Returns"
           onClick={() => {
-            navigate("tank-returns-report");
+            navigate("dealer-tank-returns-report");
           }}
         />
 
@@ -93,30 +91,18 @@ const DistributorReports = () => {
         />
         <ReportCard
           icon={
-            <Groups
+            <LocalShipping
               sx={{
                 fontSize: ICON_SIZE,
               }}
             />
           }
-          title="Dealer Stocks"
+          title="Stocks In Transit"
           onClick={() => {
-            navigate("dealer-stocks-report");
+            navigate("dealer-stocks-in-transit");
           }}
         />
-        <ReportCard
-          icon={
-            <Forward30
-              sx={{
-                fontSize: ICON_SIZE,
-              }}
-            />
-          }
-          title="Fast Moving Stocks"
-          onClick={() => {
-            navigate("fast-moving-stocks-report");
-          }}
-        />
+
         <ReportCard
           icon={
             <Description
@@ -135,4 +121,4 @@ const DistributorReports = () => {
   );
 };
 
-export default DistributorReports;
+export default DealerReports;

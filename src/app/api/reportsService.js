@@ -70,3 +70,19 @@ export const fastMovingStocksReport = (
     onComplete
   );
 };
+
+export const purchaseOrdersReports = (
+  body,
+  onSuccess,
+  onFailed,
+  onComplete
+) => {
+  post(
+    "/reports/purchase-orders",
+    body,
+    "purchaseOrdersReportsLoading",
+    onSuccess,
+    onFailed,
+    onComplete
+  );
+};

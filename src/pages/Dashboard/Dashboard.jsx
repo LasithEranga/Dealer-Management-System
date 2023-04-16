@@ -137,11 +137,7 @@ const Dashboard = () => {
               <Grid item p={3} lg={7}>
                 <Doughnut
                   data={{
-                    labels: [
-                      bestPerformingDealersData.map(
-                        (oneEl) => oneEl.dealer.name
-                      ),
-                    ],
+                    labels: [],
                     datasets: [
                       {
                         label: "Sales",
