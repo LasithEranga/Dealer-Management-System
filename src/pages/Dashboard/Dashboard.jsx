@@ -10,34 +10,23 @@ import BarChart from "../../components/BarChart/BarChart";
 import DoughnutChartLegends from "./DoughnutChartLegends";
 import { useSelector } from "react-redux";
 import {
+  bestPerformingDealers,
   dashboardChart,
   dashboardSalesInfo,
 } from "../../app/api/dasboardInfoServices";
 import { convertToRupees } from "../../utils/convertToRupees";
 Chart.register(ArcElement);
-export const data = {
-  labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-  datasets: [
-    {
-      label: "# of Votes",
-      data: [12, 19],
-      backgroundColor: [
-        "rgba(255, 99, 132, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(255, 206, 86, 1)",
-        "rgba(75, 192, 192, 1)",
-      ],
 
-      borderWidth: 1,
-    },
-  ],
-};
+export const chartColors = ["#FF6384", "#36A2EB", "#FFCE56"];
 
 const Dashboard = () => {
   const userName = useSelector((state) => state.loginDMS.name);
   const userId = useSelector((state) => state.loginDMS.userId);
   const [salesInfo, setSalesInfo] = useState({});
   const [chartData, setChartData] = useState({});
+  const [bestPerformingDealersData, setBestPerformingDealersData] = useState(
+    []
+  );
 
   useEffect(() => {
     dashboardSalesInfo(
@@ -61,6 +50,18 @@ const Dashboard = () => {
       (response) => {
         if (response.status === 0) {
           setChartData(response.data);
+        }
+      },
+      () => {},
+      () => {}
+    );
+    bestPerformingDealers(
+      {
+        userId,
+      },
+      (response) => {
+        if (response.status === 0) {
+          setBestPerformingDealersData(response.data);
         }
       },
       () => {},
@@ -135,7 +136,23 @@ const Dashboard = () => {
             <Grid container display={"flex"}>
               <Grid item p={3} lg={7}>
                 <Doughnut
-                  data={data}
+                  data={{
+                    labels: [
+                      bestPerformingDealersData.map(
+                        (oneEl) => oneEl.dealer.name
+                      ),
+                    ],
+                    datasets: [
+                      {
+                        label: "Sales",
+                        data: bestPerformingDealersData.map(
+                          (oneEl) => oneEl.sales
+                        ),
+                        backgroundColor: chartColors,
+                        borderWidth: 1,
+                      },
+                    ],
+                  }}
                   options={{
                     responsive: true,
                     plugins: {
@@ -155,42 +172,26 @@ const Dashboard = () => {
                 alignItems={"start"}
                 justifyContent={"center"}
               >
-                <DoughnutChartLegends
-                  label="Joseph Roberts"
-                  indicatorColor="rgba(255, 99, 132, 1)"
-                />
-                <DoughnutChartLegends
-                  label="Ronald Ewing"
-                  indicatorColor="rgba(54, 162, 235, 1)"
-                />
-                <DoughnutChartLegends
-                  label="Jhon doe"
-                  indicatorColor="rgba(255, 206, 86, 1)"
-                />
-                <DoughnutChartLegends
-                  label="Sunday corner"
-                  indicatorColor="rgba(75, 192, 192, 1)"
-                />
+                {bestPerformingDealersData.map((oneEl, index) => (
+                  <DoughnutChartLegends
+                    label={oneEl.dealer.name}
+                    indicatorColor={chartColors[index]}
+                    key={index}
+                  />
+                ))}
               </Grid>
             </Grid>
 
             <Box>
-              <StockSummery
-                storeName="Joseph Roberts"
-                noOfTamks="12 tanks"
-                comparisonToLastMonth="10%"
-              />
-              <StockSummery
-                storeName="Ronald Ewing"
-                noOfTamks="12 tanks"
-                comparisonToLastMonth="5%"
-              />
-              <StockSummery
-                storeName="Jhon doe"
-                noOfTamks="12 tanks"
-                comparisonToLastMonth="10%"
-                increased={false}
-              />
+              {bestPerformingDealersData.map((oneEl, index) => (
+                <StockSummery
+                  storeName={oneEl.dealer.name}
+                  noOfTamks={`${oneEl.noOfTanks} tanks`}
+                  comparisonToLastMonth={`${oneEl.percentage}%`}
+                  key={index}
+                  increased={oneEl.status === "increased" ? true : false}
+                />
+              ))}
             </Box>
           </ContentCard>
         </Grid>

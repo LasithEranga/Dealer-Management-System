@@ -53,7 +53,7 @@ const AcceptReturns = () => {
     }
   }, [salesReceiptKeyword]);
 
-  const onPrintClick = () => {
+  const onReturnClick = () => {
     if (orderList.length === 0) {
       showSystemAlert("Please add tanks to return receipt", "error");
       return;
@@ -375,7 +375,7 @@ const AcceptReturns = () => {
                   sx={{ borderRadius: 0, boxShadow: 0 }}
                   disabled
                 >
-                  Print{" "}
+                  Returning{" "}
                   <CircularProgress
                     size={15}
                     color="inherit"
@@ -389,9 +389,9 @@ const AcceptReturns = () => {
                   variant="contained"
                   color="secondary"
                   sx={{ borderRadius: 0, boxShadow: 0 }}
-                  onClick={onPrintClick}
+                  onClick={onReturnClick}
                 >
-                  Print
+                  Return
                 </Button>
               )}
             </Box>

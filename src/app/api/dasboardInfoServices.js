@@ -21,3 +21,19 @@ export const dashboardChart = (body, onSuccess, onFailed, onComplete) => {
     onComplete
   );
 };
+
+export const bestPerformingDealers = (
+  body,
+  onSuccess,
+  onFailed,
+  onComplete
+) => {
+  post(
+    "/sales-receipt/bestPerformingDealers",
+    body,
+    "bestPerformingDealersLoading",
+    onSuccess,
+    onFailed,
+    onComplete
+  );
+};

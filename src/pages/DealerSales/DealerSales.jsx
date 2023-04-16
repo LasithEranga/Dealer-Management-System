@@ -1,11 +1,72 @@
-import { Box, Grid, Typography } from "@mui/material";
-import React from "react";
+import {
+  Box,
+  Grid,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import AnalyticsCard from "../../components/AnalyticsCard/AnalyticsCard";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import SalesCard from "../../components/SalesCard/SalesCard";
+import {
+  dealerSalesByGasTankName,
+  dealerSalesChartData,
+  dealerSalesSummery,
+} from "../../app/api/salesReceiptServices";
+import { useSelector } from "react-redux";
+import { convertToRupees } from "../../utils/convertToRupees";
 
 const DealerSales = () => {
+  console.log("DealerSales");
+  const userId = useSelector((state) => state.loginDMS.userId);
+
+  const [data, setData] = useState([]);
+  const [analyticsOverview, setAnalyticsOverview] = useState([]);
+  const [dealerSalesSummary, setDealerSalesSummary] = useState([]);
+
+  useEffect(() => {
+    dealerSalesChartData(
+      {
+        userId: userId,
+        dealer: "",
+      },
+      (res) => {
+        setData(res.data);
+      },
+      (err) => {
+        console.log(err);
+      },
+      () => {}
+    );
+    dealerSalesByGasTankName(
+      {
+        userId: userId,
+        dealer: "",
+      },
+      (res) => {
+        setAnalyticsOverview(res.data);
+      },
+      (err) => {
+        console.log(err);
+      },
+      () => {}
+    );
+    dealerSalesSummery(
+      {
+        userId: userId,
+      },
+      (res) => {
+        setDealerSalesSummary(res.data);
+      },
+      (err) => {
+        console.log(err);
+      },
+      () => {}
+    );
+  }, []);
+
   const options = {
     chart: {
       id: "basic-bar",
@@ -22,23 +83,21 @@ const DealerSales = () => {
         stops: [0, 90, 100],
       },
     },
-
     xaxis: {
-      categories: [
-        "01 Jan",
-        "02 Jan",
-        "03 Jan",
-        "04 Jan",
-        "05 Jan",
-        "06 Jan",
-        "07 Jan",
-      ],
+      categories: data.map((oneEl) => oneEl.month),
+    },
+    yaxis: {
+      labels: {
+        formatter: function (val) {
+          return convertToRupees(val);
+        },
+      },
     },
   };
   const series = [
     {
-      name: "Series 1",
-      data: [45, 52, 38, 45, 19, 23, 2],
+      name: "Sales",
+      data: data.map((oneEl) => oneEl.sales),
     },
   ];
 
@@ -74,13 +133,13 @@ const DealerSales = () => {
               <Grid container>
                 <Grid item xs={12} md={7}>
                   <Grid container>
-                    {[1, 2, 3, 4].map((oneEl) => (
-                      <Grid item xs={12} md={6}>
+                    {analyticsOverview.map((oneEl, index) => (
+                      <Grid item xs={12} md={6} key={index}>
                         <AnalyticsCard
-                          title="Total Sales"
+                          title={oneEl.tankName}
                           changedRatio="10%"
                           isIncreased={true}
-                          currentValue="Rs 10.52K"
+                          currentValue={convertToRupees(oneEl.sales)}
                         />
                       </Grid>
                     ))}
@@ -104,8 +163,16 @@ const DealerSales = () => {
                       dataLabels: {
                         enabled: true,
                       },
+                      labels: analyticsOverview.map((oneEl) => oneEl.tankName),
+                      yaxis: {
+                        labels: {
+                          formatter: function (val) {
+                            return convertToRupees(val);
+                          },
+                        },
+                      },
                     }}
-                    series={[44, 55, 41, 17]}
+                    series={analyticsOverview.map((oneEl) => oneEl.sales)}
                     type="pie"
                     width="100%"
                   />
@@ -133,23 +200,39 @@ const DealerSales = () => {
           >
             <SalesCard
               title="Total Sales"
-              price="Rs 1,000.00"
-              description="Total sales made by dealer in last month"
+              price={
+                dealerSalesSummary.lastMonthSales
+                  ? convertToRupees(dealerSalesSummary.lastMonthSales)
+                  : "Rs 0.00"
+              }
+              description="Total sales made by dealers in last month"
             />
             <SalesCard
               title="Outstanding"
-              price="Rs 1,000.00"
-              description="Total outstanding amount dealer has to pay"
+              price={
+                dealerSalesSummary.outstandingAmount
+                  ? convertToRupees(dealerSalesSummary.outstandingAmount)
+                  : "Rs 0.00"
+              }
+              description="Total outstanding amount dealers has to pay"
             />
             <SalesCard
               title="New Customers"
-              price="50 customers"
+              price={
+                dealerSalesSummary.totalNewCustomers
+                  ? dealerSalesSummary.totalNewCustomers + " customers"
+                  : 0 + " customers"
+              }
               description="Total new customers added in last month"
             />
             <SalesCard
               title="Returned Tanks"
-              price="50 tanks"
-              description="Total returned tanks to dealer in last month"
+              price={
+                dealerSalesSummary.returnedTankCount
+                  ? dealerSalesSummary.returnedTankCount + " tanks"
+                  : 0 + " tanks"
+              }
+              description="Total returned tanks to dealers in last month"
             />
           </Box>
         </Grid>

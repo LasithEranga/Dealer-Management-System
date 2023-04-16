@@ -26,3 +26,41 @@ export const searchSalesReceiptsByRef = (
     onComplete
   );
 };
+
+export const dealerSalesChartData = (body, onSuccess, onFailed, onComplete) => {
+  post(
+    "/sales-receipt/dealerSalesChart",
+    body,
+    "dealerSalesChartDataLoading",
+    onSuccess,
+    onFailed,
+    onComplete
+  );
+};
+
+export const dealerSalesByGasTankName = (
+  body,
+  onSuccess,
+  onFailed,
+  onComplete
+) => {
+  post(
+    "/sales-receipt/dealerSalesByGasTankName",
+    body,
+    "dealerSalesChartDataLoading",
+    onSuccess,
+    onFailed,
+    onComplete
+  );
+};
+
+export const dealerSalesSummery = (body, onSuccess, onFailed, onComplete) => {
+  post(
+    "/sales-receipt/dealerSalesSummery",
+    body,
+    "dealerSalesSummeryLoading",
+    onSuccess,
+    onFailed,
+    onComplete
+  );
+};
