@@ -180,7 +180,7 @@ const NewPurchaseOrders = () => {
   return (
     <div>
       {/* --------------------------- table section ------------------------------- */}
-      <Box>
+      <Box mt={2}>
         <ContentCard>
           <Box
             display={"flex"}
