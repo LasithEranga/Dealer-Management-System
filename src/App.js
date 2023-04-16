@@ -33,6 +33,7 @@ import StockReport from "./pages/Reports/DistributorReports/StockReport/StockRep
 import DealerStockReport from "./pages/Reports/DistributorReports/DealerStockReport/DealerStockReport";
 import PurchaseOrdersReport from "./pages/Reports/DistributorReports/PurchaseOrdersReport/PurchaseOrdersReport";
 import FastMovingStocks from "./pages/Reports/DistributorReports/FastMovingStocks/FastMovingStocks";
+import AcceptedPurchaseOrdersDistributor from "./pages/DistributorPurchseOrders/AcceptedPurchaseOrders/AcceptedPurchaseOrders";
 
 function App() {
   const user = useSelector((state) =>
@@ -60,6 +61,10 @@ function App() {
           <Route
             path="return-to-distributor"
             element={<ReturnStockToDistributor />}
+          />
+          <Route
+            path="accepted-orders-distributor"
+            element={<AcceptedPurchaseOrdersDistributor />}
           />
           <Route path="accepted-orders" element={<AcceptedPurchaseOrders />} />
           <Route path="pending-orders" element={<PendingPurchaseOrders />} />

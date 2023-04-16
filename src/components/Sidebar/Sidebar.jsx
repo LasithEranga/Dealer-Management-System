@@ -213,6 +213,11 @@ export default function Sidebar() {
                 path={"new-orders"}
               />
               <SidebarItem
+                icon={<SwipeRightAltIcon />}
+                title="Accepted Orders"
+                path={"accepted-orders-distributor"}
+              />
+              <SidebarItem
                 icon={<PushPinIcon />}
                 title="Saved Orders"
                 path={"saved-orders"}

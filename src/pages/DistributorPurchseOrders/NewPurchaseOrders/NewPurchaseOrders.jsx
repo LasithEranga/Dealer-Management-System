@@ -33,21 +33,14 @@ import { Search } from "@mui/icons-material";
 const NewPurchaseOrders = () => {
   const navigate = useNavigate();
   const { userId } = useSelector((state) => state.loginDMS);
-
-  const [showEditModal, setShowEditModal] = useState(false);
   const [orders, setOrders] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([]);
   const [refreshTable, setRefreshTable] = useState(false);
-  const [update, setUpdate] = useState({
-    isUpdating: true,
-    _id: "",
-  });
-
   const [search, setSearch] = useState("");
-  const [sortBy, setSortBy] = useState("pleaseSelect");
-  const [outstandingBalance, setOutstandingamount] = useState({
-    min: "",
-    max: "",
-  });
+  const [outstandingBalance, setOutstandingBalance] = useState("ob");
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
+  const [filteringPredicates, setFilteringPredicates] = useState([]);
 
   const actionButtons = [
     {
@@ -159,23 +152,145 @@ const NewPurchaseOrders = () => {
       { distributor: userId, state: "PENDING" },
       (response) => {
         console.log(response);
-
-        setOrders(
-          response.data.map((oneEl) =>
-            createData(
-              oneEl,
-              oneEl.dealer?.name,
-              new Date(oneEl.createdAt).toLocaleDateString(),
-              oneEl.dealer?.storeAddress,
-              oneEl.dealer?.phoneNumber,
-              oneEl.dealer?.outstandingAmount,
-              oneEl.state
-            )
-          )
-        );
+        setOrders(response.data);
       }
     );
   }, [refreshTable]);
+
+  useEffect(() => {
+    if (search === "") {
+      setFilteredOrders(
+        orders.map((oneEl) =>
+          createData(
+            oneEl,
+            oneEl.dealer?.name,
+            new Date(oneEl.createdAt).toLocaleDateString(),
+            oneEl.dealer?.storeAddress,
+            oneEl.dealer?.phoneNumber,
+            oneEl.dealer?.outstandingAmount,
+            oneEl.state
+          )
+        )
+      );
+    } else {
+      setFilteringPredicates((prev) => ({
+        ...prev,
+        search: (oneEl) =>
+          oneEl.dealer?.name.toLowerCase().includes(search.toLowerCase()),
+      }));
+      // setFilteredOrders(
+      //   orders
+      //     .filter((oneEl) =>
+
+      //     )
+      //     .map((oneEl) =>
+      //       createData(
+      //         oneEl,
+      //         oneEl.dealer?.name,
+      //         new Date(oneEl.createdAt).toLocaleDateString(),
+      //         oneEl.dealer?.storeAddress,
+      //         oneEl.dealer?.phoneNumber,
+      //         oneEl.dealer?.outstandingAmount,
+      //         oneEl.state
+      //       )
+      //     )
+      // );
+    }
+  }, [search, orders]);
+
+  useEffect(() => {
+    switch (outstandingBalance) {
+      case "50000":
+        setFilteringPredicates((prev) => ({
+          ...prev,
+          outstandingBalance: (oneEl) => oneEl.dealer.outstandingAmount < 50000,
+        }));
+        break;
+      case "50000 - 100000":
+        setFilteringPredicates((prev) => ({
+          ...prev,
+          outstandingBalance: (oneEl) =>
+            oneEl.dealer.outstandingAmount > 50000 &&
+            oneEl.dealer.outstandingAmount < 100000,
+        }));
+        break;
+
+      case "100000 - 150000":
+        setFilteringPredicates((prev) => ({
+          ...prev,
+          outstandingBalance: (oneEl) =>
+            oneEl.dealer.outstandingAmount > 100000 &&
+            oneEl.dealer.outstandingAmount < 150000,
+        }));
+        break;
+
+      case "150000":
+        setFilteringPredicates((prev) => ({
+          ...prev,
+          outstandingBalance: (oneEl) =>
+            oneEl.dealer.outstandingAmount >= 150000,
+        }));
+        break;
+
+      default:
+    }
+  }, [outstandingBalance]);
+
+  useEffect(() => {
+    if (from && to) {
+      setFilteringPredicates((prev) => ({
+        ...prev,
+        fromTo: (oneEl) => {
+          const date = new Date(oneEl.updatedAt);
+          return date >= new Date(from) && date <= new Date(to);
+        },
+      }));
+    }
+  }, [from, to]);
+
+  useEffect(() => {
+    filterByPredicates();
+  }, [filteringPredicates]);
+
+  // const filterByOutstandingAmount = (predicate) => {
+  //   setFilteredOrders(
+  //     orders
+  //       .filter((oneEl) => predicate(oneEl))
+  //       .map((oneEl) =>
+  //         createData(
+  //           oneEl,
+  //           oneEl.dealer?.name,
+  //           new Date(oneEl.createdAt).toLocaleDateString(),
+  //           oneEl.dealer?.storeAddress,
+  //           oneEl.dealer?.phoneNumber,
+  //           oneEl.dealer?.outstandingAmount,
+  //           oneEl.state
+  //         )
+  //       )
+  //   );
+  // };
+
+  const filterByPredicates = () => {
+    let filteredResult = [...orders];
+
+    Object.values(filteringPredicates).forEach((onePredicate) => {
+      filteredResult = filteredResult.filter((oneEl) => onePredicate(oneEl));
+    });
+
+    setFilteredOrders(
+      filteredResult.map((oneEl) =>
+        createData(
+          oneEl,
+          oneEl.dealer?.name,
+          new Date(oneEl.createdAt).toLocaleDateString(),
+          oneEl.dealer?.storeAddress,
+          oneEl.dealer?.phoneNumber,
+          oneEl.dealer?.outstandingAmount,
+          oneEl.state
+        )
+      )
+    );
+  };
 
   return (
     <div>
@@ -221,14 +336,23 @@ const NewPurchaseOrders = () => {
                 <FormControl size="small" sx={{ flexGrow: 1 }}>
                   <Select
                     onChange={(e) => {
-                      setSortBy(e.target.value);
+                      setOutstandingBalance(e.target.value);
                     }}
                     defaultValue={""}
-                    value="ob"
+                    value={outstandingBalance}
+                    placeholder="Outstanding balance"
                   >
                     <MenuItem value={"ob"} disabled>
                       Outstanding balance
                     </MenuItem>
+                    <MenuItem value={"50000"}>&lt; Rs.50,000</MenuItem>
+                    <MenuItem value={"50000 - 100000"}>
+                      Rs.50,000 - Rs.100,000
+                    </MenuItem>
+                    <MenuItem value={"100000 - 150000"}>
+                      Rs.100,000 - Rs.150,000
+                    </MenuItem>
+                    <MenuItem value={"150000"}>&gt; Rs.150,000</MenuItem>
                   </Select>
                 </FormControl>
                 <Box
@@ -241,16 +365,20 @@ const NewPurchaseOrders = () => {
                     type="date"
                     fullWidth
                     size="small"
-                    placeholder="min"
-                    onChange={(e) => {}}
+                    value={from}
+                    onChange={(e) => {
+                      setFrom(e.target.value);
+                    }}
                   />
                   <Typography>to</Typography>
                   <TextField
                     type="date"
                     fullWidth
                     size="small"
-                    placeholder="max"
-                    onChange={(e) => {}}
+                    value={to}
+                    onChange={(e) => {
+                      setTo(e.target.value);
+                    }}
                   />
                 </Box>
               </Grid>
@@ -260,7 +388,7 @@ const NewPurchaseOrders = () => {
 
           <ExpandableTable
             headCells={headCells}
-            data={orders}
+            data={filteredOrders}
             ignoreTill={1}
             actionButtons={actionButtons}
           />
