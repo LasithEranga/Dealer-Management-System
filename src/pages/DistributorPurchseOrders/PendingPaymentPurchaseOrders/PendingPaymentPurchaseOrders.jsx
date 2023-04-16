@@ -1,16 +1,4 @@
-import {
-  Box,
-  Button,
-  Chip,
-  Divider,
-  FormControl,
-  Grid,
-  InputAdornment,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Chip, Divider, Typography } from "@mui/material";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -22,11 +10,7 @@ import ContentCard from "../../../components/ContentCard/ContentCard";
 import ExpandableTable from "../../../components/ExpandableTable/ExpandableTable";
 import { convertToRupees } from "../../../utils/convertToRupees";
 
-import SwipeRightIcon from "@mui/icons-material/SwipeRight";
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import { useNavigate } from "react-router-dom";
 import CreditScoreIcon from "@mui/icons-material/CreditScore";
-import { Search } from "@mui/icons-material";
 import { showSystemAlert } from "../../../app/alertServices";
 import PurchseOrderFiltering from "../../../components/PurchseOrderFiltering/PurchseOrderFiltering";
 
@@ -48,7 +32,7 @@ const SavedPurchaseOrders = () => {
           (response) => {
             if (response.status === 0) {
               setRefreshTable(!refreshTable);
-              showSystemAlert("Payment received successfully", "success");
+              showSystemAlert("Marked as payment received", "success");
             }
           },
           (error) => {

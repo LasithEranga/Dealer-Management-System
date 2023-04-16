@@ -26,6 +26,8 @@ import { useSelector } from "react-redux";
 import { fastMovingStocksReport } from "../../../../app/api/reportsService";
 import StockReportTable from "../../../../components/StockReportTable/StockReportTable";
 import "./index.css";
+import _ from "lodash";
+import { convertToRupees } from "../../../../utils/convertToRupees";
 
 const FastMovingStocks = () => {
   const userId = useSelector((state) => state.loginDMS.userId);
@@ -78,6 +80,7 @@ const FastMovingStocks = () => {
       },
       () => {}
     );
+    generate();
   }, []);
 
   return (
@@ -109,7 +112,7 @@ const FastMovingStocks = () => {
         </Box>
       </Box>
       <Grid container columnSpacing={1} rowSpacing={1}>
-        <Grid item lg={3.5}>
+        {/* <Grid item lg={3.5}>
           <ContentCard
             title="Fast moving stocks"
             sx={{
@@ -187,7 +190,7 @@ const FastMovingStocks = () => {
               </Button>
             </Box>
           </ContentCard>
-        </Grid>
+        </Grid> */}
         <Grid item lg>
           <ReportLayout
             from={from}
@@ -196,9 +199,62 @@ const FastMovingStocks = () => {
             subHeading=""
           >
             {Object.keys(data).map((oneEl, index) => {
+              let tankName = oneEl.split("tank");
               return (
                 <div key={index}>
-                  <StockReportTable title={oneEl} data={data[oneEl]} />
+                  <Box
+                    sx={{
+                      py: 1,
+                      pl: 2,
+                      backgroundColor: "#f5f5f5",
+                    }}
+                  >
+                    <Typography fontWeight={"bold"}>
+                      {tankName[0].toUpperCase() +
+                        " " +
+                        _.capitalize(tankName[1])}
+                    </Typography>
+                  </Box>
+                  <table className="stock-tb-table">
+                    <thead>
+                      <tr>
+                        <th className="stock-tb-th">Dealer</th>
+                        <th
+                          className="stock-tb-th"
+                          title="Distributor selling price"
+                        >
+                          Current Stock
+                        </th>
+                        <th className="stock-tb-th"> Sold(tanks)</th>
+                        <th
+                          className="stock-tb-th"
+                          title="Dealer selling price"
+                        >
+                          Last Month Income
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {data[oneEl].map((oneEl, index) => {
+                        return (
+                          <tr className="stock-tb-tr" key={index}>
+                            <td className="stock-tb-td">{oneEl.dealer.name}</td>
+                            <td className="stock-tb-td">
+                              {oneEl.currentValue}
+                            </td>
+                            <td className="stock-tb-td ">
+                              {oneEl.lastMonthSales}
+                            </td>
+
+                            <td className="stock-tb-td">
+                              {convertToRupees(oneEl.lastMonthIncome)}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
                   <Divider
                     sx={{
                       my: 2,

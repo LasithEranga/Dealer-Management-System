@@ -57,10 +57,10 @@ export const rejectOrder = (body, onSuccess, onFailed, onComplete) => {
     onComplete
   );
 };
-export const getAllOrders = (onSuccess, onFailed, onComplete) => {
+export const getAllOrders = (body, onSuccess, onFailed, onComplete) => {
   post(
     "/purchase-orders/getAll",
-    {},
+    body,
     "getAllOrdersLoading",
     onSuccess,
     onFailed,

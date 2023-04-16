@@ -40,7 +40,7 @@ const PurchaseOrdersReport = () => {
         mb={2}
       >
         <Typography fontSize="1.5rem" fontWeight="bold">
-          Sales Report
+          Purchase Orders Report
         </Typography>
         <Box>
           <Button
@@ -61,7 +61,7 @@ const PurchaseOrdersReport = () => {
       <Grid container columnSpacing={1} rowSpacing={1}>
         <Grid item lg={3.5}>
           <ContentCard
-            title="Sales Report"
+            title="Purchase Orders"
             sx={{
               borderRadius: 0,
             }}
@@ -151,6 +151,40 @@ const PurchaseOrdersReport = () => {
               onChange={(e, value) => {}}
             />
 
+            <Typography mt={1}>Order State</Typography>
+
+            <Autocomplete
+              multiple
+              options={[]}
+              getOptionLabel={(option) => option.name + " " + option.type}
+              // getOptionSelected={(option, value) =>
+              //   option.indexedName === value.indexedName
+              // }
+              renderOption={(props, option, { selected }) => (
+                <li {...props}>
+                  <Checkbox
+                    icon={icon}
+                    checkedIcon={checkedIcon}
+                    style={{ marginRight: 8 }}
+                    checked={selected}
+                  />
+                  {option.name + " " + option.type}
+                </li>
+              )}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="Select order state"
+                  fullWidth
+                  size="small"
+                  sx={{
+                    mt: 1,
+                  }}
+                />
+              )}
+              onChange={(e, value) => {}}
+            />
+
             <Box mt={2} display={"flex"} justifyContent="end" gap={1}>
               <Button variant="outlined">Clear</Button>
               <Button variant="contained" onClick={generate}>
@@ -160,7 +194,12 @@ const PurchaseOrdersReport = () => {
           </ContentCard>
         </Grid>
         <Grid item lg>
-          <ReportLayout from={from} to={to} subHeading={`Total Sales:`}>
+          <ReportLayout
+            from={from}
+            to={to}
+            subHeading={``}
+            title="Purchase Orders"
+          >
             <ReportTable
               headingCells={[
                 "Date",

@@ -1,33 +1,13 @@
-import {
-  Box,
-  Button,
-  Chip,
-  Divider,
-  FormControl,
-  Grid,
-  InputAdornment,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Chip, Divider, Typography } from "@mui/material";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import {
-  getAllOrders,
-  getOrderByState,
-} from "../../../app/api/purchaseOrderServices";
+import { getAllOrders } from "../../../app/api/purchaseOrderServices";
 import ContentCard from "../../../components/ContentCard/ContentCard";
-import EnhancedTable from "../../../components/EnhancedTable/EnhancedTable";
 import ExpandableTable from "../../../components/ExpandableTable/ExpandableTable";
 import { convertToRupees } from "../../../utils/convertToRupees";
 
-import SaveAltIcon from "@mui/icons-material/SaveAlt";
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import SwipeRightIcon from "@mui/icons-material/SwipeRight";
 import { useNavigate } from "react-router-dom";
-import { Search } from "@mui/icons-material";
 import PurchseOrderFiltering from "../../../components/PurchseOrderFiltering/PurchseOrderFiltering";
 
 const ViewPurchaseOrders = () => {
@@ -112,9 +92,17 @@ const ViewPurchaseOrders = () => {
   };
 
   useEffect(() => {
-    getAllOrders((response) => {
-      setOrders(response.data);
-    });
+    getAllOrders(
+      {
+        userId: userId,
+      },
+      (response) => {
+        setOrders(response.data);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }, [refreshTable]);
 
   return (
@@ -147,6 +135,7 @@ const ViewPurchaseOrders = () => {
             data={filteredOrders}
             ignoreTill={1}
             actionButtons={actionButtons}
+            showOutstandingAfterAccept={false}
           />
         </ContentCard>
       </Box>

@@ -416,9 +416,9 @@ const Dealers = () => {
           Dealers
         </Typography>
         <Box>
-          <Button sx={{ mr: 1, boxShadow: 0 }} variant="outlined">
+          {/* <Button sx={{ mr: 1, boxShadow: 0 }} variant="outlined">
             Download PDF
-          </Button>
+          </Button> */}
           <Button
             variant="outlined"
             sx={{ boxShadow: 0 }}

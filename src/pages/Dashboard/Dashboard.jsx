@@ -187,7 +187,7 @@ const Dashboard = () => {
                 <StockSummery
                   storeName={oneEl.dealer.name}
                   noOfTamks={`${oneEl.noOfTanks} tanks`}
-                  comparisonToLastMonth={`${oneEl.percentage}%`}
+                  comparisonToLastMonth={`${oneEl.percentage}`}
                   key={index}
                   increased={oneEl.status === "increased" ? true : false}
                 />
