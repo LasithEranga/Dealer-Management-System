@@ -28,25 +28,14 @@ import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import SwipeRightIcon from "@mui/icons-material/SwipeRight";
 import { useNavigate } from "react-router-dom";
 import { Search } from "@mui/icons-material";
+import PurchseOrderFiltering from "../../../components/PurchseOrderFiltering/PurchseOrderFiltering";
 
 const ViewPurchaseOrders = () => {
   const navigate = useNavigate();
   const { userId } = useSelector((state) => state.loginDMS);
-
-  const [showEditModal, setShowEditModal] = useState(false);
   const [orders, setOrders] = useState([]);
   const [refreshTable, setRefreshTable] = useState(false);
-  const [update, setUpdate] = useState({
-    isUpdating: true,
-    _id: "",
-  });
-
-  const [search, setSearch] = useState("");
-  const [sortBy, setSortBy] = useState("pleaseSelect");
-  const [outstandingBalance, setOutstandingamount] = useState({
-    min: "",
-    max: "",
-  });
+  const [filteredOrders, setFilteredOrders] = useState([]);
 
   const actionButtons = [
     // {
@@ -124,21 +113,7 @@ const ViewPurchaseOrders = () => {
 
   useEffect(() => {
     getAllOrders((response) => {
-      console.log(response);
-
-      setOrders(
-        response.data.map((oneEl) =>
-          createData(
-            oneEl,
-            oneEl.dealer?.name,
-            new Date(oneEl.createdAt).toLocaleDateString(),
-            oneEl.dealer?.storeAddress,
-            oneEl.dealer?.phoneNumber,
-            oneEl.dealer?.outstandingAmount,
-            oneEl.state
-          )
-        )
-      );
+      setOrders(response.data);
     });
   }, [refreshTable]);
 
@@ -161,71 +136,15 @@ const ViewPurchaseOrders = () => {
             </Box>
           </Box>
           <Divider orientation="horizontal" sx={{ my: 2 }} />
-          <Box>
-            <Grid container>
-              <Grid item xs={4}>
-                <TextField
-                  fullWidth
-                  size="small"
-                  placeholder="Search by Dealer name"
-                  onChange={(e) => {
-                    setSearch(e.target.value);
-                  }}
-                  value={search}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Search />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
-              <Grid item xs></Grid>
-              <Grid item xs={6} display="flex" gap={2}>
-                <FormControl size="small" sx={{ flexGrow: 1 }}>
-                  <Select
-                    onChange={(e) => {
-                      setSortBy(e.target.value);
-                    }}
-                    defaultValue={""}
-                    value="ob"
-                  >
-                    <MenuItem value={"ob"} disabled>
-                      Outstanding balance
-                    </MenuItem>
-                  </Select>
-                </FormControl>
-                <Box
-                  display={"flex"}
-                  justifyContent="space-between"
-                  gap={1}
-                  alignItems="center"
-                >
-                  <TextField
-                    type="date"
-                    fullWidth
-                    size="small"
-                    placeholder="min"
-                    onChange={(e) => {}}
-                  />
-                  <Typography>to</Typography>
-                  <TextField
-                    type="date"
-                    fullWidth
-                    size="small"
-                    placeholder="max"
-                    onChange={(e) => {}}
-                  />
-                </Box>
-              </Grid>
-            </Grid>
-          </Box>
+          <PurchseOrderFiltering
+            setFilteredOrders={setFilteredOrders}
+            orders={orders}
+          />
           <Divider orientation="horizontal" sx={{ my: 2 }} />
 
           <ExpandableTable
             headCells={headCells}
-            data={orders}
+            data={filteredOrders}
             ignoreTill={1}
             actionButtons={actionButtons}
           />

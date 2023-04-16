@@ -29,6 +29,7 @@ import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import { useNavigate } from "react-router-dom";
 import { showSystemAlert } from "../../../app/alertServices";
 import { Search } from "@mui/icons-material";
+import PurchseOrderFiltering from "../../../components/PurchseOrderFiltering/PurchseOrderFiltering";
 
 const NewPurchaseOrders = () => {
   const navigate = useNavigate();
@@ -151,146 +152,10 @@ const NewPurchaseOrders = () => {
     getOrderByStateAndDistributor(
       { distributor: userId, state: "PENDING" },
       (response) => {
-        console.log(response);
         setOrders(response.data);
       }
     );
   }, [refreshTable]);
-
-  useEffect(() => {
-    if (search === "") {
-      setFilteredOrders(
-        orders.map((oneEl) =>
-          createData(
-            oneEl,
-            oneEl.dealer?.name,
-            new Date(oneEl.createdAt).toLocaleDateString(),
-            oneEl.dealer?.storeAddress,
-            oneEl.dealer?.phoneNumber,
-            oneEl.dealer?.outstandingAmount,
-            oneEl.state
-          )
-        )
-      );
-    } else {
-      setFilteringPredicates((prev) => ({
-        ...prev,
-        search: (oneEl) =>
-          oneEl.dealer?.name.toLowerCase().includes(search.toLowerCase()),
-      }));
-      // setFilteredOrders(
-      //   orders
-      //     .filter((oneEl) =>
-
-      //     )
-      //     .map((oneEl) =>
-      //       createData(
-      //         oneEl,
-      //         oneEl.dealer?.name,
-      //         new Date(oneEl.createdAt).toLocaleDateString(),
-      //         oneEl.dealer?.storeAddress,
-      //         oneEl.dealer?.phoneNumber,
-      //         oneEl.dealer?.outstandingAmount,
-      //         oneEl.state
-      //       )
-      //     )
-      // );
-    }
-  }, [search, orders]);
-
-  useEffect(() => {
-    switch (outstandingBalance) {
-      case "50000":
-        setFilteringPredicates((prev) => ({
-          ...prev,
-          outstandingBalance: (oneEl) => oneEl.dealer.outstandingAmount < 50000,
-        }));
-        break;
-      case "50000 - 100000":
-        setFilteringPredicates((prev) => ({
-          ...prev,
-          outstandingBalance: (oneEl) =>
-            oneEl.dealer.outstandingAmount > 50000 &&
-            oneEl.dealer.outstandingAmount < 100000,
-        }));
-        break;
-
-      case "100000 - 150000":
-        setFilteringPredicates((prev) => ({
-          ...prev,
-          outstandingBalance: (oneEl) =>
-            oneEl.dealer.outstandingAmount > 100000 &&
-            oneEl.dealer.outstandingAmount < 150000,
-        }));
-        break;
-
-      case "150000":
-        setFilteringPredicates((prev) => ({
-          ...prev,
-          outstandingBalance: (oneEl) =>
-            oneEl.dealer.outstandingAmount >= 150000,
-        }));
-        break;
-
-      default:
-    }
-  }, [outstandingBalance]);
-
-  useEffect(() => {
-    if (from && to) {
-      setFilteringPredicates((prev) => ({
-        ...prev,
-        fromTo: (oneEl) => {
-          const date = new Date(oneEl.updatedAt);
-          return date >= new Date(from) && date <= new Date(to);
-        },
-      }));
-    }
-  }, [from, to]);
-
-  useEffect(() => {
-    filterByPredicates();
-  }, [filteringPredicates]);
-
-  // const filterByOutstandingAmount = (predicate) => {
-  //   setFilteredOrders(
-  //     orders
-  //       .filter((oneEl) => predicate(oneEl))
-  //       .map((oneEl) =>
-  //         createData(
-  //           oneEl,
-  //           oneEl.dealer?.name,
-  //           new Date(oneEl.createdAt).toLocaleDateString(),
-  //           oneEl.dealer?.storeAddress,
-  //           oneEl.dealer?.phoneNumber,
-  //           oneEl.dealer?.outstandingAmount,
-  //           oneEl.state
-  //         )
-  //       )
-  //   );
-  // };
-
-  const filterByPredicates = () => {
-    let filteredResult = [...orders];
-
-    Object.values(filteringPredicates).forEach((onePredicate) => {
-      filteredResult = filteredResult.filter((oneEl) => onePredicate(oneEl));
-    });
-
-    setFilteredOrders(
-      filteredResult.map((oneEl) =>
-        createData(
-          oneEl,
-          oneEl.dealer?.name,
-          new Date(oneEl.createdAt).toLocaleDateString(),
-          oneEl.dealer?.storeAddress,
-          oneEl.dealer?.phoneNumber,
-          oneEl.dealer?.outstandingAmount,
-          oneEl.state
-        )
-      )
-    );
-  };
 
   return (
     <div>
@@ -311,79 +176,10 @@ const NewPurchaseOrders = () => {
             </Box>
           </Box>
           <Divider orientation="horizontal" sx={{ my: 2 }} />
-          <Box>
-            <Grid container>
-              <Grid item xs={4}>
-                <TextField
-                  fullWidth
-                  size="small"
-                  placeholder="Search by Dealer name"
-                  onChange={(e) => {
-                    setSearch(e.target.value);
-                  }}
-                  value={search}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Search />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
-              <Grid item xs></Grid>
-              <Grid item xs={6} display="flex" gap={2}>
-                <FormControl size="small" sx={{ flexGrow: 1 }}>
-                  <Select
-                    onChange={(e) => {
-                      setOutstandingBalance(e.target.value);
-                    }}
-                    defaultValue={""}
-                    value={outstandingBalance}
-                    placeholder="Outstanding balance"
-                  >
-                    <MenuItem value={"ob"} disabled>
-                      Outstanding balance
-                    </MenuItem>
-                    <MenuItem value={"50000"}>&lt; Rs.50,000</MenuItem>
-                    <MenuItem value={"50000 - 100000"}>
-                      Rs.50,000 - Rs.100,000
-                    </MenuItem>
-                    <MenuItem value={"100000 - 150000"}>
-                      Rs.100,000 - Rs.150,000
-                    </MenuItem>
-                    <MenuItem value={"150000"}>&gt; Rs.150,000</MenuItem>
-                  </Select>
-                </FormControl>
-                <Box
-                  display={"flex"}
-                  justifyContent="space-between"
-                  gap={1}
-                  alignItems="center"
-                >
-                  <TextField
-                    type="date"
-                    fullWidth
-                    size="small"
-                    value={from}
-                    onChange={(e) => {
-                      setFrom(e.target.value);
-                    }}
-                  />
-                  <Typography>to</Typography>
-                  <TextField
-                    type="date"
-                    fullWidth
-                    size="small"
-                    value={to}
-                    onChange={(e) => {
-                      setTo(e.target.value);
-                    }}
-                  />
-                </Box>
-              </Grid>
-            </Grid>
-          </Box>
+          <PurchseOrderFiltering
+            setFilteredOrders={setFilteredOrders}
+            orders={orders}
+          />
           <Divider orientation="horizontal" sx={{ my: 2 }} />
 
           <ExpandableTable
