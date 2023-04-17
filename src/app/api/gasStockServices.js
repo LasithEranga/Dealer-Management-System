@@ -10,6 +10,44 @@ export const getStockByUser = (body, onSuccess, onFailed, onComplete) => {
     onComplete
   );
 };
+export const updateStock = (body, onSuccess, onFailed, onComplete) => {
+  post(
+    "/stocks/updateStock",
+    body,
+    "updateStockLoading",
+    onSuccess,
+    onFailed,
+    onComplete
+  );
+};
+
+export const updateReOrderLevel = (body, onSuccess, onFailed, onComplete) => {
+  post(
+    "/stocks/updateReOrderLevel",
+    body,
+    "updateReOrderLevelLoading",
+    onSuccess,
+    onFailed,
+    onComplete
+  );
+};
+
+export const getStocksByUserAndType = (
+  body,
+  onSuccess,
+  onFailed,
+  onComplete
+) => {
+  post(
+    "/stocks/getStocksByUserAndType",
+    body,
+    "getStocksByUserAndTypeLoading",
+    onSuccess,
+    onFailed,
+    onComplete
+  );
+};
+
 export const searchGasStock = (body, onSuccess, onFailed, onComplete) => {
   post(
     "/stocks/search",

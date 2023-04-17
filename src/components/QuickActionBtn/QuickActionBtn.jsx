@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import React from "react";
 
-const QuickActionBtn = ({ title }) => {
+const QuickActionBtn = ({ title, onClick = () => {} }) => {
   return (
     <Button
       variant="outlined"
@@ -12,6 +12,7 @@ const QuickActionBtn = ({ title }) => {
         color: "black",
         fontWeight: 550,
       }}
+      onClick={onClick}
     >
       {title}
     </Button>

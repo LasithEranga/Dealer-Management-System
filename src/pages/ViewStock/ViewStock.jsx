@@ -5,10 +5,27 @@ import StockLevelCard from "./StockLevelCard";
 import QuickActionBtn from "../../components/QuickActionBtn/QuickActionBtn";
 import EstimatedLevelCard from "./EstimatedLevelCard";
 import ContentCard from "../../components/ContentCard/ContentCard";
-import { Box, Grid, Paper, styled, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Checkbox,
+  Grid,
+  Paper,
+  styled,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Titlebar from "../../components/Titlebar/Titlebar";
 import { useEffect } from "react";
-import { getChartData, getStockSummery } from "../../app/api/gasStockServices";
+import {
+  getChartData,
+  getStockByUser,
+  getStocksByUserAndType,
+  getStockSummery,
+  updateReOrderLevel,
+  updateStock,
+} from "../../app/api/gasStockServices";
 import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { getColorFromName } from "../../utils/getColorFromName";
@@ -16,14 +33,36 @@ import { Menu } from "@mui/icons-material";
 import { setTankTypeColors } from "../../reducers/chartColorSlice";
 import CustomModal from "../../components/CustomModal/CustomModal";
 import "./style.css";
+import { useNavigate } from "react-router-dom";
+import { showSystemAlert } from "../../app/alertServices";
 const ViewStock = () => {
   const { userId } = useSelector((state) => state.loginDMS);
   const { tankTypeColors } = useSelector((state) => state.chartColorsDMS);
   const [chartData, setChartData] = useState([]);
   const [stockSummery, setStockSummery] = useState({});
   const [showColorModal, setShowColorModal] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [showReOrderLevelModal, setShowReOrderLevelModal] = useState(false);
+  const [showSendStock, setShowSendStock] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [gasStocks, setGasStocks] = useState([]);
+  const [selectedStock, setSelectedStock] = useState({});
+  const [updatedStockValue, setUpdatedStockValue] = useState("");
+  const [
+    selectedStockForReOrderLevelUpdate,
+    setSelectedStockForReOrderLevelUpdate,
+  ] = useState({});
+  const [updatedReOrderLevel, setUpdatedReOrderLevel] = useState("");
+  const [returnableStocks, setReturnableStocks] = useState([]);
+  const [selectedReturnableStock, setSelectedReturnableStock] = useState({});
+  const [sendingQuantity, setSendingQuantity] = useState("");
+  const [stockToDelete, setStockToDelete] = useState({});
+
   const [tankTypes, setTankTypes] = useState([]);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!showColorModal) {
@@ -44,7 +83,28 @@ const ViewStock = () => {
         setStockSummery(response.data);
       });
     }
-  }, [showColorModal]);
+    getStockByUser(
+      { userID: userId },
+      (response) => {
+        setGasStocks(response.data);
+      },
+      (error) => {
+        console.log("error", error);
+      }
+    );
+    getStocksByUserAndType(
+      {
+        userID: userId,
+        types: ["EMPTY", "RETURNED"],
+      },
+      (response) => {
+        setReturnableStocks(response.data);
+      },
+      (error) => {
+        console.log("error", error);
+      }
+    );
+  }, [showColorModal, refresh]);
 
   const data = {
     labels: chartData.map((oneEl) => `${_.capitalize(oneEl._id)} tanks`),
@@ -85,6 +145,443 @@ const ViewStock = () => {
               <Typography>{oneEl}</Typography>
             </Box>
           ))}
+        </Box>
+      </CustomModal>
+
+      <CustomModal open={showUpdateModal} setOpen={setShowUpdateModal}>
+        <Typography
+          fontSize={"1.5rem"}
+          sx={{
+            mb: 2,
+          }}
+        >
+          {" "}
+          Update stock{" "}
+        </Typography>
+        <Typography fontSize={"1rem"}> Choose stock </Typography>
+        <Autocomplete
+          options={gasStocks}
+          getOptionLabel={(option) =>
+            option.gasTank.name + " " + option.gasTank.type
+          }
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              placeholder="Select gas stock"
+              fullWidth
+              size="small"
+              sx={{
+                mt: 1,
+              }}
+            />
+          )}
+          onChange={(e, value) => setSelectedStock(value)}
+        />
+        <Typography
+          fontSize={"1rem"}
+          sx={{
+            mt: 1,
+          }}
+        >
+          Current Value
+        </Typography>
+        <TextField
+          fullWidth
+          size="small"
+          sx={{
+            mt: 1,
+          }}
+          inputProps={{
+            readOnly: true,
+          }}
+          value={selectedStock.quantity}
+        />
+        <Typography
+          fontSize={"1rem"}
+          sx={{
+            mt: 1,
+          }}
+        >
+          New Value
+        </Typography>
+        <TextField
+          placeholder="Enter new quantity"
+          fullWidth
+          size="small"
+          sx={{
+            mt: 1,
+          }}
+          value={updatedStockValue}
+          onChange={(e) => {
+            setUpdatedStockValue(e.target.value);
+          }}
+        />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            mt: 2,
+          }}
+        >
+          <Button
+            variant="text"
+            color="secondary"
+            sx={{
+              mr: 1,
+            }}
+            onClick={() => {
+              setShowUpdateModal(false);
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="text"
+            sx={{
+              mr: 1,
+            }}
+            onClick={() => {
+              updateStock(
+                {
+                  stockId: selectedStock._id,
+                  quantity: updatedStockValue,
+                },
+                (response) => {
+                  console.log("response", response);
+                  setShowUpdateModal(false);
+                  showSystemAlert("Stock updated successfully", "success");
+                  setRefresh(!refresh);
+                  setSelectedStock({});
+                  setUpdatedStockValue("");
+                },
+                (error) => {
+                  console.log("error", error);
+                }
+              );
+            }}
+          >
+            Update
+          </Button>
+        </Box>
+      </CustomModal>
+
+      <CustomModal
+        open={showReOrderLevelModal}
+        setOpen={setShowReOrderLevelModal}
+      >
+        <Typography fontSize={"1.5rem"}>Set Re-order Levels </Typography>
+        <Typography fontSize={"1rem"}> Choose stock </Typography>
+        <Autocomplete
+          options={gasStocks}
+          getOptionLabel={(option) =>
+            option.gasTank.name + " " + option.gasTank.type
+          }
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              placeholder="Select gas stock"
+              fullWidth
+              size="small"
+              sx={{
+                mt: 1,
+              }}
+            />
+          )}
+          onChange={(e, value) => setSelectedStockForReOrderLevelUpdate(value)}
+        />
+        <Typography
+          fontSize={"1rem"}
+          sx={{
+            mt: 1,
+          }}
+        >
+          Current Value
+        </Typography>
+        <TextField
+          fullWidth
+          size="small"
+          sx={{
+            mt: 1,
+          }}
+          inputProps={{
+            readOnly: true,
+          }}
+          value={selectedStockForReOrderLevelUpdate.reOrderLevel}
+        />
+        <Typography
+          fontSize={"1rem"}
+          sx={{
+            mt: 1,
+          }}
+        >
+          New Value
+        </Typography>
+        <TextField
+          placeholder="Enter new quantity"
+          fullWidth
+          size="small"
+          sx={{
+            mt: 1,
+          }}
+          value={updatedReOrderLevel}
+          onChange={(e) => {
+            setUpdatedReOrderLevel(e.target.value);
+          }}
+        />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            mt: 2,
+          }}
+        >
+          <Button
+            variant="text"
+            color="secondary"
+            sx={{
+              mr: 1,
+            }}
+            onClick={() => {
+              setShowReOrderLevelModal(false);
+              setSelectedStockForReOrderLevelUpdate({});
+              setUpdatedReOrderLevel("");
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="text"
+            sx={{
+              mr: 1,
+            }}
+            onClick={() => {
+              updateReOrderLevel(
+                {
+                  stockId: selectedStockForReOrderLevelUpdate._id,
+                  newValue: updatedReOrderLevel,
+                },
+                (response) => {
+                  setShowReOrderLevelModal(false);
+                  showSystemAlert(
+                    "Re-order level updated successfully",
+                    "success"
+                  );
+                  setRefresh(!refresh);
+                  setSelectedStockForReOrderLevelUpdate({});
+                  setUpdatedReOrderLevel("");
+                },
+                (error) => {
+                  console.log("error", error);
+                }
+              );
+            }}
+          >
+            Set
+          </Button>
+        </Box>
+      </CustomModal>
+
+      <CustomModal open={showSendStock} setOpen={setShowSendStock}>
+        <Typography fontSize={"1.5rem"}>
+          Send Stocks to filling station
+        </Typography>
+
+        <Autocomplete
+          options={returnableStocks}
+          getOptionLabel={(option) =>
+            option.gasTank.name + " " + option.gasTank.type
+          }
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              placeholder="Select gas stock"
+              fullWidth
+              size="small"
+              sx={{
+                mt: 1,
+              }}
+            />
+          )}
+          onChange={(e, value) => setSelectedReturnableStock(value)}
+        />
+        <Typography
+          fontSize={"1rem"}
+          sx={{
+            mt: 1,
+          }}
+        >
+          Current Value
+        </Typography>
+        <TextField
+          fullWidth
+          size="small"
+          sx={{
+            mt: 1,
+          }}
+          inputProps={{
+            readOnly: true,
+          }}
+          value={selectedReturnableStock.quantity}
+        />
+        <Typography
+          fontSize={"1rem"}
+          sx={{
+            mt: 1,
+          }}
+        >
+          Sending
+        </Typography>
+        <TextField
+          placeholder="Enter quantity to send"
+          fullWidth
+          size="small"
+          sx={{
+            mt: 1,
+          }}
+          value={sendingQuantity}
+          onChange={(e) => {
+            setSendingQuantity(e.target.value);
+          }}
+        />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            mt: 2,
+          }}
+        >
+          <Button
+            variant="text"
+            color="secondary"
+            sx={{
+              mr: 1,
+            }}
+            onClick={() => {
+              setShowSendStock(false);
+              setSelectedReturnableStock({});
+              setSendingQuantity("");
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="text"
+            sx={{
+              mr: 1,
+            }}
+            onClick={() => {
+              updateStock(
+                {
+                  stockId: selectedReturnableStock._id,
+                  quantity: selectedReturnableStock.quantity - sendingQuantity,
+                },
+                (response) => {
+                  setShowSendStock(false);
+                  showSystemAlert("Stock details updated", "success");
+                  setRefresh(!refresh);
+                  setSelectedReturnableStock({});
+                  setSendingQuantity("");
+                },
+                (error) => {
+                  console.log("error", error);
+                }
+              );
+            }}
+          >
+            Send
+          </Button>
+        </Box>
+      </CustomModal>
+
+      <CustomModal
+        open={showDeleteConfirmation}
+        setOpen={setShowDeleteConfirmation}
+      >
+        <Typography fontSize={"1.5rem"}>Delete Stock</Typography>
+        <Typography
+          fontSize={"1rem"}
+          sx={{
+            mt: 2,
+          }}
+        >
+          Choose stock
+        </Typography>
+        <Autocomplete
+          options={gasStocks}
+          getOptionLabel={(option) =>
+            option.gasTank.name + " " + option.gasTank.type
+          }
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              placeholder="Select gas stock"
+              fullWidth
+              size="small"
+              sx={{
+                mt: 1,
+              }}
+            />
+          )}
+          onChange={(e, value) => setStockToDelete(value)}
+        />
+        {stockToDelete._id && (
+          <Typography
+            fontSize={"0.8rem"}
+            color={"red"}
+            sx={{
+              mt: 1,
+            }}
+          >
+            This will remove the current stock details. Are you sure?
+          </Typography>
+        )}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            mt: 2,
+          }}
+        >
+          <Button
+            variant="text"
+            color="secondary"
+            sx={{
+              mr: 1,
+            }}
+            onClick={() => {
+              setShowDeleteConfirmation(false);
+              setRefresh(!refresh);
+              setStockToDelete({});
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="text"
+            color="error"
+            sx={{
+              mr: 1,
+            }}
+            onClick={() => {
+              updateStock(
+                {
+                  stockId: stockToDelete._id,
+                  quantity: 0,
+                },
+                (response) => {
+                  setShowDeleteConfirmation(false);
+                  showSystemAlert("Stock details removed", "success");
+                  setRefresh(!refresh);
+                  setStockToDelete({});
+                },
+                (error) => {
+                  console.log("error", error);
+                }
+              );
+            }}
+          >
+            Delete
+          </Button>
         </Box>
       </CustomModal>
       <Box
@@ -179,26 +676,56 @@ const ViewStock = () => {
               </Box>
               <Grid container gap={2} my={4}>
                 <Grid item xs display="flex" justifyContent={"center"}>
-                  <QuickActionBtn title={"Update Stock"} />
+                  <QuickActionBtn
+                    title={"Update Stock"}
+                    onClick={() => {
+                      setShowUpdateModal(true);
+                    }}
+                  />
                 </Grid>
                 <Grid item xs display="flex" justifyContent={"center"}>
-                  <QuickActionBtn title={"Re-order levels"} />
+                  <QuickActionBtn
+                    title={"Re-order levels"}
+                    onClick={() => {
+                      setShowReOrderLevelModal(true);
+                    }}
+                  />
                 </Grid>
               </Grid>
               <Grid container gap={2} my={4}>
                 <Grid item xs display="flex" justifyContent={"center"}>
-                  <QuickActionBtn title={"Send Stock"} />
+                  <QuickActionBtn
+                    title={"Send Stock"}
+                    onClick={() => {
+                      setShowSendStock(true);
+                    }}
+                  />
                 </Grid>
                 <Grid item xs display="flex" justifyContent={"center"}>
-                  <QuickActionBtn title={"Distribute Stock"} />
+                  <QuickActionBtn
+                    title={"Distribute Stock"}
+                    onClick={() => {
+                      navigate("/distribute-stock");
+                    }}
+                  />
                 </Grid>
               </Grid>
               <Grid container gap={2} my={4}>
                 <Grid item xs display="flex" justifyContent={"center"}>
-                  <QuickActionBtn title={"Delete Stock"} />
+                  <QuickActionBtn
+                    title={"Delete Stock"}
+                    onClick={() => {
+                      setShowDeleteConfirmation(true);
+                    }}
+                  />
                 </Grid>
                 <Grid item xs display="flex" justifyContent={"center"}>
-                  <QuickActionBtn title={"Print Details"} />
+                  <QuickActionBtn
+                    title={"Print Details"}
+                    onClick={() => {
+                      navigate("/distributor-reports/stocks-report");
+                    }}
+                  />
                 </Grid>
               </Grid>
 
