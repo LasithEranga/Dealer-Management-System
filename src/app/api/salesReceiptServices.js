@@ -11,6 +11,22 @@ export const newRecipt = (body, onSuccess, onFailed, onComplete) => {
   );
 };
 
+export const newDistributorReturnRecipt = (
+  body,
+  onSuccess,
+  onFailed,
+  onComplete
+) => {
+  post(
+    "/distributor-return/newDistributorReturnRecipt",
+    body,
+    "newDistributorReturnReciptLoading",
+    onSuccess,
+    onFailed,
+    onComplete
+  );
+};
+
 export const searchSalesReceiptsByRef = (
   body,
   onSuccess,

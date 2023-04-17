@@ -5,7 +5,10 @@ import { useSelector } from "react-redux";
 import { showSystemAlert } from "../../app/alertServices";
 import { stockInfoChartData } from "../../app/api/gasStockServices";
 import { searchGasTank } from "../../app/api/gasTankServices";
-import { newRecipt } from "../../app/api/salesReceiptServices";
+import {
+  newDistributorReturnRecipt,
+  newRecipt,
+} from "../../app/api/salesReceiptServices";
 import ButtonCard from "../../components/ButtonCard/ButtonCard";
 import ContentCard from "../../components/ContentCard/ContentCard";
 import DoughnutChartWithText from "../../components/DoughnutChartWithText/DoughnutChartWithText";
@@ -89,17 +92,16 @@ const ReturnStockToDistributor = () => {
   };
 
   const onPrintClick = () => {
-    console.log("print");
-    newRecipt(
+    newDistributorReturnRecipt(
       {
         dealerId: userId,
         gasTanks: orderList.map((oneEl) => ({
-          _id: oneEl._id,
+          gasTank: oneEl._id,
           quantity: oneEl.quantity,
         })),
       },
       (response) => {
-        showSystemAlert("Recipt printed", "success");
+        showSystemAlert("Retrun success!", "success");
         setOrderList([]);
         setRefresh((prev) => !prev);
       }
@@ -230,7 +232,7 @@ const ReturnStockToDistributor = () => {
                   sx={{ borderRadius: 0, boxShadow: "none" }}
                   onClick={onPrintClick}
                 >
-                  Print Reciept
+                  Return
                 </Button>
                 <Button
                   color="primary"

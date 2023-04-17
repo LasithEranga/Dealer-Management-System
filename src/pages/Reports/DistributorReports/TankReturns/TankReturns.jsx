@@ -266,7 +266,7 @@ const TankReturns = () => {
               <>
                 {/* FIXME: */}
                 <span>
-                  No of tanks returned : {data.length} tank{" "}
+                  No of tanks returned : {data.length} tank{""}
                   {data.length === 1 ? "" : "s"}
                 </span>
                 <br></br>
@@ -281,7 +281,7 @@ const TankReturns = () => {
                 "Date",
                 "Dealer",
                 "Gas Tank",
-                "Amount Left",
+                "Amount Left(Kg)",
                 "Return Price",
               ]}
               tableContent={data.slice(
