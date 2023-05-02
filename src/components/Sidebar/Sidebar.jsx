@@ -8,11 +8,11 @@ import { styled } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import SidebarItem from "./SidebarItem";
 import SubHeading from "./SubHeading";
 import logo from "../../asessts/logo.png";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import LoupeIcon from "@mui/icons-material/Loupe";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
@@ -34,6 +34,8 @@ import AddCardIcon from "@mui/icons-material/AddCard";
 import DownloadingIcon from "@mui/icons-material/Downloading";
 import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
 import HourglassTopIcon from "@mui/icons-material/HourglassTop";
+import { Logout } from "@mui/icons-material";
+import { logout } from "../../reducers/loginSlice";
 
 const drawerWidth = 240;
 
@@ -88,10 +90,17 @@ export default function Sidebar() {
   const userType = useSelector((state) =>
     state.loginDMS.type ? state.loginDMS.type : "DEALER"
   );
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = () => {
     setOpen((prev) => !prev);
+  };
+
+  const onClickLogout = () => {
+    dispatch(logout());
+    navigate("/login");
   };
 
   return (
@@ -111,6 +120,17 @@ export default function Sidebar() {
           <Box display={"flex"}>
             <img src={logo} alt="" width="100px" />
           </Box>
+          <Box display={"flex"} flexGrow={1}></Box>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={onClickLogout}
+            edge="start"
+            sx={{ mr: 1 }}
+            title="Logout"
+          >
+            <Logout sx={{ fontSize: "1.6rem", color: "#B2B2B2" }} />
+          </IconButton>
         </Toolbar>
       </AppBar>
 

@@ -35,6 +35,7 @@ import PurchaseOrdersReport from "./pages/Reports/DistributorReports/PurchaseOrd
 import FastMovingStocks from "./pages/Reports/DistributorReports/FastMovingStocks/FastMovingStocks";
 import AcceptedPurchaseOrdersDistributor from "./pages/DistributorPurchseOrders/AcceptedPurchaseOrders/AcceptedPurchaseOrders";
 import DealerReports from "./pages/Reports/DealerReports";
+import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
 
 function App() {
   const user = useSelector((state) =>
@@ -44,7 +45,14 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path={"/login"} element={<Login />} />
-        <Route path={"/"} element={<Sidebar />}>
+        <Route
+          path={"/"}
+          element={
+            <ProtectedRoutes>
+              <Sidebar />
+            </ProtectedRoutes>
+          }
+        >
           <Route
             path=""
             element={user === "DISTRIBUTOR" ? <Dashboard /> : <SellTanks />}

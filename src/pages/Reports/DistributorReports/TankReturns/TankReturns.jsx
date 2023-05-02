@@ -264,7 +264,6 @@ const TankReturns = () => {
             to={to}
             subHeading={
               <>
-                {/* FIXME: */}
                 <span>
                   No of tanks returned : {data.length} tank{""}
                   {data.length === 1 ? "" : "s"}

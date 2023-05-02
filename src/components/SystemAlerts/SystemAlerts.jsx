@@ -13,6 +13,7 @@ const SystemAlerts = () => {
   const handleClose = () => {
     setOpen(false);
   };
+
   useEffect(() => {
     if (alertState.isVisible) {
       setOpen(true);
@@ -22,11 +23,15 @@ const SystemAlerts = () => {
   }, [alertState]);
 
   useEffect(() => {
+    let timeout = null;
     if (!open) {
-      setTimeout(() => {
+      timeout = setTimeout(() => {
         dispatch(hideAlert());
       }, 1000);
     }
+    return () => {
+      clearTimeout(timeout);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
