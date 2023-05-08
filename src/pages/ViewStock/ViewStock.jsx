@@ -130,8 +130,14 @@ const ViewStock = () => {
             mb: 5,
           }}
         >
-          {tankTypes.map((oneEl) => (
-            <Box display={"flex"} alignItems="center" gap={1} width={"100px"}>
+          {tankTypes.map((oneEl, index) => (
+            <Box
+              display={"flex"}
+              alignItems="center"
+              gap={1}
+              width={"100px"}
+              key={index}
+            >
               <input
                 className="color-picker"
                 type={"color"}
@@ -660,8 +666,8 @@ const ViewStock = () => {
               rowSpacing={2}
               columnSpacing={{ xs: 2, sm: 2, md: 2 }}
             >
-              {Object.keys(stockSummery).map((oneEl) => (
-                <Grid item xs={6}>
+              {Object.keys(stockSummery).map((oneEl, index) => (
+                <Grid item xs={6} key={index}>
                   <StockLevelCard title={oneEl} data={stockSummery[oneEl]} />
                 </Grid>
               ))}

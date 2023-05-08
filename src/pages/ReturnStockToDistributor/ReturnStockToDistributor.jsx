@@ -264,13 +264,14 @@ const ReturnStockToDistributor = () => {
                 pb: 1,
               }}
             >
-              {chartData.map((oneEl) => {
+              {chartData.map((oneEl, index) => {
                 const tankName =
                   oneEl.name.split(" ")[0] +
                   " " +
                   _.upperFirst(_.lowerCase(oneEl.type));
                 return (
                   <DoughnutChartWithText
+                    key={index}
                     chartTitle={tankName}
                     dataSet={[
                       oneEl.quantity,
