@@ -10,6 +10,7 @@ export const loginSlice = createSlice({
     type: "",
     outstandingAmount: 0,
     distributor: "",
+    jwt: "",
   },
   reducers: {
     login: (state, action) => {
@@ -20,6 +21,7 @@ export const loginSlice = createSlice({
       state.type = action.payload.type;
       state.outstandingAmount = action.payload.outstandingAmount;
       state.distributor = action.payload.distributor;
+      state.jwt = action.payload.jwt;
     },
     logout: (state) => {
       state.isLoggedIn = false;
@@ -29,6 +31,7 @@ export const loginSlice = createSlice({
       state.type = "";
       state.outstandingAmount = 0;
       state.distributor = "";
+      state.jwt = "";
     },
   },
 });

@@ -34,7 +34,8 @@ const Login = () => {
       console.log(response);
       if (response.status === 0) {
         const { _id, name, email, type, outstandingAmount, distributor } =
-          response.data;
+          response.data.user;
+        const jwt = response.data.jwt;
         if (type === "DEALER") {
           dispatch(
             login({
@@ -44,6 +45,7 @@ const Login = () => {
               type,
               outstandingAmount,
               distributor,
+              jwt,
             })
           );
         } else {
@@ -55,6 +57,7 @@ const Login = () => {
               type,
               outstandingAmount,
               distributor: {},
+              jwt,
             })
           );
         }
